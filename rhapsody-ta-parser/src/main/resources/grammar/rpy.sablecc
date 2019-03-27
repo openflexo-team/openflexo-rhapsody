@@ -19,6 +19,11 @@ Helpers
  not_hyphen = [any - '"' ];
  not_hyphen2 = [any - ''' ];
 
+ minus = '-';
+
+ decimal_numeral = minus? digit (digit)*;
+ lit_float = minus? digit (digit)* '.' digit (digit)* (('E' | 'e') ('+' | '-')? digit (digit)*)?;
+
 Tokens
  l_brc = '{';
  r_brc = '}';
@@ -38,17 +43,24 @@ guid_token = 'GUID';
 
 // literals
  
+ decimal_numeral = decimal_numeral;
+ lit_float = lit_float;
+ 
 //    digit = ['0'..'9'];
 //    hex_digit = ['0'..'9'] | ['a'..'f'] | ['A'..'F'];
 
-      decimal_numeral = '0' | ['1'..'9'] digit*;
+// decimal_numeral = minus? digit (digit)*;
+// lit_float = minus? digit (digit)* '.' digit (digit)* (('E' | 'e') ('+' | '-')? digit (digit)*)?;
+
+
+      // decimal_numeral = '0' | ['1'..'9'] digit*;
   //  hex_numeral = '0' ('x' | 'X') hex_digit+;
     hex_numeral = hex_digit+;
  
 // 	time_literal = digit+ '.' digit* '.' digit* '::' digit* ':' digit* ':' digit*;
  
-      lit_float =
-        digit+ '.' digit*;
+     // lit_float =
+     //   digit+ '.' digit*;
  
 
  
@@ -140,7 +152,9 @@ Productions
     {hex_numeral} hex_numeral |
     {decimal_numeral} decimal_numeral |
   	{tail1} hex_numeral minus extended_hex_identifier|
-  	{tail2} decimal_numeral minus extended_hex_identifier;
+  	{tail2} decimal_numeral minus extended_hex_identifier |
+  	{tail3} hex_numeral extended_hex_identifier|
+  	{tail4} decimal_numeral extended_hex_identifier;
 
   // time = [day]:decimal_numeral [d1]:dot [month]:decimal_numeral [d2]:dot [year]:decimal_numeral [c1]:colon [c2]:colon [hour]:decimal_numeral [c3]:colon [minut]:decimal_numeral [c4]:colon [second]:decimal_numeral;
 
