@@ -116,9 +116,7 @@ Productions
 
   rpy_complex_object = l_brc identifier [property_values]:rpy_property_value* r_brc;
 
-  rpy_property_value =
-  	{normal} minus identifier assign rpy_object |
-  	{negative} [minus1]:minus identifier assign [minus2]:minus decimal_numeral semi;
+  rpy_property_value = minus identifier assign rpy_object;
 
   //system_definition = system [components]:component_definition* [links]:link_definition* end;
 
