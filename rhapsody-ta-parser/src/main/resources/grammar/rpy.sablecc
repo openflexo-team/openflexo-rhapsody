@@ -28,9 +28,14 @@ Helpers
 
 //  single_character = [input_character - [''' + '\']];
 //  octal_escape = '\' (octal_digit octal_digit? | zero_to_three octal_digit octal_digit);
-//escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
-escape_sequence = '\"';
-string_character = [input_character - ['"' + '\']] | escape_sequence;
+escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
+//escape_sequence = '\"';
+//string_character = [input_character - ['"' + '\']] | escape_sequence;
+//string_character = [not_hyphen - ['"' + '\']] | escape_sequence;
+string_character = [any - ['"' + '\']] | escape_sequence;
+
+//  escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\' | octal_escape;
+//  string_character = [input_character - ['"' + '\']] | escape_sequence;
 
 Tokens
  l_brc = '{';
@@ -79,8 +84,8 @@ guid_token = 'GUID';
 // | ['0' .. '9']+ '.' ['0' .. '9']+ 'e' '-' ['0' .. '9']+
 // | ['0' .. '9']+ '.' ['0' .. '9']+ 'E' ['0' .. '9']+ 
 // | ['0' .. '9']+ '.' ['0' .. '9']+ 'E' '-' ['0' .. '9']+;
- string_value = '"' (not_hyphen)* '"';
-// string_value = '"' (string_character)* '"';
+// string_value = '"' (not_hyphen)* '"';
+ string_value = '"' (string_character)* '"';
  chars_value = ''' (not_hyphen2)* ''';
  identifier = letter (letter | digit)*;
 // blank = (' ' | 13 | 10)+;
