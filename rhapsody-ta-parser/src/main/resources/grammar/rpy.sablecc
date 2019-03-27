@@ -12,42 +12,31 @@ Helpers
   line_terminator = lf | cr | cr lf;
   input_character = [unicode_input_character - [cr + lf]];
 
- upper_case = ['A' .. 'Z'] | [0x00c0 .. 0x00dd] | 0x20ac;
- lower_case = ['a' .. 'z'] | [0x00e0 .. 0x00fd] | 0x20ac;
- digit = ['0'..'9'];
- hex_digit = ['0'..'9'] | ['a'..'f'] | ['A'..'F'];
- letter = upper_case | lower_case | '_' ;
- any        = [0 .. 0xffff];
- not_hyphen = [any - '"'];
- not_hyphen2 = [any - ''' ];
+  upper_case = ['A' .. 'Z'] | [0x00c0 .. 0x00dd] | 0x20ac;
+  lower_case = ['a' .. 'z'] | [0x00e0 .. 0x00fd] | 0x20ac;
+  digit = ['0'..'9'];
+  hex_digit = ['0'..'9'] | ['a'..'f'] | ['A'..'F'];
+  letter = upper_case | lower_case | '_' ;
+  any        = [0 .. 0xffff];
+  not_hyphen = [any - '"'];
+  not_hyphen2 = [any - ''' ];
 
- minus = '-';
+  minus = '-';
 
- decimal_numeral = minus? digit (digit)*;
- lit_float = minus? digit (digit)* '.' digit (digit)* (('E' | 'e') ('+' | '-')? digit (digit)*)?;
+  decimal_numeral = minus? digit (digit)*;
+  lit_float = minus? digit (digit)* '.' digit (digit)* (('E' | 'e') ('+' | '-')? digit (digit)*)?;
 
-//  single_character = [input_character - [''' + '\']];
-//  octal_escape = '\' (octal_digit octal_digit? | zero_to_three octal_digit octal_digit);
-escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
-//escape_sequence = '\"';
-//string_character = [input_character - ['"' + '\']] | escape_sequence;
-//string_character = [not_hyphen - ['"' + '\']] | escape_sequence;
-string_character = [any - ['"' + '\']] | escape_sequence;
-
-//  escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\' | octal_escape;
-//  string_character = [input_character - ['"' + '\']] | escape_sequence;
+  escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
+  string_character = [any - ['"' + '\']] | escape_sequence;
 
 Tokens
- l_brc = '{';
- r_brc = '}';
- //l_par = '(';
- //r_par = ')';
- dot = '.';
- //comma = ',';
- semi  = ';';
- colon = ':';
- minus = '-';
- assign = '=';
+  l_brc = '{';
+  r_brc = '}';
+  dot = '.';
+  semi  = ';';
+  colon = ':';
+  minus = '-';
+  assign = '=';
  
 // keywords
 
@@ -56,50 +45,21 @@ guid_token = 'GUID';
 
 // literals
  
- decimal_numeral = decimal_numeral;
- lit_float = lit_float;
+  decimal_numeral = decimal_numeral;
+  lit_float = lit_float;
  
-//    digit = ['0'..'9'];
-//    hex_digit = ['0'..'9'] | ['a'..'f'] | ['A'..'F'];
-
-// decimal_numeral = minus? digit (digit)*;
-// lit_float = minus? digit (digit)* '.' digit (digit)* (('E' | 'e') ('+' | '-')? digit (digit)*)?;
-
-
-      // decimal_numeral = '0' | ['1'..'9'] digit*;
-  //  hex_numeral = '0' ('x' | 'X') hex_digit+;
-    hex_numeral = hex_digit+;
+  hex_numeral = hex_digit+;
  
-// 	time_literal = digit+ '.' digit* '.' digit* '::' digit* ':' digit* ':' digit*;
- 
-     // lit_float =
-     //   digit+ '.' digit*;
- 
+  string_value = '"' (string_character)* '"';
+  chars_value = ''' (not_hyphen2)* ''';
+  identifier = letter (letter | digit)*;
 
- 
-// decimal_number = ['0' .. '9']+;
-// precise_number = ['0' .. '9']+ '.' ['0' .. '9']+;
-// scientific_notation_number = 
-// ['0' .. '9']+ '.' ['0' .. '9']+ 'e' ['0' .. '9']+ 
-// | ['0' .. '9']+ '.' ['0' .. '9']+ 'e' '-' ['0' .. '9']+
-// | ['0' .. '9']+ '.' ['0' .. '9']+ 'E' ['0' .. '9']+ 
-// | ['0' .. '9']+ '.' ['0' .. '9']+ 'E' '-' ['0' .. '9']+;
-// string_value = '"' (not_hyphen)* '"';
- string_value = '"' (string_character)* '"';
- chars_value = ''' (not_hyphen2)* ''';
- identifier = letter (letter | digit)*;
-// blank = (' ' | 13 | 10)+;
-
-//  string_value = '"' string_character* '"';
-
- white_space = (sp | ht | ff | line_terminator)*;
+  white_space = (sp | ht | ff | line_terminator)*;
 
 Ignored Tokens
- white_space;
+  white_space;
  
 Productions
-
- // truc = extended_hex_identifier;
 
   rpy_root = rpy_header rpy_complex_object;
 
@@ -108,22 +68,16 @@ Productions
   rpy_single_object = 
     {string_value} string_value semi |
     {chars_value} chars_value semi |
-    //{decimal_numeral} decimal_numeral semi |
-    //{negative_decimal_numeral} minus decimal_numeral semi |
     {time} time semi |
     {identifier} identifier semi |
     {none} semi |
     {style} string_value [s1]:decimal_numeral [s2]:decimal_numeral [s3]:decimal_numeral [s4]:decimal_numeral [s5]:decimal_numeral semi |
-    //{number_couple} [n1]:number [n2]:number semi |
-    //{number_triple} [n1]:number [n2]:number [n3]:number semi |
-    //{number_sexa} [n1]:number [n2]:number [n3]:number [n4]:number [n5]:number [n6]:number semi |
     {numbers} [n_list]:number* semi |
     {id_value} guid_token extended_hex_identifier semi |
     {rpy_complex_object} rpy_complex_object;
 
   number =
     {int} decimal_numeral |
- //   {neg_int} minus decimal_numeral |
     {float} lit_float;
 
   rpy_object = 
@@ -134,35 +88,17 @@ Productions
 
   rpy_property_value = minus identifier assign rpy_object;
 
-  //system_definition = system [components]:component_definition* [links]:link_definition* end;
-
-  //component_definition = component [name]:identifier colon [slots]:slot_definition*;
-
-  //slot_definition = slot [name]:identifier semi;
-
-  //link_definition = link [name]:identifier from [from_name]:dot_identifier to [to_name]:dot_identifier semi;
-
-  //rpy_object_list = 
-  //  {single} rpy_single_object |
-  //	{multiple} rpy_single_object rpy_object_list;
-
   extended_identifier = 
     {identifier} identifier |
   	{tail} identifier minus extended_identifier;
-
- // version = 
- //   {decimal_number} decimal_number |
- //   {precise_number} precise_number |
- // 	{tail1} decimal_number dot version |
- // 	{tail2} precise_number dot version;
- 
-   version = 
+  	
+  version = 
     {decimal_numeral} decimal_numeral |
     {lit_float} lit_float |
   	{tail1} decimal_numeral dot version |
   	{tail2} lit_float dot version;
  
-   extended_hex_identifier = 
+  extended_hex_identifier = 
     {hex_numeral} hex_numeral |
     {decimal_numeral} decimal_numeral |
   	{tail1} hex_numeral minus extended_hex_identifier|
@@ -170,8 +106,6 @@ Productions
   	{tail3} hex_numeral extended_hex_identifier|
   	{tail4} decimal_numeral extended_hex_identifier;
 
-  // time = [day]:decimal_numeral [d1]:dot [month]:decimal_numeral [d2]:dot [year]:decimal_numeral [c1]:colon [c2]:colon [hour]:decimal_numeral [c3]:colon [minut]:decimal_numeral [c4]:colon [second]:decimal_numeral;
-
-   time = [day_month]:lit_float [d2]:dot [year]:decimal_numeral [c1]:colon [c2]:colon [hour]:decimal_numeral [c3]:colon [minut]:decimal_numeral [c4]:colon [second]:decimal_numeral;
+  time = [day_month]:lit_float [d2]:dot [year]:decimal_numeral [c1]:colon [c2]:colon [hour]:decimal_numeral [c3]:colon [minut]:decimal_numeral [c4]:colon [second]:decimal_numeral;
 
  
