@@ -79,11 +79,24 @@ Productions
 
   rpy_single_object = 
     {string_value} string_value semi |
-    {decimal_numeral} decimal_numeral semi |
+    {chars_value} chars_value semi |
+    //{decimal_numeral} decimal_numeral semi |
     //{negative_decimal_numeral} minus decimal_numeral semi |
     {time} time semi |
+    {identifier} identifier semi |
+    {none} semi |
+    {style} string_value [s1]:decimal_numeral [s2]:decimal_numeral [s3]:decimal_numeral [s4]:decimal_numeral [s5]:decimal_numeral semi |
+    //{number_couple} [n1]:number [n2]:number semi |
+    //{number_triple} [n1]:number [n2]:number [n3]:number semi |
+    //{number_sexa} [n1]:number [n2]:number [n3]:number [n4]:number [n5]:number [n6]:number semi |
+    {numbers} [n_list]:number* semi |
     {id_value} guid_token extended_hex_identifier semi |
     {rpy_complex_object} rpy_complex_object;
+
+  number =
+    {int} decimal_numeral |
+ //   {neg_int} minus decimal_numeral |
+    {float} lit_float;
 
   rpy_object = 
     {single_object} rpy_single_object |
@@ -91,7 +104,9 @@ Productions
 
   rpy_complex_object = l_brc identifier [property_values]:rpy_property_value* r_brc;
 
-  rpy_property_value = minus identifier assign rpy_object;
+  rpy_property_value =
+  	{normal} minus identifier assign rpy_object |
+  	{negative} [minus1]:minus identifier assign [minus2]:minus decimal_numeral semi;
 
   //system_definition = system [components]:component_definition* [links]:link_definition* end;
 
