@@ -23,8 +23,8 @@ Helpers
 
   minus = '-';
 
-  decimal_numeral = minus? digit (digit)*;
-  lit_float = minus? digit (digit)* '.' digit (digit)* (('E' | 'e') ('+' | '-')? digit (digit)*)?;
+  integer_literal = minus? digit (digit)*;
+  float_literal = minus? digit (digit)* '.' digit (digit)* (('E' | 'e') ('+' | '-')? digit (digit)*)?;
 
   escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
   string_character = [any - ['"' + '\']] | escape_sequence;
@@ -38,20 +38,19 @@ Tokens
   minus = '-';
   assign = '=';
  
-// keywords
+  // keywords
 
-version_token = 'version';
-guid_token = 'GUID';
+  version_token = 'version';
+  guid_token = 'GUID';
 
-// literals
+  // literals
  
-  decimal_numeral = decimal_numeral;
-  lit_float = lit_float;
+  integer_literal = integer_literal;
+  float_literal = float_literal;
+  hex_literal = hex_digit+;
  
-  hex_numeral = hex_digit+;
- 
-  string_value = '"' (string_character)* '"';
-  chars_value = ''' (not_hyphen2)* ''';
+  string_literal = '"' (string_character)* '"';
+  chars_literal = ''' (not_hyphen2)* ''';
   identifier = letter (letter | digit)*;
 
   white_space = (sp | ht | ff | line_terminator)*;
@@ -63,22 +62,22 @@ Productions
 
   rpy_root = rpy_header rpy_complex_object;
 
-  rpy_header = extended_identifier version_token version identifier decimal_numeral;
+  rpy_header = extended_identifier version_token version identifier integer_literal;
 
   rpy_single_object = 
-    {string_value} string_value semi |
-    {chars_value} chars_value semi |
-    {time} time semi |
-    {identifier} identifier semi |
     {none} semi |
-    {style} string_value [s1]:decimal_numeral [s2]:decimal_numeral [s3]:decimal_numeral [s4]:decimal_numeral [s5]:decimal_numeral semi |
+    {string_literal} string_literal semi |
+    {chars_literal} chars_literal semi |
+    {time_literal} time_literal semi |
+    {identifier} identifier semi |
     {numbers} [n_list]:number* semi |
+    {style} string_literal [s1]:integer_literal [s2]:integer_literal [s3]:integer_literal [s4]:integer_literal [s5]:integer_literal semi |
     {id_value} guid_token extended_hex_identifier semi |
     {rpy_complex_object} rpy_complex_object;
 
   number =
-    {int} decimal_numeral |
-    {float} lit_float;
+    {int} integer_literal |
+    {float} float_literal;
 
   rpy_object = 
     {single_object} rpy_single_object |
@@ -93,19 +92,19 @@ Productions
   	{tail} identifier minus extended_identifier;
   	
   version = 
-    {decimal_numeral} decimal_numeral |
-    {lit_float} lit_float |
-  	{tail1} decimal_numeral dot version |
-  	{tail2} lit_float dot version;
+    {integer_literal} integer_literal |
+    {float_literal} float_literal |
+  	{tail1} integer_literal dot version |
+  	{tail2} float_literal dot version;
  
   extended_hex_identifier = 
-    {hex_numeral} hex_numeral |
-    {decimal_numeral} decimal_numeral |
-  	{tail1} hex_numeral minus extended_hex_identifier|
-  	{tail2} decimal_numeral minus extended_hex_identifier |
-  	{tail3} hex_numeral extended_hex_identifier|
-  	{tail4} decimal_numeral extended_hex_identifier;
+    {hex_literal} hex_literal |
+    {integer_literal} integer_literal |
+  	{tail1} hex_literal minus extended_hex_identifier|
+  	{tail2} integer_literal minus extended_hex_identifier |
+  	{tail3} hex_literal extended_hex_identifier|
+  	{tail4} integer_literal extended_hex_identifier;
 
-  time = [day_month]:lit_float [d2]:dot [year]:decimal_numeral [c1]:colon [c2]:colon [hour]:decimal_numeral [c3]:colon [minut]:decimal_numeral [c4]:colon [second]:decimal_numeral;
+  time_literal = [day_month]:float_literal [d2]:dot [year]:integer_literal [c1]:colon [c2]:colon [hour]:integer_literal [c3]:colon [minut]:integer_literal [c4]:colon [second]:integer_literal;
 
  

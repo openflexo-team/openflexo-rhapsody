@@ -1,0 +1,10 @@
+dependencies {
+  compile project(":rhapsody-ta")
+
+  // openflexo dep
+  compile flexoUi()
+  // external dep
+
+  // testing dep
+  testCompile flexoUiTest()
+}

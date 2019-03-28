@@ -1,0 +1,1 @@
+include 'rhapsody-ta', 'rhapsody-ta-parser', 'rhapsody-ta-test', 'rhapsody-ta-test-rc', 'rhapsody-ta-ui'

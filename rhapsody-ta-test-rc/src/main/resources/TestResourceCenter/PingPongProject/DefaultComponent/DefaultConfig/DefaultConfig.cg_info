@@ -1,0 +1,47 @@
+I-Logix-RPY-Archive version 8.12.0 * 9728113
+
+- m_fileModifyTime = { IRPYRawContainer 
+	- size = 3;
+	- value = "DefaultComponent/DefaultConfig/Default/Default_pkgClass.java" 3.25.2019::15:1:14
+	"DefaultComponent/DefaultConfig/Default/Ping.java" 3.25.2019::16:10:49
+	"DefaultComponent/DefaultConfig/Default/Pong.java" 3.25.2019::16:16:4
+	
+}
+- size = 4;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "Ping";
+	- _id = GUID a5eb55f8-eecb-4243-b31d-d125f44765ff;
+}
+- genTime = 3.25.2019::16:10:49;
+- hElement = { IHandle 
+	- _m2Class = "ISubsystem";
+	- _filename = "Default.sbs";
+	- _subsystem = "";
+	- _class = "";
+	- _name = "Default";
+	- _id = GUID 6edc95c9-9b38-4c87-b385-d5feecb8ae36;
+}
+- genTime = 3.25.2019::16:4:18;
+- hElement = { IHandle 
+	- _m2Class = "ICodeGenConfigInfo";
+	- _filename = "DefaultComponent.cmp";
+	- _subsystem = "";
+	- _class = "";
+	- _name = "DefaultComponent\\DefaultConfig";
+	- _id = GUID 919ee223-8c2b-4026-89b8-6bccfa1a0ec0;
+}
+- genTime = 3.25.2019::16:16:4;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "Pong";
+	- _id = GUID 9393464d-4518-42cc-9e6d-a201106aa7c2;
+}
+- genTime = 3.25.2019::16:16:4;
+

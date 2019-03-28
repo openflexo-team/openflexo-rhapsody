@@ -1,0 +1,15 @@
+dependencies {
+
+    compile project(':rhapsody-ta')
+    compile flexoFoundation()
+    
+    compile testUtils()
+    compile flexoFoundationTest()
+
+	  // Test resource center
+	  testRuntime project(':rhapsody-ta-test-rc')
+  
+}
+tasks.withType(Test) {
+	jvmArgs += ["-Djava.awt.headless=true"]
+}
