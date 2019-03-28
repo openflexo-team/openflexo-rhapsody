@@ -46,13 +46,13 @@ import org.openflexo.pamela.factory.EditingContext;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
- * A {@link RPYFactory} used to manage a {@link RPYProject}<br>
+ * A {@link RPYModelFactory} used to manage a {@link RPYProject}<br>
  * One instance of this class should be used for each {@link RPYProjectResource}
  * 
  * @author sylvain
  * 
  */
-public class RPYProjectFactory extends RPYFactory<RPYProject, RPYProjectResource> {
+public class RPYProjectFactory extends RPYModelFactory<RPYProject, RPYProjectResource> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RPYProjectFactory.class.getPackage().getName());

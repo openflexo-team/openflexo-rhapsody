@@ -57,11 +57,11 @@ import org.openflexo.ta.rhapsody.rm.RPYResource;
  * @author sylvain
  * 
  */
-public abstract class RPYFactory<RD extends ResourceData<RD> & RPYObject, R extends RPYResource<RD, ?>> extends ModelFactory
+public abstract class RPYModelFactory<RD extends ResourceData<RD> & RPYObject, R extends RPYResource<RD, ?>> extends ModelFactory
 		implements PamelaResourceModelFactory<R> {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(RPYFactory.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(RPYModelFactory.class.getPackage().getName());
 
 	private final R resource;
 	private IgnoreLoadingEdits ignoreHandler = null;
@@ -69,7 +69,7 @@ public abstract class RPYFactory<RD extends ResourceData<RD> & RPYObject, R exte
 
 	private RelativePathResourceConverter relativePathResourceConverter;
 
-	public RPYFactory(Class<RD> resourceDataClass, R resource, EditingContext editingContext) throws ModelDefinitionException {
+	public RPYModelFactory(Class<RD> resourceDataClass, R resource, EditingContext editingContext) throws ModelDefinitionException {
 		super(ModelContextLibrary.getCompoundModelContext(resourceDataClass));
 		this.resource = resource;
 		setEditingContext(editingContext);

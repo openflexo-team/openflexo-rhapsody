@@ -75,7 +75,7 @@ public class RPYParser {
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static <RD extends ResourceData<RD> & RPYObject> RD parse(InputStream inputStream, RPYFactory<RD, ?> modelFactory)
+	public static <RD extends ResourceData<RD> & RPYObject> RD parse(InputStream inputStream, RPYModelFactory<RD, ?> modelFactory)
 			throws ParseException, IOException {
 		String data = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
 		System.out.println("read: " + data);
@@ -92,7 +92,7 @@ public class RPYParser {
 	 * @throws ParseException
 	 *             if parsing expression lead to an error
 	 */
-	public static <RD extends ResourceData<RD> & RPYObject> RD parse(String data, RPYFactory<RD, ?> modelFactory) throws ParseException {
+	public static <RD extends ResourceData<RD> & RPYObject> RD parse(String data, RPYModelFactory<RD, ?> modelFactory) throws ParseException {
 		try {
 			// System.out.println("Parsing: " + anExpression);
 

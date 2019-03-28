@@ -50,10 +50,10 @@ import org.openflexo.ta.rhapsody.parser.analysis.DepthFirstAdapter;
  */
 class RPYSemanticsAnalyzer<RD extends ResourceData<RD> & RPYObject> extends DepthFirstAdapter {
 
-	private RPYFactory<RD, ?> modelFactory;
+	private RPYModelFactory<RD, ?> modelFactory;
 	private RD rootObject;
 
-	public RPYSemanticsAnalyzer(RPYFactory<RD, ?> modelFactory) {
+	public RPYSemanticsAnalyzer(RPYModelFactory<RD, ?> modelFactory) {
 		this.modelFactory = modelFactory;
 	}
 

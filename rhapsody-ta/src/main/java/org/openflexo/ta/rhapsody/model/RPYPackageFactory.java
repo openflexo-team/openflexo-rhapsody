@@ -52,7 +52,7 @@ import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
  * @author sylvain
  * 
  */
-public class RPYPackageFactory extends RPYFactory<RPYPackage, RPYPackageResource> {
+public class RPYPackageFactory extends RPYModelFactory<RPYPackage, RPYPackageResource> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RPYPackageFactory.class.getPackage().getName());

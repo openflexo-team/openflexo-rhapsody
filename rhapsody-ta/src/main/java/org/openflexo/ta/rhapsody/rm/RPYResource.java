@@ -43,7 +43,7 @@ import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.model.RPYFactory;
+import org.openflexo.ta.rhapsody.model.RPYModelFactory;
 import org.openflexo.ta.rhapsody.model.RPYObject;
 
 /**
@@ -53,7 +53,7 @@ import org.openflexo.ta.rhapsody.model.RPYObject;
  *
  */
 @ModelEntity(isAbstract = true)
-public interface RPYResource<RD extends ResourceData<RD> & RPYObject, F extends RPYFactory>
+public interface RPYResource<RD extends ResourceData<RD> & RPYObject, F extends RPYModelFactory>
 		extends TechnologyAdapterResource<RD, RPYTechnologyAdapter>, PamelaResource<RD, F> {
 
 }
