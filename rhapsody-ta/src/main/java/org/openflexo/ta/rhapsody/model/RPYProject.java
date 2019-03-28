@@ -59,7 +59,7 @@ import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
  */
 @ModelEntity
 @ImplementationClass(value = RPYProject.RPYProjectImpl.class)
-public interface RPYProject extends RPYProjectObject, ResourceData<RPYProject> {
+public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> {
 
 	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
@@ -89,6 +89,7 @@ public interface RPYProject extends RPYProjectObject, ResourceData<RPYProject> {
 	 * @param objectId
 	 * @return
 	 */
+	@Override
 	public RPYObject getObjectWithSerializationIdentifier(String objectId);
 
 	/**

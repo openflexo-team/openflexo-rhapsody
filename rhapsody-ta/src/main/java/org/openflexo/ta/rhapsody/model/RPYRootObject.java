@@ -1,9 +1,8 @@
 /**
  * 
- * Copyright (c) 2013-2014, Openflexo
- * Copyright (c) 2012-2012, AgileBirds
+ * Copyright (c) 2018, Openflexo
  * 
- * This file is part of Connie-core, a component of the software infrastructure 
+ * This file is part of OpenflexoTechnologyAdapter, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -39,32 +38,22 @@
 
 package org.openflexo.ta.rhapsody.model;
 
-import org.openflexo.ta.rhapsody.parser.analysis.DepthFirstAdapter;
-import org.openflexo.ta.rhapsody.parser.node.ARpyHeader;
+import org.openflexo.foundation.resource.ResourceData;
 
 /**
- * This class implements the semantics analyzer for a parsed DSL.<br>
+ * Represents a root object in a Rhapsody resource
  * 
  * @author sylvain
- * 
+ *
  */
-class RPYSemanticsAnalyzer<RD extends RPYRootObject<RD>> extends DepthFirstAdapter {
+public interface RPYRootObject<RD extends RPYRootObject<RD>> extends RPYObject, ResourceData<RD> {
 
-	private RPYModelFactory<RD, ?> modelFactory;
-	private RD rootObject;
-
-	public RPYSemanticsAnalyzer(RPYModelFactory<RD, ?> modelFactory) {
-		this.modelFactory = modelFactory;
-	}
-
-	public RD getRootObject() {
-		return rootObject;
-	}
-
-	@Override
-	public void inARpyHeader(ARpyHeader node) {
-		System.out.println("Tiens, le header: " + node);
-		super.inARpyHeader(node);
-	}
+	/**
+	 * Retrieve object with supplied serialization identifier, asserting this object resides in this {@link RPYRootObject}
+	 * 
+	 * @param objectId
+	 * @return
+	 */
+	public RPYObject getObjectWithSerializationIdentifier(String objectId);
 
 }

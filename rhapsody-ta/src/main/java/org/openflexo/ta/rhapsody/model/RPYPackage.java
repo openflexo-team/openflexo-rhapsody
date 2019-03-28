@@ -56,7 +56,7 @@ import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
  */
 @ModelEntity
 @ImplementationClass(value = RPYPackage.RPYPackageImpl.class)
-public interface RPYPackage extends RPYPackageObject, ResourceData<RPYPackage> {
+public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> {
 
 	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
@@ -86,6 +86,7 @@ public interface RPYPackage extends RPYPackageObject, ResourceData<RPYPackage> {
 	 * @param objectId
 	 * @return
 	 */
+	@Override
 	public RPYObject getObjectWithSerializationIdentifier(String objectId);
 
 	/**

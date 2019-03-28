@@ -43,7 +43,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.PamelaResourceModelFactory;
 import org.openflexo.foundation.action.FlexoUndoManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl.IgnoreLoadingEdits;
-import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.pamela.ModelContextLibrary;
 import org.openflexo.pamela.converter.RelativePathResourceConverter;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
@@ -57,7 +56,7 @@ import org.openflexo.ta.rhapsody.rm.RPYResource;
  * @author sylvain
  * 
  */
-public abstract class RPYModelFactory<RD extends ResourceData<RD> & RPYObject, R extends RPYResource<RD, ?>> extends ModelFactory
+public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RPYResource<RD, ?>> extends ModelFactory
 		implements PamelaResourceModelFactory<R> {
 
 	@SuppressWarnings("unused")

@@ -38,19 +38,15 @@
 
 package org.openflexo.ta.rhapsody.rm;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.IOFlexoException;
-import org.openflexo.foundation.InconsistentDataException;
-import org.openflexo.foundation.InvalidModelDefinitionException;
-import org.openflexo.foundation.InvalidXMLException;
 import org.openflexo.foundation.resource.FileIODelegate;
-import org.openflexo.foundation.resource.FlexoFileNotFoundException;
 import org.openflexo.foundation.resource.InJarIODelegate;
-import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.rm.BasicResourceImpl;
 import org.openflexo.rm.ClasspathResourceLocatorImpl;
@@ -58,15 +54,19 @@ import org.openflexo.rm.FileSystemResourceLocatorImpl;
 import org.openflexo.rm.InJarResourceImpl;
 import org.openflexo.rm.Resource;
 import org.openflexo.rm.ResourceLocator;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.model.RPYProject;
 import org.openflexo.ta.rhapsody.model.RPYProjectFactory;
+import org.openflexo.toolbox.FileSystemMetaDataManager;
 
-public abstract class RPYProjectResourceImpl extends PamelaResourceImpl<RPYProject, RPYProjectFactory> implements RPYProjectResource {
+/**
+ * Default implementation for a resource storing a {@link RPYProject}
+ * 
+ * @author sylvain
+ *
+ */
+public abstract class RPYProjectResourceImpl extends RPYResourceImpl<RPYProject, RPYProjectFactory> implements RPYProjectResource {
 
 	static final Logger logger = Logger.getLogger(RPYProjectResourceImpl.class.getPackage().getName());
-
-	// private static XMLRootElementReader reader = new XMLRootElementReader();
 
 	@Override
 	public Class<RPYProject> getResourceDataClass() {
@@ -104,37 +104,9 @@ public abstract class RPYProjectResourceImpl extends PamelaResourceImpl<RPYProje
 	}
 
 	@Override
-	public RPYTechnologyAdapter getTechnologyAdapter() {
-		if (getServiceManager() != null) {
-			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(RPYTechnologyAdapter.class);
-		}
-		return null;
-	}
-
-	@Override
-	public RPYProject loadResourceData() throws FlexoFileNotFoundException, IOFlexoException, InvalidXMLException,
-			InconsistentDataException, InvalidModelDefinitionException {
-		System.out.println("Hop je dois charger l'artefact: " + getIODelegate().getSerializationArtefact());
-		return super.loadResourceData();
-	}
-
-	/*@Override
-	public List<BResource> getBComponentResources() {
-		return getContents(BResource.class);
-	}*/
-
-	@Override
 	public boolean delete(Object... context) {
 		if (super.delete(context)) {
 			getServiceManager().getResourceManager().addToFilesToDelete(ResourceLocator.retrieveResourceAsFile(getDirectory()));
-			// isDeleted = true;
-			// also remove the parent folder if empty, created by openflexo
-			/*
-			 * if (!(getDirectory().length() > 0)) { getDirectory().delete(); }
-			 * else { logger.
-			 * warning("Diagram specification folder cannot be deleted because it is not empty"
-			 * ); }
-			 */
 			return true;
 		}
 
@@ -157,6 +129,52 @@ public abstract class RPYProjectResourceImpl extends PamelaResourceImpl<RPYProje
 			return parent;
 		}
 		return null;
+	}
+
+	private String projectName;
+
+	public String getProjectName() {
+		if (isLoaded()) {
+			return getRPYProject().getName();
+		}
+		else {
+			projectName = findProjectNameInMetaData();
+			if (projectName == null) {
+				try {
+					if (!isLoading()) {
+						System.out.println("********** Loading " + this);
+						loadResourceData();
+						projectName = getRPYProject().getName();
+						saveMetaData();
+					}
+				} catch (IOFlexoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return projectName;
+		}
+	}
+
+	private String findProjectNameInMetaData() {
+
+		FileSystemMetaDataManager metaDataManager = getMetaDataManager();
+		if (metaDataManager != null && getIODelegate().getSerializationArtefact() instanceof File) {
+			File file = (File) getIODelegate().getSerializationArtefact();
+			if (file.lastModified() < metaDataManager.metaDataLastModified(file)) {
+				return metaDataManager.getProperty("projectName", file);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	protected void saveMetaData() {
+		FileSystemMetaDataManager metaDataManager = getMetaDataManager();
+		if (metaDataManager != null && getIODelegate().getSerializationArtefact() instanceof File) {
+			File file = (File) getIODelegate().getSerializationArtefact();
+			metaDataManager.setProperty("projectName", getLoadedResourceData().getName(), file, true);
+		}
 	}
 
 }

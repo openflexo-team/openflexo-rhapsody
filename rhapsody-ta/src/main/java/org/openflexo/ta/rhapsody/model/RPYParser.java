@@ -47,7 +47,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
-import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.ta.rhapsody.parser.lexer.Lexer;
 import org.openflexo.ta.rhapsody.parser.node.Start;
 import org.openflexo.ta.rhapsody.parser.parser.Parser;
@@ -75,7 +74,7 @@ public class RPYParser {
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static <RD extends ResourceData<RD> & RPYObject> RD parse(InputStream inputStream, RPYModelFactory<RD, ?> modelFactory)
+	public static <RD extends RPYRootObject<RD>> RD parse(InputStream inputStream, RPYModelFactory<RD, ?> modelFactory)
 			throws ParseException, IOException {
 		String data = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
 		System.out.println("read: " + data);
@@ -92,7 +91,7 @@ public class RPYParser {
 	 * @throws ParseException
 	 *             if parsing expression lead to an error
 	 */
-	public static <RD extends ResourceData<RD> & RPYObject> RD parse(String data, RPYModelFactory<RD, ?> modelFactory) throws ParseException {
+	public static <RD extends RPYRootObject<RD>> RD parse(String data, RPYModelFactory<RD, ?> modelFactory) throws ParseException {
 		try {
 			// System.out.println("Parsing: " + anExpression);
 

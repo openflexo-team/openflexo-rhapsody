@@ -39,12 +39,11 @@
 package org.openflexo.ta.rhapsody.rm;
 
 import org.openflexo.foundation.resource.PamelaResource;
-import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.model.RPYModelFactory;
-import org.openflexo.ta.rhapsody.model.RPYObject;
+import org.openflexo.ta.rhapsody.model.RPYRootObject;
 
 /**
  * Abstract resource in Rhapsody project
@@ -53,7 +52,7 @@ import org.openflexo.ta.rhapsody.model.RPYObject;
  *
  */
 @ModelEntity(isAbstract = true)
-public interface RPYResource<RD extends ResourceData<RD> & RPYObject, F extends RPYModelFactory>
+public interface RPYResource<RD extends RPYRootObject<RD>, F extends RPYModelFactory<RD, ?>>
 		extends TechnologyAdapterResource<RD, RPYTechnologyAdapter>, PamelaResource<RD, F> {
 
 }
