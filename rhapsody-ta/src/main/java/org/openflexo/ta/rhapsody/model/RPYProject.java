@@ -40,6 +40,7 @@ package org.openflexo.ta.rhapsody.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.pamela.annotations.Getter;
@@ -81,7 +82,10 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 	public void setName(String aName);
 
 	@Override
-	public RPYProjectResource getResource();
+	public FlexoResource<RPYProject> getResource();
+
+	@Override
+	public void setResource(FlexoResource<RPYProject> resource);
 
 	/**
 	 * Retrieve object with supplied serialization identifier, asserting this object resides in this {@link RPYProject}
@@ -111,6 +115,11 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 		@Override
 		public RPYProjectResource getResource() {
 			return (RPYProjectResource) performSuperGetter(FLEXO_RESOURCE);
+		}
+
+		@Override
+		public void setResource(FlexoResource<RPYProject> resource) {
+			performSuperSetter(FLEXO_RESOURCE, resource);
 		}
 
 		@Override

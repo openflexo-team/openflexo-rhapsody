@@ -31,6 +31,7 @@ import org.openflexo.foundation.resource.TechnologySpecificPamelaResourceFactory
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
+import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.model.RPYProject;
 import org.openflexo.ta.rhapsody.model.RPYProjectFactory;
 
@@ -67,7 +68,7 @@ public class RPYProjectResourceFactory
 	@Override
 	public RPYProjectFactory makeModelFactory(RPYProjectResource resource,
 			TechnologyContextManager<RPYTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
-		return new RPYProjectFactory(resource, technologyContextManager.getServiceManager().getEditingContext());
+		return new RPYProjectFactory(resource, (RPYTechnologyContextManager) technologyContextManager);
 	}
 
 	@Override

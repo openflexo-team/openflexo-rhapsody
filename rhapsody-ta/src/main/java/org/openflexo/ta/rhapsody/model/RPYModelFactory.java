@@ -48,6 +48,10 @@ import org.openflexo.pamela.converter.RelativePathResourceConverter;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.EditingContext;
 import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
+import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
+import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
+import org.openflexo.ta.rhapsody.metamodel.RPYProperty.PropertyType;
 import org.openflexo.ta.rhapsody.rm.RPYResource;
 
 /**
@@ -68,10 +72,14 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 
 	private RelativePathResourceConverter relativePathResourceConverter;
 
-	public RPYModelFactory(Class<RD> resourceDataClass, R resource, EditingContext editingContext) throws ModelDefinitionException {
+	private RPYTechnologyContextManager technologyContextManager;
+
+	public RPYModelFactory(Class<RD> resourceDataClass, R resource, RPYTechnologyContextManager technologyContextManager)
+			throws ModelDefinitionException {
 		super(ModelContextLibrary.getCompoundModelContext(resourceDataClass));
 		this.resource = resource;
-		setEditingContext(editingContext);
+		this.technologyContextManager = technologyContextManager;
+		setEditingContext(technologyContextManager.getServiceManager().getEditingContext());
 		addConverter(relativePathResourceConverter = new RelativePathResourceConverter(null));
 		if (resource != null && resource.getIODelegate() != null && resource.getIODelegate().getSerializationArtefactAsResource() != null) {
 			relativePathResourceConverter
@@ -102,7 +110,20 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 			undoManager.removeFromIgnoreHandlers(ignoreHandler);
 			// System.out.println("@@@@@@@@@@@@@@@@ END LOADING RESOURCE " + resource.getURI());
 		}
+	}
 
+	public RPYConcept getRPYConcept(String conceptName) {
+		return technologyContextManager.getRPYConcept(conceptName);
+	}
+
+	public RPYObject makeObject(RPYConcept concept) {
+		RPYObject returned = newInstance(RPYObject.class);
+		returned.setConcept(concept);
+		return returned;
+	}
+
+	public RPYProperty ensureProperty(String propertyName, PropertyType type, RPYConcept concept) {
+		return technologyContextManager.ensureProperty(propertyName, type, concept);
 	}
 
 }

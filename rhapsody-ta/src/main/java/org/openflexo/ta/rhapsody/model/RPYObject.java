@@ -42,8 +42,13 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
+import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
+import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 
 /**
  * Common API for all objects involved in Rhapsody model
@@ -51,8 +56,12 @@ import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
  * @author sylvain
  *
  */
-@ModelEntity(isAbstract = true)
+@ModelEntity
+@ImplementationClass(value = RPYObject.RPYObjectImpl.class)
 public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAdapter> {
+
+	@PropertyIdentifier(type = RPYConcept.class)
+	public static final String CONCEPT_KEY = "concept";
 
 	/**
 	 * Return serialization identifier of this object<br>
@@ -62,6 +71,12 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 	 * @return
 	 */
 	public String getSerializationIdentifier();
+
+	@Getter(value = CONCEPT_KEY)
+	public RPYConcept getConcept();
+
+	@Setter(CONCEPT_KEY)
+	public void setConcept(RPYConcept aConcept);
 
 	/**
 	 * Default base implementation for {@link RPYObject}
@@ -73,6 +88,19 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
+
+		@Override
+		public String toString() {
+			StringBuffer sb = new StringBuffer();
+			sb.append("[" + getConcept().getName() + "]\n");
+			/*for (DSLComponent component : getComponents()) {
+				sb.append(component.toString() + "\n");
+			}
+			for (DSLLink link : getLinks()) {
+				sb.append(link.toString() + "\n");
+			}*/
+			return sb.toString();
+		}
 
 	}
 }

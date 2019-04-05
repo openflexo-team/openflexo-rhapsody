@@ -56,7 +56,7 @@ public abstract class AbstractRPYTest extends OpenflexoProjectAtRunTimeTestCase 
 
 	protected RPYProjectResource getRPYProjectResource(String documentName, FlexoResourceCenter<?> resourceCenter) {
 
-		String documentURI = resourceCenter.getDefaultBaseURI() + "/" + "RPY" + "/" + documentName;
+		String documentURI = resourceCenter.getDefaultBaseURI() + "/" + "TestResourceCenter" + "/" + documentName;
 		System.out.println("Searching " + documentURI);
 
 		RPYProjectResource documentResource = (RPYProjectResource) serviceManager.getResourceManager().getResource(documentURI, null,

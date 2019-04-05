@@ -37,7 +37,7 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.ta.rhapsody.model.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +47,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
+import org.openflexo.ta.rhapsody.model.RPYModelFactory;
+import org.openflexo.ta.rhapsody.model.RPYProject;
+import org.openflexo.ta.rhapsody.model.RPYRootObject;
 import org.openflexo.ta.rhapsody.parser.lexer.Lexer;
 import org.openflexo.ta.rhapsody.parser.node.Start;
 import org.openflexo.ta.rhapsody.parser.parser.Parser;

@@ -42,7 +42,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.pamela.converter.RelativePathResourceConverter;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.EditingContext;
+import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
+import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
@@ -59,8 +60,9 @@ public class RPYProjectFactory extends RPYModelFactory<RPYProject, RPYProjectRes
 
 	private RelativePathResourceConverter relativePathResourceConverter;
 
-	public RPYProjectFactory(RPYProjectResource resource, EditingContext editingContext) throws ModelDefinitionException {
-		super(RPYProject.class, resource, editingContext);
+	public RPYProjectFactory(RPYProjectResource resource, RPYTechnologyContextManager technologyContextManager)
+			throws ModelDefinitionException {
+		super(RPYProject.class, resource, technologyContextManager);
 		addConverter(relativePathResourceConverter = new RelativePathResourceConverter(null));
 		if (resource != null && resource.getIODelegate() != null && resource.getIODelegate().getSerializationArtefactAsResource() != null) {
 			relativePathResourceConverter
@@ -71,4 +73,15 @@ public class RPYProjectFactory extends RPYModelFactory<RPYProject, RPYProjectRes
 	public RPYProject makeProject() {
 		return newInstance(RPYProject.class);
 	}
+
+	@Override
+	public RPYObject makeObject(RPYConcept concept) {
+		if (concept.getName().equals("IProject")) {
+			RPYProject returned = makeProject();
+			returned.setConcept(concept);
+			return returned;
+		}
+		return super.makeObject(concept);
+	}
+
 }

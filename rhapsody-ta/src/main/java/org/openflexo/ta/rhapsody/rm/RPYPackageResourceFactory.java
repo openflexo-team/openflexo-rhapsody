@@ -29,6 +29,7 @@ import org.openflexo.foundation.resource.TechnologySpecificPamelaResourceFactory
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
+import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.model.RPYPackage;
 import org.openflexo.ta.rhapsody.model.RPYPackageFactory;
 
@@ -73,7 +74,7 @@ public class RPYPackageResourceFactory
 	@Override
 	public RPYPackageFactory makeModelFactory(RPYPackageResource resource,
 			TechnologyContextManager<RPYTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
-		return new RPYPackageFactory(resource, technologyContextManager.getServiceManager().getEditingContext());
+		return new RPYPackageFactory(resource, (RPYTechnologyContextManager) technologyContextManager);
 	}
 
 	public <I> RPYPackageResource retrieveInnerPackageResource(I serializationArtefact, RPYProjectResource projectResource)

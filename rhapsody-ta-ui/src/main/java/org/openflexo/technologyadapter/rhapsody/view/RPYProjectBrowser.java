@@ -1,9 +1,8 @@
 /**
  * 
- * Copyright (c) 2013-2014, Openflexo
- * Copyright (c) 2011-2012, AgileBirds
+ * Copyright (c) 2014, Openflexo
  * 
- * This file is part of Connie-core, a component of the software infrastructure 
+ * This file is part of Openflexo-technology-adapters-ui, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -37,18 +36,30 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.technologyadapter.rhapsody.view;
 
+import java.util.logging.Logger;
+
+import org.openflexo.rm.Resource;
+import org.openflexo.rm.ResourceLocator;
+import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
+import org.openflexo.ta.rhapsody.model.RPYProject;
+import org.openflexo.view.FIBBrowserView;
+import org.openflexo.view.controller.FlexoController;
+
+/**
+ * Browser allowing to browse a {@link RPYProject}<br>
+ * 
+ * @author sguerin
+ * 
+ */
 @SuppressWarnings("serial")
-public class ParseException extends Exception {
+public class RPYProjectBrowser extends FIBBrowserView<RPYProject> {
+	static final Logger logger = Logger.getLogger(RPYProjectBrowser.class.getPackage().getName());
 
-	/**
-	 * Constructs a new parse exception with the specified detail message.
-	 * 
-	 * @param message
-	 *            the detail message. The detail message is saved for later retrieval by the {@link #getMessage()} method.
-	 */
-	public ParseException(String message) {
-		super(message);
+	public static final Resource FIB_FILE = ResourceLocator.locateResource("Fib/Widget/RPYProjectBrowser.fib");
+
+	public RPYProjectBrowser(RPYProject project, FlexoController controller) {
+		super(project, controller, FIB_FILE, controller.getTechnologyAdapter(RPYTechnologyAdapter.class).getLocales());
 	}
 }

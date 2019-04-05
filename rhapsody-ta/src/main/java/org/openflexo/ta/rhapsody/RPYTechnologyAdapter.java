@@ -43,6 +43,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.fml.annotations.DeclareModelSlots;
 import org.openflexo.foundation.fml.annotations.DeclareResourceFactories;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.ta.rhapsody.fml.binding.RPYBindingFactory;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResourceFactory;
@@ -113,6 +114,16 @@ public class RPYTechnologyAdapter extends TechnologyAdapter<RPYTechnologyAdapter
 			resourceCenter.registerRepository(returned, RPYProjectResourceRepository.class, this);
 		}
 		return returned;
+	}
+
+	@Override
+	public RPYTechnologyContextManager createTechnologyContextManager(FlexoResourceCenterService service) {
+		return new RPYTechnologyContextManager(this, getTechnologyAdapterService().getServiceManager().getResourceCenterService());
+	}
+
+	@Override
+	public RPYTechnologyContextManager getTechnologyContextManager() {
+		return (RPYTechnologyContextManager) super.getTechnologyContextManager();
 	}
 
 }

@@ -1,7 +1,7 @@
 /**
  * 
  * Copyright (c) 2013-2014, Openflexo
- * Copyright (c) 2012-2012, AgileBirds
+ * Copyright (c) 2011-2012, AgileBirds
  * 
  * This file is part of Connie-core, a component of the software infrastructure 
  * developed at Openflexo.
@@ -37,34 +37,18 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.ta.rhapsody.model.parser;
 
-import org.openflexo.ta.rhapsody.parser.analysis.DepthFirstAdapter;
-import org.openflexo.ta.rhapsody.parser.node.ARpyHeader;
+@SuppressWarnings("serial")
+public class ParseException extends Exception {
 
-/**
- * This class implements the semantics analyzer for a parsed DSL.<br>
- * 
- * @author sylvain
- * 
- */
-class RPYSemanticsAnalyzer<RD extends RPYRootObject<RD>> extends DepthFirstAdapter {
-
-	private RPYModelFactory<RD, ?> modelFactory;
-	private RD rootObject;
-
-	public RPYSemanticsAnalyzer(RPYModelFactory<RD, ?> modelFactory) {
-		this.modelFactory = modelFactory;
+	/**
+	 * Constructs a new parse exception with the specified detail message.
+	 * 
+	 * @param message
+	 *            the detail message. The detail message is saved for later retrieval by the {@link #getMessage()} method.
+	 */
+	public ParseException(String message) {
+		super(message);
 	}
-
-	public RD getRootObject() {
-		return rootObject;
-	}
-
-	@Override
-	public void inARpyHeader(ARpyHeader node) {
-		System.out.println("Tiens, le header: " + node);
-		super.inARpyHeader(node);
-	}
-
 }

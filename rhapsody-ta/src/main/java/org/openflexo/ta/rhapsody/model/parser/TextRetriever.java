@@ -1,8 +1,8 @@
 /**
  * 
- * Copyright (c) 2018, Openflexo
+ * Copyright (c) 2019, Openflexo
  * 
- * This file is part of OpenflexoTechnologyAdapter, a component of the software infrastructure 
+ * This file is part of FML-parser, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -36,54 +36,51 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.ta.rhapsody.model.parser;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.InnerResourceData;
-import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
+import org.openflexo.ta.rhapsody.parser.analysis.DepthFirstAdapter;
+import org.openflexo.ta.rhapsody.parser.node.Node;
+import org.openflexo.ta.rhapsody.parser.node.Token;
 
 /**
- * Common API for all objects involved in Rhapsody model of a {@link RPYProject}
+ * 
  * 
  * @author sylvain
- *
+ * 
  */
-@ModelEntity(isAbstract = true)
-public interface RPYProjectObject extends RPYObject, InnerResourceData<RPYProject> {
+public class TextRetriever extends DepthFirstAdapter {
 
-	/**
-	 * Return the model factory which manages this {@link RPYProjectObject}
-	 * 
-	 * @return
-	 */
-	public RPYProjectFactory getFactory();
+	private static final Logger logger = Logger.getLogger(TextRetriever.class.getPackage().getName());
 
-	/**
-	 * Default base implementation for {@link RPYProjectObject}
-	 * 
-	 * @author sylvain
-	 *
-	 */
-	public static abstract class RPYProjectObjectImpl extends RPYObjectImpl implements RPYProjectObject {
+	private Node node;
+	private StringBuffer sb = new StringBuffer();
 
-		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
-
-		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getResourceData() != null && getResourceData().getResource() != null) {
-				return ((RPYProjectResource) getResourceData().getResource()).getTechnologyAdapter();
-			}
-			return null;
-		}
-
-		@Override
-		public RPYProjectFactory getFactory() {
-			return ((RPYProjectResource) getResourceData().getResource()).getFactory();
-		}
-
+	public TextRetriever(Node node) {
+		this.node = node;
+		sb = new StringBuffer();
+		node.apply(this);
 	}
+
+	public Node getNode() {
+		return node;
+	}
+
+	public String getText() {
+		return sb.toString();
+	}
+
+	@Override
+	public void defaultCase(Node node) {
+		super.defaultCase(node);
+		if (node instanceof Token) {
+			handleToken((Token) node);
+		}
+	}
+
+	private void handleToken(Token token) {
+		sb.append(token.getText());
+	}
+
 }

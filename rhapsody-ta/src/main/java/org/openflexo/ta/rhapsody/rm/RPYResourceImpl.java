@@ -61,11 +61,11 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.resource.StreamIODelegate;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.model.ParseException;
 import org.openflexo.ta.rhapsody.model.RPYModelFactory;
 import org.openflexo.ta.rhapsody.model.RPYObject;
-import org.openflexo.ta.rhapsody.model.RPYParser;
 import org.openflexo.ta.rhapsody.model.RPYRootObject;
+import org.openflexo.ta.rhapsody.model.parser.ParseException;
+import org.openflexo.ta.rhapsody.model.parser.RPYParser;
 import org.openflexo.toolbox.FileSystemMetaDataManager;
 import org.openflexo.toolbox.FileUtils;
 

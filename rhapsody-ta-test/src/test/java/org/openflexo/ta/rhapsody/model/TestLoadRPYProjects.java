@@ -48,8 +48,12 @@ import org.junit.runner.RunWith;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.ta.rhapsody.AbstractRPYTest;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
+import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
+import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
+import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResourceRepository;
 import org.openflexo.test.OrderedRunner;
@@ -108,5 +112,22 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 			assertEquals("link2", system.getLinks().get(1).getName());
 			assertEquals("link3", system.getLinks().get(2).getName());
 			assertEquals("link4", system.getLinks().get(3).getName());*/
+
+		debugMetaModel();
+
+	}
+
+	private void debugMetaModel() {
+
+		TechnologyAdapterService taService = serviceManager.getTechnologyAdapterService();
+		RPYTechnologyAdapter ta = taService.getTechnologyAdapter(RPYTechnologyAdapter.class);
+		RPYTechnologyContextManager cm = (RPYTechnologyContextManager) taService.getTechnologyContextManager(ta);
+
+		for (RPYConcept concept : cm.getRPYConcepts()) {
+			System.out.println("***** " + concept.getName());
+			for (RPYProperty property : concept.getProperties()) {
+				System.out.println("  > " + property.getName() + " : " + property.getType());
+			}
+		}
 	}
 }

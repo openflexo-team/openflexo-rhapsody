@@ -1,8 +1,9 @@
 /**
  * 
- * Copyright (c) 2018, Openflexo
+ * Copyright (c) 2013-2014, Openflexo
+ * Copyright (c) 2012-2012, AgileBirds
  * 
- * This file is part of OpenflexoTechnologyAdapter, a component of the software infrastructure 
+ * This file is part of Connie-core, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -36,33 +37,46 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.ta.rhapsody.model.parser;
 
-import java.util.logging.Logger;
-
-import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.ModelFactory;
-import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
-import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
+import org.openflexo.ta.rhapsody.model.RPYModelFactory;
+import org.openflexo.ta.rhapsody.model.RPYRootObject;
+import org.openflexo.ta.rhapsody.parser.analysis.DepthFirstAdapter;
+import org.openflexo.ta.rhapsody.parser.node.ARpyComplexObject;
+import org.openflexo.ta.rhapsody.parser.node.ARpyRoot;
 
 /**
- * A {@link ModelFactory} used to manage a {@link RPYPackage}<br>
- * One instance of this class should be used for each {@link RPYPackageResource}
+ * This class implements the semantics analyzer for a parsed DSL.<br>
  * 
  * @author sylvain
  * 
  */
-public class RPYPackageFactory extends RPYModelFactory<RPYPackage, RPYPackageResource> {
+public class RPYSemanticsAnalyzer<RD extends RPYRootObject<RD>> extends DepthFirstAdapter {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(RPYPackageFactory.class.getPackage().getName());
+	private RPYModelFactory<RD, ?> modelFactory;
+	private RD rootObject;
 
-	public RPYPackageFactory(RPYPackageResource resource, RPYTechnologyContextManager technologyContextManager)
-			throws ModelDefinitionException {
-		super(RPYPackage.class, resource, technologyContextManager);
+	private RPYObjectFactory objectFactory;
+
+	public RPYSemanticsAnalyzer(RPYModelFactory<RD, ?> modelFactory) {
+		this.modelFactory = modelFactory;
+		objectFactory = new RPYObjectFactory(modelFactory);
 	}
 
-	public RPYPackage makePackage() {
-		return newInstance(RPYPackage.class);
+	public RPYModelFactory<RD, ?> getModelFactory() {
+		return modelFactory;
 	}
+
+	public RD getRootObject() {
+		return rootObject;
+	}
+
+	@Override
+	public void inARpyRoot(ARpyRoot node) {
+		// TODO Auto-generated method stub
+		super.inARpyRoot(node);
+		rootObject = (RD) objectFactory.makeRPYObject((ARpyComplexObject) node.getRpyComplexObject());
+		System.out.println("RootObject : " + rootObject);
+	}
+
 }
