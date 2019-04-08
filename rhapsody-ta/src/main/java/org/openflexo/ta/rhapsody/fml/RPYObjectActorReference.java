@@ -113,7 +113,7 @@ public interface RPYObjectActorReference extends ActorReference<RPYObject> {
 		@Override
 		public RPYObject getModellingElement(boolean forceLoading) {
 			if (object == null && serializationId != null) {
-				return getProject().getObjectWithSerializationIdentifier(serializationId);
+				return getProject().getObjectWithID(serializationId, null);
 			}
 			if (object == null) {
 				logger.warning("Could not retrieve object " + serializationId);

@@ -40,67 +40,57 @@ package org.openflexo.ta.rhapsody.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
- * Common API for all objects involved in Rhapsody model of a {@link RPYProject}
+ * Represents a RPY profile<br>
  * 
  * @author sylvain
  *
  */
-@ModelEntity(isAbstract = true)
-public interface RPYProjectObject extends RPYObject, InnerResourceData<RPYProject> {
+@ModelEntity
+@ImplementationClass(value = RPYProfile.RPYProfileImpl.class)
+public interface RPYProfile extends RPYProjectObject {
 
-	@PropertyIdentifier(type = RPYProject.class)
-	public static final String PROJECT_KEY = "project";
+	@PropertyIdentifier(type = String.class)
+	public static final String PERSIST_AS_KEY = "persistAs";
+	@PropertyIdentifier(type = String.class)
+	public static final String FILE_NAME_KEY = "fileName";
 
-	@Getter(value = PROJECT_KEY)
-	public RPYProject getProject();
+	@Getter(value = PERSIST_AS_KEY)
+	public String getPersistAs();
 
-	@Setter(PROJECT_KEY)
-	public void setProject(RPYProject aProject);
+	@Setter(PERSIST_AS_KEY)
+	public void setPersistAs(String persistAs);
+
+	@Getter(value = FILE_NAME_KEY)
+	public String getFileName();
+
+	@Setter(FILE_NAME_KEY)
+	public void setFileName(String aFileName);
 
 	/**
-	 * Return the model factory which manages this {@link RPYProjectObject}
-	 * 
-	 * @return
-	 */
-	public RPYProjectFactory getFactory();
-
-	/**
-	 * Default base implementation for {@link RPYProjectObject}
+	 * Default base implementation for {@link RPYProfile}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class RPYProjectObjectImpl extends RPYObjectImpl implements RPYProjectObject {
+	public static abstract class RPYProfileImpl extends RPYProjectObjectImpl implements RPYProfile {
 
 		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(RPYProjectObjectImpl.class.getPackage().getName());
 
 		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getResourceData() != null && getResourceData().getResource() != null) {
-				return ((RPYProjectResource) getResourceData().getResource()).getTechnologyAdapter();
-			}
-			return null;
-		}
-
-		@Override
-		public RPYProjectFactory getFactory() {
-			return ((RPYProjectResource) getResourceData().getResource()).getFactory();
-		}
-
-		@Override
-		public RPYProject getResourceData() {
-			return getProject();
+		public void mapProperties() {
+			super.mapProperties();
+			setFileName(getPropertyValue("fileName"));
+			setPersistAs(getPropertyValue("_persistAs"));
 		}
 
 	}
+
 }

@@ -43,6 +43,7 @@ import java.util.logging.Logger;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.ModelFactory;
 import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
+import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 
 /**
@@ -65,4 +66,16 @@ public class RPYPackageFactory extends RPYModelFactory<RPYPackage, RPYPackageRes
 	public RPYPackage makePackage() {
 		return newInstance(RPYPackage.class);
 	}
+
+	@Override
+	public RPYObject makeObject(RPYConcept concept) {
+		if (concept.getName().equals("ISubsystem")) {
+			RPYPackage returned = makePackage();
+			returned.setConcept(concept);
+			setRootObject(returned);
+			return returned;
+		}
+		return super.makeObject(concept);
+	}
+
 }

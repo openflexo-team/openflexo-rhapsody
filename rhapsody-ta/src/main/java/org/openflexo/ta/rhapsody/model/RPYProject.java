@@ -38,22 +38,26 @@
 
 package org.openflexo.ta.rhapsody.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.pamela.annotations.Adder;
+import org.openflexo.pamela.annotations.Finder;
 import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.Getter.Cardinality;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
  * Represents the {@link ResourceData} deserialized from a {@link RPYProjectResource}<br>
- * 
- * Note: Purpose of that class is to demonstrate API of a {@link TechnologyAdapter}, thus the semantics is here trivial
  * 
  * @author sylvain
  *
@@ -64,6 +68,12 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 
 	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = RPYPackage.class, cardinality = Cardinality.LIST)
+	public static final String PACKAGES_KEY = "packages";
+	@PropertyIdentifier(type = RPYProfile.class, cardinality = Cardinality.LIST)
+	public static final String PROFILES_KEY = "profiles";
+	@PropertyIdentifier(type = RPYObjectClassDiagram.class, cardinality = Cardinality.LIST)
+	public static final String DIAGRAMS_KEY = "diagrams";
 
 	/**
 	 * Return name of this project
@@ -87,14 +97,46 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 	@Override
 	public void setResource(FlexoResource<RPYProject> resource);
 
-	/**
-	 * Retrieve object with supplied serialization identifier, asserting this object resides in this {@link RPYProject}
-	 * 
-	 * @param objectId
-	 * @return
-	 */
-	@Override
-	public RPYObject getObjectWithSerializationIdentifier(String objectId);
+	@Getter(value = PACKAGES_KEY, cardinality = Cardinality.LIST, ignoreType = true)
+	public List<RPYPackage> getPackages();
+
+	@Finder(attribute = RPYPackage.NAME_KEY, collection = PACKAGES_KEY)
+	public RPYPackage getPackage(String packageName);
+
+	@Adder(PACKAGES_KEY)
+	public void addToPackages(RPYPackage aPackage);
+
+	@Remover(PACKAGES_KEY)
+	public void removeFromPackages(RPYPackage aPackage);
+
+	@Getter(value = PROFILES_KEY, cardinality = Cardinality.LIST, inverse = RPYProfile.PROJECT_KEY)
+	public List<RPYProfile> getProfiles();
+
+	@Finder(attribute = RPYProfile.FILE_NAME_KEY, collection = PROFILES_KEY)
+	public RPYProfile getProfile(String profileFileName);
+
+	@Adder(PROFILES_KEY)
+	public void addToProfiles(RPYProfile aProfile);
+
+	@Remover(PROFILES_KEY)
+	public void removeFromProfiles(RPYProfile aProfile);
+
+	@Getter(value = DIAGRAMS_KEY, cardinality = Cardinality.LIST, inverse = RPYDiagram.ROOT_OBJECT_KEY)
+	public List<RPYObjectClassDiagram> getDiagrams();
+
+	@Adder(DIAGRAMS_KEY)
+	public void addToDiagrams(RPYObjectClassDiagram aDiagram);
+
+	@Remover(DIAGRAMS_KEY)
+	public void removeFromDiagrams(RPYObjectClassDiagram aDiagram);
+
+	public ComponentsList getComponentsList();
+
+	public ObjectModelDiagramsList getObjectModelDiagramsList();
+
+	public PackagesList getPackagesList();
+
+	public ProfilesList getProfilesList();
 
 	/**
 	 * Default base implementation for {@link RPYProject}
@@ -106,6 +148,53 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYProjectObjectImpl.class.getPackage().getName());
+
+		private List<RPYPackage> packages;
+
+		private ComponentsList componentsList = new ComponentsList() {
+		};
+
+		private ObjectModelDiagramsList objectModelDiagramsList = new ObjectModelDiagramsList() {
+
+			@Override
+			public List<RPYObjectClassDiagram> getDiagrams() {
+				return RPYProjectImpl.this.getDiagrams();
+			}
+		};
+
+		private PackagesList packagesList = new PackagesList() {
+			@Override
+			public List<RPYPackage> getPackages() {
+				return RPYProjectImpl.this.getPackages();
+			}
+		};
+
+		private ProfilesList profilesList = new ProfilesList() {
+			@Override
+			public List<RPYProfile> getProfiles() {
+				return RPYProjectImpl.this.getProfiles();
+			}
+		};
+
+		@Override
+		public ComponentsList getComponentsList() {
+			return componentsList;
+		}
+
+		@Override
+		public ObjectModelDiagramsList getObjectModelDiagramsList() {
+			return objectModelDiagramsList;
+		}
+
+		@Override
+		public PackagesList getPackagesList() {
+			return packagesList;
+		}
+
+		@Override
+		public ProfilesList getProfilesList() {
+			return profilesList;
+		}
 
 		@Override
 		public RPYProject getResourceData() {
@@ -123,18 +212,130 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 		}
 
 		@Override
-		public String toString() {
-			StringBuffer sb = new StringBuffer();
-			sb.append("[RPYProject]\n");
-			/*for (DSLComponent component : getComponents()) {
-				sb.append(component.toString() + "\n");
+		public void mapProperties() {
+			super.mapProperties();
+			setName(getPropertyValue("_name"));
+			RPYRawContainer subsystems = getPropertyValue("Subsystems");
+			for (Object object : subsystems.getValues()) {
+				if (object instanceof RPYProfile) {
+					addToProfiles((RPYProfile) object);
+				}
 			}
-			for (DSLLink link : getLinks()) {
-				sb.append(link.toString() + "\n");
-			}*/
-			return sb.toString();
+			RPYRawContainer diagrams = getPropertyValue("Diagrams");
+			for (Object object : diagrams.getValues()) {
+				if (object instanceof RPYObjectClassDiagram) {
+					addToDiagrams((RPYObjectClassDiagram) object);
+				}
+				else {
+					logger.warning("Unexpected object: " + object);
+				}
+			}
 		}
 
+		@Override
+		public List<RPYPackage> getPackages() {
+			if (packages == null) {
+				loadPackagesWhenUnloaded();
+			}
+			return packages;
+		}
+
+		@Override
+		public RPYPackage getPackage(String packageName) {
+			if (packages == null) {
+				loadPackagesWhenUnloaded();
+			}
+			if (packageName == null) {
+				return null;
+			}
+			for (RPYPackage s : getPackages()) {
+				if (packageName.equals(s.getName())) {
+					return s;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public void addToPackages(RPYPackage aPackage) {
+			if (packages == null) {
+				loadPackagesWhenUnloaded();
+			}
+			if (!packages.contains(aPackage)) {
+				packages.add(aPackage);
+				getPropertyChangeSupport().firePropertyChange("packages", null, aPackage);
+			}
+		}
+
+		@Override
+		public void removeFromPackages(RPYPackage aPackage) {
+			if (packages == null) {
+				loadPackagesWhenUnloaded();
+			}
+			if (packages.contains(aPackage)) {
+				packages.remove(aPackage);
+				getPropertyChangeSupport().firePropertyChange("packages", aPackage, null);
+			}
+		}
+
+		/**
+		 * Load eventually unloaded packages<br>
+		 * After this call return, we can assert that all {@link RPYPackage} are loaded.
+		 */
+		private void loadPackagesWhenUnloaded() {
+			packages = new ArrayList<>();
+			if (getResource() != null) {
+				for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
+					if (r instanceof RPYPackageResource) {
+						RPYPackage aPackage = ((RPYPackageResource) r).getRPYPackage();
+						if (!packages.contains(aPackage)) {
+							addToPackages(aPackage);
+						}
+					}
+				}
+			}
+		}
+
+		@Override
+		public RPYProject getProject() {
+			return this;
+		}
+
+		/**
+		 * Retrieve object with supplied serialization identifier, asserting this object resides in this {@link RPYRootObject}
+		 * 
+		 * @param objectId
+		 * @return
+		 */
+		@Override
+		public RPYObject getObjectWithID(String objectId, String className) {
+			for (RPYObjectClassDiagram diagram : getDiagrams()) {
+				if (diagram.getID().equals(objectId)) {
+					return diagram;
+				}
+			}
+			// System.out.println("Tiens je cherche l'objet: " + objectId + " of " + className + " in " + this);
+			logger.warning("Cannot find object with ID: " + objectId + " class: " + className + " in " + this);
+			Thread.dumpStack();
+			return null;
+		}
+
+	}
+
+	public static interface ComponentsList {
+		// public List<RPYComponent> getComponents();
+	}
+
+	public static interface ObjectModelDiagramsList {
+		public List<RPYObjectClassDiagram> getDiagrams();
+	}
+
+	public static interface PackagesList {
+		public List<RPYPackage> getPackages();
+	}
+
+	public static interface ProfilesList {
+		public List<RPYProfile> getProfiles();
 	}
 
 }

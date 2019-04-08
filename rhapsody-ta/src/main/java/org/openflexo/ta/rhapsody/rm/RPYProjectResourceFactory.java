@@ -148,10 +148,6 @@ public class RPYProjectResourceFactory
 	protected <I> FlexoIODelegate<I> makeFlexoIODelegate(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
 		String artefactName = resourceCenter.retrieveName(serializationArtefact);
 		System.out.println("On contruit le IODelegate pour " + serializationArtefact);
-		I rpyDir = resourceCenter.getDirectory(artefactName + RPY_DIR_SUFFIX, serializationArtefact);
-		if (!resourceCenter.exists(rpyDir)) {
-			rpyDir = resourceCenter.createDirectory(artefactName + RPY_DIR_SUFFIX, serializationArtefact);
-		}
 		I rpyFile = resourceCenter.getEntry(artefactName + CORE_FILE_SUFFIX, serializationArtefact);
 		if (!resourceCenter.exists(rpyFile)) {
 			rpyFile = resourceCenter.createEntry(artefactName + CORE_FILE_SUFFIX, serializationArtefact);
@@ -171,9 +167,19 @@ public class RPYProjectResourceFactory
 		}
 
 		FlexoResourceCenter<I> resourceCenter = (FlexoResourceCenter<I>) projectResource.getResourceCenter();
-		I projectArtefact = resourceCenter.getContainer(resourceCenter.getContainer(serializationArtefact));
+		I projectArtefact = resourceCenter.getContainer(serializationArtefact);
 
-		for (I child : resourceCenter.getContents(projectArtefact)) {
+		String artefactName = resourceCenter.retrieveName(serializationArtefact);
+		if (artefactName.endsWith(CORE_FILE_SUFFIX)) {
+			artefactName = artefactName.substring(0, artefactName.length() - CORE_FILE_SUFFIX.length());
+		}
+		I rpyDir = resourceCenter.getDirectory(artefactName + RPY_DIR_SUFFIX, projectArtefact);
+		if (!resourceCenter.exists(rpyDir)) {
+			rpyDir = resourceCenter.createDirectory(artefactName + RPY_DIR_SUFFIX, projectArtefact);
+		}
+
+		System.out.println("On regarde le contenu de " + rpyDir);
+		for (I child : resourceCenter.getContents(rpyDir)) {
 			if (getPackageResourceFactory().isValidArtefact(child, resourceCenter)) {
 				try {
 					RPYPackageResource bRes = getPackageResourceFactory().retrieveInnerPackageResource(child, projectResource);

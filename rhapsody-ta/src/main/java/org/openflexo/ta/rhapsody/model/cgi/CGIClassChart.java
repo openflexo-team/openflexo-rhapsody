@@ -36,71 +36,40 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.ta.rhapsody.model.cgi;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.InnerResourceData;
-import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.PropertyIdentifier;
-import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
- * Common API for all objects involved in Rhapsody model of a {@link RPYProject}
+ * Represents a class chart<br>
  * 
  * @author sylvain
  *
  */
-@ModelEntity(isAbstract = true)
-public interface RPYProjectObject extends RPYObject, InnerResourceData<RPYProject> {
-
-	@PropertyIdentifier(type = RPYProject.class)
-	public static final String PROJECT_KEY = "project";
-
-	@Getter(value = PROJECT_KEY)
-	public RPYProject getProject();
-
-	@Setter(PROJECT_KEY)
-	public void setProject(RPYProject aProject);
+@ModelEntity
+@ImplementationClass(value = CGIClassChart.CGIClassChartImpl.class)
+public interface CGIClassChart extends CGIChart {
 
 	/**
-	 * Return the model factory which manages this {@link RPYProjectObject}
-	 * 
-	 * @return
-	 */
-	public RPYProjectFactory getFactory();
-
-	/**
-	 * Default base implementation for {@link RPYProjectObject}
+	 * Default base implementation for {@link CGIClassChart}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class RPYProjectObjectImpl extends RPYObjectImpl implements RPYProjectObject {
+	public static abstract class CGIClassChartImpl extends CGIChartImpl implements CGIClassChart {
 
 		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(CGIClassChartImpl.class.getPackage().getName());
 
 		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getResourceData() != null && getResourceData().getResource() != null) {
-				return ((RPYProjectResource) getResourceData().getResource()).getTechnologyAdapter();
-			}
-			return null;
-		}
-
-		@Override
-		public RPYProjectFactory getFactory() {
-			return ((RPYProjectResource) getResourceData().getResource()).getFactory();
-		}
-
-		@Override
-		public RPYProject getResourceData() {
-			return getProject();
+		public void mapProperties() {
+			super.mapProperties();
+			System.out.println("Coucou ici avec " + getPropertyValue("_id"));
 		}
 
 	}
+
 }

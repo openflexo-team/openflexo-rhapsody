@@ -57,6 +57,7 @@ public class RPYPackageResourceFactory
 
 	@Override
 	public <I> boolean isValidArtefact(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
+
 		return resourceCenter.retrieveName(serializationArtefact).endsWith(SBS_FILE_SUFFIX);
 	}
 
@@ -107,7 +108,7 @@ public class RPYPackageResourceFactory
 		logger.warning("Y'aurait pas un truc a faire la pour :" + returned);
 	}
 
-	public <I> RPYPackageResource makeInnerBResource(String name, RPYProjectResource projectResource, boolean createEmptyContents)
+	public <I> RPYPackageResource makeInnerPackageResource(String name, RPYProjectResource projectResource, boolean createEmptyContents)
 			throws SaveResourceException, ModelDefinitionException {
 
 		FlexoResourceCenter<I> resourceCenter = (FlexoResourceCenter<I>) projectResource.getResourceCenter();

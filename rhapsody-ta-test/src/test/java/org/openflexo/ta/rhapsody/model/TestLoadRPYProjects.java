@@ -37,7 +37,11 @@ package org.openflexo.ta.rhapsody.model;
  * 
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.util.Collection;
@@ -54,6 +58,7 @@ import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
+import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResourceRepository;
 import org.openflexo.test.OrderedRunner;
@@ -96,24 +101,71 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		}
 	}
 
+	private static RPYProject project;
+
 	@Test
 	@TestOrder(4)
 	public void testRPYContents() {
 
-		RPYProject project = getRPYProject("PingPongProject");
+		project = getRPYProject("PingPongProject");
 		System.out.println("PingPongProject:\n" + project);
 
-		/*	assertEquals(3, system.getComponents().size());
-			assertEquals("ComponentA", system.getComponents().get(0).getName());
-			assertEquals("ComponentB", system.getComponents().get(1).getName());
-			assertEquals("ComponentC", system.getComponents().get(2).getName());
-			assertEquals(4, system.getLinks().size());
-			assertEquals("link1", system.getLinks().get(0).getName());
-			assertEquals("link2", system.getLinks().get(1).getName());
-			assertEquals("link3", system.getLinks().get(2).getName());
-			assertEquals("link4", system.getLinks().get(3).getName());*/
-
 		debugMetaModel();
+
+		System.out.println("*************************");
+
+		System.out.println(project.toExtendedString(0));
+
+		assertEquals(1, project.getResource().getContents().size());
+		assertTrue(project.getResource().getContents().get(0) instanceof RPYPackageResource);
+
+		RPYPackageResource defaultPackageResource = (RPYPackageResource) project.getResource().getContents().get(0);
+		assertFalse(defaultPackageResource.isLoaded());
+
+		assertEquals(1, project.getProfiles().size());
+		RPYProfile profile = project.getProfiles().get(0);
+		assertSame(project, profile.getResourceData());
+
+		assertEquals(1, project.getDiagrams().size());
+		RPYObjectClassDiagram rootDiagram = project.getDiagrams().get(0);
+		assertNotNull(rootDiagram);
+		assertNotNull(rootDiagram.getClassChart());
+		assertSame(rootDiagram, rootDiagram.getClassChart().getModelObject());
+
+		assertEquals("Model1", rootDiagram.getName());
+	}
+
+	@Test
+	@TestOrder(5)
+	public void testRPYPackages() {
+		assertEquals(1, project.getPackages().size());
+		RPYPackageResource defaultPackageResource = (RPYPackageResource) project.getResource().getContents().get(0);
+		assertTrue(defaultPackageResource.isLoaded());
+
+		RPYPackage defaultPackage = defaultPackageResource.getLoadedResourceData();
+
+		assertEquals(2, defaultPackage.getObjectClassDiagrams().size());
+		RPYObjectClassDiagram diagram1 = defaultPackage.getObjectClassDiagrams().get(0);
+		assertNotNull(diagram1);
+		assertNotNull(diagram1.getClassChart());
+		assertSame(diagram1, diagram1.getClassChart().getModelObject());
+		assertEquals("DiagramClassPingPong", diagram1.getName());
+
+		RPYObjectClassDiagram diagram2 = defaultPackage.getObjectClassDiagrams().get(1);
+		assertNotNull(diagram2);
+		assertNotNull(diagram2.getClassChart());
+		assertSame(diagram2, diagram2.getClassChart().getModelObject());
+		assertEquals("DiagramInstanceClass", diagram2.getName());
+
+		assertEquals(2, defaultPackage.getSequenceDiagrams().size());
+		RPYSequenceDiagram seqDiag1 = defaultPackage.getSequenceDiagrams().get(0);
+		assertNotNull(seqDiag1);
+		/*assertNotNull(seqDiag1.getClassChart());
+		assertSame(seqDiag1, seqDiag1.getClassChart().getModelObject());
+		RPYSequenceDiagram seqDiag2 = defaultPackage.getSequenceDiagrams().get(1);
+		assertNotNull(seqDiag2);
+		assertNotNull(seqDiag2.getClassChart());
+		assertSame(seqDiag2, seqDiag2.getClassChart().getModelObject());*/
 
 	}
 

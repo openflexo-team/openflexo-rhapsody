@@ -291,7 +291,7 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 		System.out.println("Je dois trouver l'objet avec l'ID " + objectIdentifier);
 		// return getFlexoObject(Long.parseLong(objectIdentifier), userIdentifier);
 		try {
-			return getResourceData().getObjectWithSerializationIdentifier(objectIdentifier);
+			return getResourceData().getObjectWithID(objectIdentifier, null);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -38,69 +38,47 @@
 
 package org.openflexo.ta.rhapsody.model;
 
-import java.util.logging.Logger;
-
-import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
- * Common API for all objects involved in Rhapsody model of a {@link RPYProject}
+ * Represents a collection of objects
  * 
  * @author sylvain
  *
  */
-@ModelEntity(isAbstract = true)
-public interface RPYProjectObject extends RPYObject, InnerResourceData<RPYProject> {
+@ModelEntity
+@ImplementationClass(value = RPYUnmappedObject.RPYUnmappedObjectImpl.class)
+public interface RPYUnmappedObject extends RPYObject {
 
-	@PropertyIdentifier(type = RPYProject.class)
-	public static final String PROJECT_KEY = "project";
+	@PropertyIdentifier(type = RPYRootObject.class)
+	public static final String ROOT_OBJECT_KEY = "rootObject";
 
-	@Getter(value = PROJECT_KEY)
-	public RPYProject getProject();
+	@Getter(value = ROOT_OBJECT_KEY)
+	public RPYRootObject<?> getRootObject();
 
-	@Setter(PROJECT_KEY)
-	public void setProject(RPYProject aProject);
-
-	/**
-	 * Return the model factory which manages this {@link RPYProjectObject}
-	 * 
-	 * @return
-	 */
-	public RPYProjectFactory getFactory();
+	@Setter(ROOT_OBJECT_KEY)
+	public void setRootObject(RPYRootObject<?> aRootObject);
 
 	/**
-	 * Default base implementation for {@link RPYProjectObject}
+	 * Default base implementation for {@link RPYUnmappedObject}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class RPYProjectObjectImpl extends RPYObjectImpl implements RPYProjectObject {
-
-		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
+	public static abstract class RPYUnmappedObjectImpl extends RPYObjectImpl implements RPYUnmappedObject {
 
 		@Override
 		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getResourceData() != null && getResourceData().getResource() != null) {
-				return ((RPYProjectResource) getResourceData().getResource()).getTechnologyAdapter();
+			if (getRootObject() != null) {
+				return getRootObject().getTechnologyAdapter();
 			}
 			return null;
 		}
-
-		@Override
-		public RPYProjectFactory getFactory() {
-			return ((RPYProjectResource) getResourceData().getResource()).getFactory();
-		}
-
-		@Override
-		public RPYProject getResourceData() {
-			return getProject();
-		}
-
 	}
+
 }

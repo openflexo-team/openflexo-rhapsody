@@ -18,7 +18,7 @@
  *
  */
 
-package org.openflexo.technologyadapter.rhapsody.controller;
+package org.openflexo.ta.rhapsody.controller;
 
 import java.util.logging.Logger;
 
@@ -29,10 +29,10 @@ import org.openflexo.foundation.fml.editionaction.EditionAction;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.gina.utils.InspectorGroup;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
+import org.openflexo.ta.rhapsody.gui.RPYIconLibrary;
 import org.openflexo.ta.rhapsody.model.RPYObject;
 import org.openflexo.ta.rhapsody.model.RPYProject;
-import org.openflexo.technologyadapter.rhapsody.gui.RPYIconLibrary;
-import org.openflexo.technologyadapter.rhapsody.view.RPYProjectModuleView;
+import org.openflexo.ta.rhapsody.view.RPYProjectModuleView;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;

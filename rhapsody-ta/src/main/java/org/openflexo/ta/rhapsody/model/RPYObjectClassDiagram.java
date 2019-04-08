@@ -1,8 +1,8 @@
 /**
  * 
- * Copyright (c) 2014, Openflexo
+ * Copyright (c) 2018, Openflexo
  * 
- * This file is part of Openflexo-technology-adapters-ui, a component of the software infrastructure 
+ * This file is part of OpenflexoTechnologyAdapter, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -36,30 +36,53 @@
  * 
  */
 
-package org.openflexo.technologyadapter.rhapsody.view;
+package org.openflexo.ta.rhapsody.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.rm.Resource;
-import org.openflexo.rm.ResourceLocator;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.model.RPYProject;
-import org.openflexo.view.FIBBrowserView;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
+import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.ta.rhapsody.model.cgi.CGIClassChart;
 
 /**
- * Browser allowing to browse a {@link RPYProject}<br>
+ * Represents a RPY object or class diagram<br>
  * 
- * @author sguerin
- * 
+ * @author sylvain
+ *
  */
-@SuppressWarnings("serial")
-public class RPYProjectBrowser extends FIBBrowserView<RPYProject> {
-	static final Logger logger = Logger.getLogger(RPYProjectBrowser.class.getPackage().getName());
+@ModelEntity
+@ImplementationClass(value = RPYObjectClassDiagram.RPYObjectClassDiagramImpl.class)
+public interface RPYObjectClassDiagram extends RPYDiagram {
 
-	public static final Resource FIB_FILE = ResourceLocator.locateResource("Fib/Widget/RPYProjectBrowser.fib");
+	@PropertyIdentifier(type = CGIClassChart.class)
+	public static final String CLASS_CHART_KEY = "classChart";
 
-	public RPYProjectBrowser(RPYProject project, FlexoController controller) {
-		super(project, controller, FIB_FILE, controller.getTechnologyAdapter(RPYTechnologyAdapter.class).getLocales());
+	@Getter(value = CLASS_CHART_KEY)
+	public CGIClassChart getClassChart();
+
+	@Setter(CLASS_CHART_KEY)
+	public void setClassChart(CGIClassChart aChart);
+
+	/**
+	 * Default base implementation for {@link RPYObjectClassDiagram}
+	 * 
+	 * @author sylvain
+	 *
+	 */
+	public static abstract class RPYObjectClassDiagramImpl extends RPYDiagramImpl implements RPYObjectClassDiagram {
+
+		@SuppressWarnings("unused")
+		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
+
+		@Override
+		public void mapProperties() {
+			super.mapProperties();
+			setClassChart(getPropertyValue("_graphicChart"));
+		}
+
 	}
+
 }

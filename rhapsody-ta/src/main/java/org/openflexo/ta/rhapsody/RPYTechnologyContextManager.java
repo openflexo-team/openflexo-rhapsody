@@ -56,7 +56,7 @@ public class RPYTechnologyContextManager extends TechnologyContextManager<RPYTec
 	public RPYConcept getRPYConcept(String conceptName) {
 		RPYConcept returned = rpyConcepts.get(conceptName);
 		if (returned == null) {
-			System.out.println("******* New concept " + conceptName);
+			// System.out.println("******* New concept " + conceptName);
 			returned = metaModelFactory.newInstance(RPYConcept.class);
 			returned.setName(conceptName);
 			rpyConcepts.put(conceptName, returned);
@@ -73,7 +73,7 @@ public class RPYTechnologyContextManager extends TechnologyContextManager<RPYTec
 			}
 		}
 		if (returned == null) {
-			System.out.println("******* New property " + propertyName + " in " + concept);
+			// System.out.println("******* New property " + propertyName + " in " + concept);
 			returned = metaModelFactory.newInstance(RPYProperty.class);
 			returned.setName(propertyName);
 			returned.setType(type);

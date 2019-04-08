@@ -66,7 +66,6 @@ import org.openflexo.ta.rhapsody.parser.node.AStyleRpySingleObject;
 import org.openflexo.ta.rhapsody.parser.node.ATimeLiteralRpySingleObject;
 import org.openflexo.ta.rhapsody.parser.node.Node;
 import org.openflexo.ta.rhapsody.parser.node.PNumber;
-import org.openflexo.ta.rhapsody.parser.node.PRpyComplexObject;
 import org.openflexo.ta.rhapsody.parser.node.PRpyObject;
 import org.openflexo.ta.rhapsody.parser.node.PRpyPropertyValue;
 import org.openflexo.ta.rhapsody.parser.node.PRpySingleObject;
@@ -94,26 +93,37 @@ public class RPYObjectFactory extends DepthFirstAdapter {
 	public RPYObject makeRPYObject(ARpyComplexObject node) {
 		// node.apply(this);
 
-		RPYConcept concept = getModelFactory().getRPYConcept(node.getIdentifier().getText());
-		System.out.println("concept: " + concept);
+		String conceptIdentifier = node.getIdentifier().getText();
+
+		/*if (conceptIdentifier.equals("IRPYRawContainer")) {
+		
+			System.out.println("Tiens faut gerer une liste pour ");
+		
+		}
+		else {*/
+
+		RPYConcept concept = getModelFactory().getRPYConcept(conceptIdentifier);
+		// System.out.println("concept: " + concept);
 
 		RPYObject returned = getModelFactory().makeObject(concept);
 
 		for (PRpyPropertyValue pRpyPropertyValue : node.getPropertyValues()) {
 			ARpyPropertyValue pv = (ARpyPropertyValue) pRpyPropertyValue;
-			System.out.println(pv.getIdentifier() + " = " + pv.getRpyObject() + " of " + pv.getRpyObject().getClass());
+			// System.out.println(pv.getIdentifier() + " = " + pv.getRpyObject() + " of " + pv.getRpyObject().getClass());
 			String propertyName = pv.getIdentifier().getText();
 			Object value = makePropertyValue(pv.getRpyObject(), propertyName, concept);
+			returned.setPropertyValue(propertyName, value);
 		}
 
-		System.out.println("on retourne " + returned);
+		returned.mapProperties();
 
 		return returned;
+		// }
 	}
 
-	private Object makePropertyValue(PRpyObject node, String propertyName, RPYConcept concept) {
+	private <T> T makePropertyValue(PRpyObject node, String propertyName, RPYConcept concept) {
 		if (node instanceof AObjectListRpyObject) {
-			return makePropertyValueAsList((AObjectListRpyObject) node, propertyName, concept);
+			return (T) makePropertyValueAsList((AObjectListRpyObject) node, propertyName, concept);
 		}
 		else if (node instanceof ASingleObjectRpyObject) {
 			return makePropertyValue(((ASingleObjectRpyObject) node).getRpySingleObject(), propertyName, concept);
@@ -121,19 +131,19 @@ public class RPYObjectFactory extends DepthFirstAdapter {
 		return null;
 	}
 
-	private Object makePropertyValue(PRpySingleObject node, String propertyName, RPYConcept concept) {
+	private <T> T makePropertyValue(PRpySingleObject node, String propertyName, RPYConcept concept) {
 		if (node instanceof ACharsLiteralRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.Chars, concept);
-			return ((ACharsLiteralRpySingleObject) node).getCharsLiteral().getText();
+			return (T) ((ACharsLiteralRpySingleObject) node).getCharsLiteral().getText();
 		}
 		if (node instanceof AIdentifierRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.Identifier, concept);
-			return ((AIdentifierRpySingleObject) node).getIdentifier().getText();
+			return (T) ((AIdentifierRpySingleObject) node).getIdentifier().getText();
 		}
 		if (node instanceof AIdValueRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.Id, concept);
-			System.out.println("On retourne l'ID: " + getText(((AIdValueRpySingleObject) node).getExtendedHexIdentifier()));
-			return getText(((AIdValueRpySingleObject) node).getExtendedHexIdentifier());
+			// System.out.println("On retourne l'ID: " + getText(((AIdValueRpySingleObject) node).getExtendedHexIdentifier()));
+			return (T) getText(((AIdValueRpySingleObject) node).getExtendedHexIdentifier());
 		}
 		if (node instanceof ANoneRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, null, concept);
@@ -144,20 +154,21 @@ public class RPYObjectFactory extends DepthFirstAdapter {
 			LinkedList<PNumber> nList = ((ANumbersRpySingleObject) node).getNList();
 			if (nList.size() == 1) {
 				RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.Number, concept);
-				return getNumber(nList.get(0));
+				return (T) getNumber(nList.get(0));
 			}
 			else {
-				return getNumbers(nList);
+				return (T) getNumbers(nList);
 			}
 		}
 		if (node instanceof ARpyComplexObjectRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.Object, concept);
-			PRpyComplexObject rpyComplexObject = ((ARpyComplexObjectRpySingleObject) node).getRpyComplexObject();
-			return makeRPYObject((ARpyComplexObject) rpyComplexObject);
+			ARpyComplexObject rpyComplexObject = (ARpyComplexObject) ((ARpyComplexObjectRpySingleObject) node).getRpyComplexObject();
+			return (T) makeRPYObject(rpyComplexObject);
 		}
 		if (node instanceof AStringLiteralRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.String, concept);
-			return ((AStringLiteralRpySingleObject) node).getStringLiteral().getText();
+			String stringWithQuotes = ((AStringLiteralRpySingleObject) node).getStringLiteral().getText();
+			return (T) stringWithQuotes.substring(1, stringWithQuotes.length() - 1);
 		}
 		if (node instanceof AStyleRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.Style, concept);
@@ -175,7 +186,23 @@ public class RPYObjectFactory extends DepthFirstAdapter {
 	}
 
 	public List<?> makePropertyValueAsList(AObjectListRpyObject node, String propertyName, RPYConcept concept) {
-		return null;
+
+		// System.out.println("Tiens j'ai une liste de " + node + " pour " + propertyName);
+
+		List<?> returned = new ArrayList<>();
+		appendPropertyValueAsList(node, propertyName, concept, returned);
+		return returned;
+	}
+
+	private <T> void appendPropertyValueAsList(AObjectListRpyObject node, String propertyName, RPYConcept concept, List<T> list) {
+
+		list.add(makePropertyValue(node.getRpySingleObject(), propertyName, concept));
+		if (node.getRpyObject() instanceof AObjectListRpyObject) {
+			appendPropertyValueAsList((AObjectListRpyObject) node.getRpyObject(), propertyName, concept, list);
+		}
+		else if (node.getRpyObject() instanceof ASingleObjectRpyObject) {
+			list.add(makePropertyValue(((ASingleObjectRpyObject) node.getRpyObject()).getRpySingleObject(), propertyName, concept));
+		}
 	}
 
 	private String getText(Node node) {

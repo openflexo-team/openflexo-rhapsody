@@ -39,6 +39,7 @@
 package org.openflexo.ta.rhapsody.model;
 
 import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.pamela.annotations.ModelEntity;
 
 /**
  * Represents a root object in a Rhapsody resource
@@ -46,6 +47,7 @@ import org.openflexo.foundation.resource.ResourceData;
  * @author sylvain
  *
  */
+@ModelEntity(isAbstract = true)
 public interface RPYRootObject<RD extends RPYRootObject<RD>> extends RPYObject, ResourceData<RD> {
 
 	/**
@@ -54,6 +56,6 @@ public interface RPYRootObject<RD extends RPYRootObject<RD>> extends RPYObject, 
 	 * @param objectId
 	 * @return
 	 */
-	public RPYObject getObjectWithSerializationIdentifier(String objectId);
+	public RPYObject getObjectWithID(String objectId, String className);
 
 }

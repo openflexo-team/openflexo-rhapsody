@@ -80,7 +80,7 @@ public class RPYParser {
 	public static <RD extends RPYRootObject<RD>> RD parse(InputStream inputStream, RPYModelFactory<RD, ?> modelFactory)
 			throws ParseException, IOException {
 		String data = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-		System.out.println("read: " + data);
+		// System.out.println("read: " + data);
 		return parse(data, modelFactory);
 	}
 
@@ -107,6 +107,8 @@ public class RPYParser {
 			// Apply the semantics analyzer.
 			RPYSemanticsAnalyzer<RD> t = new RPYSemanticsAnalyzer<RD>(modelFactory);
 			tree.apply(t);
+
+			t.getRootObject().lookupReferences();
 
 			return t.getRootObject();
 		} catch (Exception e) {

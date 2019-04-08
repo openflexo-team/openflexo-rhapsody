@@ -79,6 +79,12 @@ public class RPYProjectFactory extends RPYModelFactory<RPYProject, RPYProjectRes
 		if (concept.getName().equals("IProject")) {
 			RPYProject returned = makeProject();
 			returned.setConcept(concept);
+			setRootObject(returned);
+			return returned;
+		}
+		if (concept.getName().equals("IProfile")) {
+			RPYProfile returned = newInstance(RPYProfile.class);
+			returned.setConcept(concept);
 			return returned;
 		}
 		return super.makeObject(concept);

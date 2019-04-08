@@ -1,8 +1,8 @@
 /**
  * 
- * Copyright (c) 2018, Openflexo
+ * Copyright (c) 2014, Openflexo
  * 
- * This file is part of OpenflexoTechnologyAdapter, a component of the software infrastructure 
+ * This file is part of Gina-core, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -36,33 +36,41 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model.fml;
+package org.openflexo.ta.rhapsody.model;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openflexo.foundation.fml.FMLTechnologyAdapter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.test.fml.AbstractModelFactoryIntegrationTestCase;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.pamela.exceptions.MissingImplementationException;
+import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
+import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.test.OrderedRunner;
 import org.openflexo.test.TestOrder;
 
 /**
- * Test instanciation of FMLModelFactory<br>
- * Here the model factory is instanciated with all FML and FML@RT technology adapters
+ * Test instanciation of FIBModelFactory<br>
+ * TODO: instanciate all widgets
  * 
  */
 @RunWith(OrderedRunner.class)
-public class RPYFMLModelFactoryIntegrationTest extends AbstractModelFactoryIntegrationTestCase {
+public class RPYProjectFactoryTest extends AbstractModelFactoryIntegrationTestCase {
 
-	private static final Logger logger = FlexoLogger.getLogger(RPYFMLModelFactoryIntegrationTest.class.getPackage().getName());
+	@SuppressWarnings("unused")
+	private static final Logger LOGGER = FlexoLogger.getLogger(RPYProjectFactoryTest.class.getPackage().getName());
+
+	private static TechnologyAdapterService taService;
+	private static RPYTechnologyAdapter technologyAdapter;
+	private static RPYTechnologyContextManager technologyAdapterContextManager;
+
+	private static RPYProjectFactory factory;
 
 	/**
 	 * Instanciate test ServiceManager
@@ -71,27 +79,29 @@ public class RPYFMLModelFactoryIntegrationTest extends AbstractModelFactoryInteg
 	@TestOrder(1)
 	public void initializeServiceManager() {
 		log("initializeServiceManager()");
-		instanciateTestServiceManager();
+		instanciateTestServiceManager(RPYTechnologyAdapter.class);
 
 		assertNotNull(serviceManager.getService(FlexoResourceCenterService.class));
 		assertNotNull(serviceManager.getService(TechnologyAdapterService.class));
 
-		TechnologyAdapterService taService = serviceManager.getTechnologyAdapterService();
-		assertEquals(taService, serviceManager.getService(TechnologyAdapterService.class));
-
-		assertNotNull(taService.getTechnologyAdapter(RPYTechnologyAdapter.class));
+		assertNotNull(taService = serviceManager.getTechnologyAdapterService());
+		assertNotNull(technologyAdapter = taService.getTechnologyAdapter(RPYTechnologyAdapter.class));
+		assertNotNull(
+				technologyAdapterContextManager = (RPYTechnologyContextManager) taService.getTechnologyContextManager(technologyAdapter));
 	}
 
-	/**
-	 * Check the presence of {@link FMLTechnologyAdapter}, instanciate FMLModelFactory with this TA
-	 */
 	@Test
 	@TestOrder(2)
-	public void checkRPYFMLTechnologyAdapter() {
-		log("checkRPYFMLTechnologyAdapter()");
+	public void instanciateRPYProjectFactory() throws ModelDefinitionException, MissingImplementationException {
+		RPYProjectFactory factory = new RPYProjectFactory(null, technologyAdapterContextManager);
+		factory.checkMethodImplementations();
+	}
 
-		testVirtualModelModelFactoryWithTechnologyAdapter(
-				serviceManager.getTechnologyAdapterService().getTechnologyAdapter(RPYTechnologyAdapter.class));
+	@Test
+	@TestOrder(3)
+	public void checkMethodImplementations() throws ModelDefinitionException, MissingImplementationException {
+		RPYPackageFactory factory = new RPYPackageFactory(null, technologyAdapterContextManager);
+		factory.checkMethodImplementations();
 	}
 
 }

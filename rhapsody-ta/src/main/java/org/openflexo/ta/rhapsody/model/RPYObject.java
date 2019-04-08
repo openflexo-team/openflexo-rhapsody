@@ -38,17 +38,23 @@
 
 package org.openflexo.ta.rhapsody.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
+import org.openflexo.pamela.annotations.Import;
+import org.openflexo.pamela.annotations.Imports;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
+import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Common API for all objects involved in Rhapsody model
@@ -56,12 +62,22 @@ import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
  * @author sylvain
  *
  */
-@ModelEntity
+@ModelEntity(isAbstract = true)
 @ImplementationClass(value = RPYObject.RPYObjectImpl.class)
+@Imports({ @Import(RPYRawContainer.class), @Import(RPYHandle.class), @Import(RPYUnmappedObject.class) })
 public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAdapter> {
 
 	@PropertyIdentifier(type = RPYConcept.class)
 	public static final String CONCEPT_KEY = "concept";
+
+	@PropertyIdentifier(type = String.class)
+	public static final String ID_KEY = "ID";
+
+	@Getter(value = ID_KEY)
+	public String getID();
+
+	@Setter(ID_KEY)
+	public void setID(String anID);
 
 	/**
 	 * Return serialization identifier of this object<br>
@@ -78,6 +94,20 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 	@Setter(CONCEPT_KEY)
 	public void setConcept(RPYConcept aConcept);
 
+	public <T> T getPropertyValue(String propertyName);
+
+	public <T> void setPropertyValue(String propertyName, T value);
+
+	public <T extends RPYObject> T getReference(String propertyName);
+
+	public void mapProperties();
+
+	public void mapReferences();
+
+	public void lookupReferences();
+
+	public String toExtendedString(int indent);
+
 	/**
 	 * Default base implementation for {@link RPYObject}
 	 * 
@@ -90,16 +120,101 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
 
 		@Override
-		public String toString() {
+		public final String toString() {
 			StringBuffer sb = new StringBuffer();
-			sb.append("[" + getConcept().getName() + "]\n");
-			/*for (DSLComponent component : getComponents()) {
-				sb.append(component.toString() + "\n");
-			}
-			for (DSLLink link : getLinks()) {
-				sb.append(link.toString() + "\n");
-			}*/
+			sb.append("[" + getConcept().getName() + "]");
 			return sb.toString();
+		}
+
+		@Override
+		public String toExtendedString(int indent) {
+			StringBuffer sb = new StringBuffer();
+			sb.append(StringUtils.buildWhiteSpaceIndentation(indent * 2) + "[" + getConcept().getName() + "/" + getID() + "]");
+			for (RPYProperty property : getConcept().getProperties()) {
+				Object value = getPropertyValue(property.getName());
+				String valueAsString;
+				if (value instanceof RPYRawContainer) {
+					valueAsString = "{";
+					boolean isFirst = true;
+					for (Object item : ((RPYRawContainer) value).getValues()) {
+						if (item instanceof RPYObject) {
+							valueAsString = valueAsString + (isFirst ? "" : ",") + "\n" + ((RPYObject) item).toExtendedString(indent + 1);
+						}
+						else {
+							valueAsString = valueAsString + (isFirst ? "" : ",") + item.toString();
+						}
+						isFirst = false;
+					}
+					valueAsString = valueAsString + "}";
+				}
+				else if (value instanceof RPYObject) {
+					valueAsString = ((RPYObject) value).toExtendedString(indent + 1);
+				}
+				else if (value != null) {
+					valueAsString = value.toString();
+				}
+				else {
+					valueAsString = "null";
+				}
+				sb.append("\n" + StringUtils.buildWhiteSpaceIndentation(indent * 2) + " > " + property.getName() + " = " + valueAsString);
+			}
+			return sb.toString();
+		}
+
+		private Map<String, Object> propertyValues = new HashMap<>();
+
+		@Override
+		public <T> T getPropertyValue(String propertyName) {
+			return (T) propertyValues.get(propertyName);
+		}
+
+		@Override
+		public <T> void setPropertyValue(String propertyName, T value) {
+			propertyValues.put(propertyName, value);
+		}
+
+		@Override
+		public <T extends RPYObject> T getReference(String propertyName) {
+			RPYHandle<T> handle = getPropertyValue(propertyName);
+			return handle.getReferencedObject();
+		}
+
+		private RPYProperty getProperty(String propertyName) {
+			if (getConcept() == null) {
+				return null;
+			}
+			return getConcept().getPropertyNamed(propertyName);
+		}
+
+		@Override
+		public void mapProperties() {
+			setID(getPropertyValue("_id"));
+		}
+
+		@Override
+		public void mapReferences() {
+		}
+
+		@Override
+		public final void lookupReferences() {
+			for (Object object : propertyValues.values()) {
+				if (object instanceof RPYObject) {
+					((RPYObject) object).lookupReferences();
+				}
+				if (object instanceof RPYRawContainer) {
+					for (Object o : ((RPYRawContainer) object).getValues()) {
+						if (o instanceof RPYObject) {
+							((RPYObject) o).lookupReferences();
+						}
+					}
+				}
+			}
+			mapReferences();
+		}
+
+		@Override
+		public String getSerializationIdentifier() {
+			return getID();
 		}
 
 	}

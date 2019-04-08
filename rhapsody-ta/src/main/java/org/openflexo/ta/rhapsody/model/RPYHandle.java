@@ -40,67 +40,90 @@ package org.openflexo.ta.rhapsody.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
- * Common API for all objects involved in Rhapsody model of a {@link RPYProject}
+ * Represents a reference to an object
  * 
  * @author sylvain
  *
  */
-@ModelEntity(isAbstract = true)
-public interface RPYProjectObject extends RPYObject, InnerResourceData<RPYProject> {
+@ModelEntity
+@ImplementationClass(value = RPYHandle.RPYHandleImpl.class)
+public interface RPYHandle<T extends RPYObject> extends RPYObject {
 
-	@PropertyIdentifier(type = RPYProject.class)
-	public static final String PROJECT_KEY = "project";
+	@PropertyIdentifier(type = String.class)
+	public static final String CLASS_NAME_KEY = "className";
+	@PropertyIdentifier(type = String.class)
+	public static final String FILE_NAME_KEY = "fileName";
+	@PropertyIdentifier(type = RPYObject.class)
+	public static final String REFERENCED_OBJECT_KEY = "referencedObject";
+	@PropertyIdentifier(type = RPYRootObject.class)
+	public static final String ROOT_OBJECT_KEY = "rootObject";
 
-	@Getter(value = PROJECT_KEY)
-	public RPYProject getProject();
+	@Getter(value = CLASS_NAME_KEY)
+	public String getClassName();
 
-	@Setter(PROJECT_KEY)
-	public void setProject(RPYProject aProject);
+	@Setter(CLASS_NAME_KEY)
+	public void setClassName(String aName);
+
+	@Getter(value = FILE_NAME_KEY)
+	public String getFileName();
+
+	@Setter(FILE_NAME_KEY)
+	public void setFileName(String aFileName);
+
+	@Getter(value = REFERENCED_OBJECT_KEY)
+	public T getReferencedObject();
+
+	@Setter(REFERENCED_OBJECT_KEY)
+	public void setReferencedObject(T referencedObject);
+
+	@Getter(value = ROOT_OBJECT_KEY)
+	public RPYRootObject<?> getRootObject();
+
+	@Setter(ROOT_OBJECT_KEY)
+	public void setRootObject(RPYRootObject<?> aRootObject);
 
 	/**
-	 * Return the model factory which manages this {@link RPYProjectObject}
-	 * 
-	 * @return
-	 */
-	public RPYProjectFactory getFactory();
-
-	/**
-	 * Default base implementation for {@link RPYProjectObject}
+	 * Default base implementation for {@link RPYHandle}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class RPYProjectObjectImpl extends RPYObjectImpl implements RPYProjectObject {
+	public static abstract class RPYHandleImpl<T extends RPYObject> extends RPYObjectImpl implements RPYHandle<T> {
 
 		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(RPYHandleImpl.class.getPackage().getName());
 
 		@Override
 		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getResourceData() != null && getResourceData().getResource() != null) {
-				return ((RPYProjectResource) getResourceData().getResource()).getTechnologyAdapter();
+			if (getRootObject() != null) {
+				return getRootObject().getTechnologyAdapter();
 			}
 			return null;
 		}
 
 		@Override
-		public RPYProjectFactory getFactory() {
-			return ((RPYProjectResource) getResourceData().getResource()).getFactory();
+		public void mapProperties() {
+			super.mapProperties();
+			setClassName(getPropertyValue("_m2Class"));
+			setFileName(getPropertyValue("_filename"));
 		}
 
 		@Override
-		public RPYProject getResourceData() {
-			return getProject();
+		public T getReferencedObject() {
+			T returned = (T) getRootObject().getObjectWithID(getID(), getClassName());
+			if (returned == null) {
+				logger.warning("Cannot find object with ID: " + getID() + " in " + getRootObject());
+			}
+			return returned;
 		}
-
 	}
+
 }

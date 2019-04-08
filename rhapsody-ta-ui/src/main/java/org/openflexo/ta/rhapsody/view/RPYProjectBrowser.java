@@ -1,8 +1,8 @@
 /**
  * 
- * Copyright (c) 2018, Openflexo
+ * Copyright (c) 2014, Openflexo
  * 
- * This file is part of OpenflexoTechnologyAdapter, a component of the software infrastructure 
+ * This file is part of Openflexo-technology-adapters-ui, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -36,54 +36,30 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.ta.rhapsody.view;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.InnerResourceData;
-import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.rm.Resource;
+import org.openflexo.rm.ResourceLocator;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
-import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
+import org.openflexo.ta.rhapsody.model.RPYProject;
+import org.openflexo.view.FIBBrowserView;
+import org.openflexo.view.controller.FlexoController;
 
 /**
- * Common API for all objects involved in Rhapsody model of a {@link RPYPackage}
+ * Browser allowing to browse a {@link RPYProject}<br>
  * 
- * @author sylvain
- *
+ * @author sguerin
+ * 
  */
-@ModelEntity(isAbstract = true)
-public interface RPYPackageObject extends RPYObject, InnerResourceData<RPYPackage> {
+@SuppressWarnings("serial")
+public class RPYProjectBrowser extends FIBBrowserView<RPYProject> {
+	static final Logger logger = Logger.getLogger(RPYProjectBrowser.class.getPackage().getName());
 
-	/**
-	 * Return the model factory which manages this {@link RPYPackageObject}
-	 * 
-	 * @return
-	 */
-	public RPYPackageFactory getFactory();
+	public static final Resource FIB_FILE = ResourceLocator.locateResource("Fib/Widget/RPYProjectBrowser.fib");
 
-	/**
-	 * Default base implementation for {@link RPYPackageObject}
-	 * 
-	 * @author sylvain
-	 *
-	 */
-	public static abstract class RPYPackageObjectImpl extends RPYObjectImpl implements RPYPackageObject {
-
-		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYPackageObjectImpl.class.getPackage().getName());
-
-		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getResourceData() != null && getResourceData().getResource() != null) {
-				return ((RPYPackageResource) getResourceData().getResource()).getTechnologyAdapter();
-			}
-			return null;
-		}
-
-		@Override
-		public RPYPackageFactory getFactory() {
-			return ((RPYPackageResource) getResourceData().getResource()).getFactory();
-		}
-
+	public RPYProjectBrowser(RPYProject project, FlexoController controller) {
+		super(project, controller, FIB_FILE, controller.getTechnologyAdapter(RPYTechnologyAdapter.class).getLocales());
 	}
 }

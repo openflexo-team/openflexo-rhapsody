@@ -23,6 +23,7 @@ package org.openflexo.ta.rhapsody.metamodel;
 import java.util.List;
 
 import org.openflexo.pamela.annotations.Adder;
+import org.openflexo.pamela.annotations.Finder;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.Getter.Cardinality;
 import org.openflexo.pamela.annotations.ModelEntity;
@@ -63,5 +64,8 @@ public interface RPYConcept {
 
 	@Remover(PROPERTIES_KEY)
 	public void removeFromProperties(RPYProperty aProperty);
+
+	@Finder(attribute = RPYProperty.NAME_KEY, collection = PROPERTIES_KEY)
+	public RPYProperty getPropertyNamed(String name);
 
 }

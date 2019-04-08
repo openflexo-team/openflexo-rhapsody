@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.rhapsody.view;
+package org.openflexo.ta.rhapsody.view;
 
 import java.awt.BorderLayout;
 import java.util.List;

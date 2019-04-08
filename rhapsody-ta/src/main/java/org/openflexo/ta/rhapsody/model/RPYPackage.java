@@ -38,13 +38,18 @@
 
 package org.openflexo.ta.rhapsody.model;
 
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.pamela.annotations.Adder;
 import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.Getter.Cardinality;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 
@@ -60,6 +65,10 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 
 	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = RPYObjectClassDiagram.class, cardinality = Cardinality.LIST)
+	public static final String OBJECT_CLASS_DIAGRAMS_KEY = "objectClassDiagrams";
+	@PropertyIdentifier(type = RPYSequenceDiagram.class, cardinality = Cardinality.LIST)
+	public static final String SEQUENCE_DIAGRAMS_KEY = "sequenceDiagrams";
 
 	/**
 	 * Return name of this package
@@ -77,17 +86,29 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 	@Setter(NAME_KEY)
 	public void setName(String aName);
 
-	@Override
-	public RPYPackageResource getResource();
+	@Getter(value = OBJECT_CLASS_DIAGRAMS_KEY, cardinality = Cardinality.LIST, inverse = RPYDiagram.ROOT_OBJECT_KEY)
+	public List<RPYObjectClassDiagram> getObjectClassDiagrams();
 
-	/**
-	 * Retrieve object with supplied serialization identifier, asserting this object resides in this {@link RPYPackage}
-	 * 
-	 * @param objectId
-	 * @return
-	 */
+	@Adder(OBJECT_CLASS_DIAGRAMS_KEY)
+	public void addToObjectClassDiagrams(RPYObjectClassDiagram aDiagram);
+
+	@Remover(OBJECT_CLASS_DIAGRAMS_KEY)
+	public void removeFromObjectClassDiagrams(RPYObjectClassDiagram aDiagram);
+
+	@Getter(value = SEQUENCE_DIAGRAMS_KEY, cardinality = Cardinality.LIST, inverse = RPYDiagram.ROOT_OBJECT_KEY)
+	public List<RPYSequenceDiagram> getSequenceDiagrams();
+
+	@Adder(SEQUENCE_DIAGRAMS_KEY)
+	public void addToSequenceDiagrams(RPYSequenceDiagram aDiagram);
+
+	@Remover(SEQUENCE_DIAGRAMS_KEY)
+	public void removeFromSequenceDiagrams(RPYSequenceDiagram aDiagram);
+
 	@Override
-	public RPYObject getObjectWithSerializationIdentifier(String objectId);
+	public FlexoResource<RPYPackage> getResource();
+
+	@Override
+	public void setResource(FlexoResource<RPYPackage> resource);
 
 	/**
 	 * Default base implementation for {@link RPYPackage}
@@ -111,16 +132,46 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 		}
 
 		@Override
-		public String toString() {
-			StringBuffer sb = new StringBuffer();
-			sb.append("[RPYPackage]\n");
-			/*for (DSLComponent component : getComponents()) {
-				sb.append(component.toString() + "\n");
+		public void setResource(FlexoResource<RPYPackage> resource) {
+			performSuperSetter(FLEXO_RESOURCE, resource);
+		}
+
+		@Override
+		public void mapProperties() {
+			super.mapProperties();
+			setName(getPropertyValue("_name"));
+			RPYRawContainer diagrams = getPropertyValue("Declaratives");
+			for (Object object : diagrams.getValues()) {
+				System.out.println("Declaratives: " + object);
+				if (object instanceof RPYObjectClassDiagram) {
+					addToObjectClassDiagrams((RPYObjectClassDiagram) object);
+				}
+				else if (object instanceof RPYSequenceDiagram) {
+					addToSequenceDiagrams((RPYSequenceDiagram) object);
+				}
+				else {
+					logger.warning("Unexpected object: " + object);
+				}
 			}
-			for (DSLLink link : getLinks()) {
-				sb.append(link.toString() + "\n");
-			}*/
-			return sb.toString();
+		}
+
+		/**
+		 * Retrieve object with supplied serialization identifier, asserting this object resides in this {@link RPYRootObject}
+		 * 
+		 * @param objectId
+		 * @return
+		 */
+		@Override
+		public RPYObject getObjectWithID(String objectId, String className) {
+			for (RPYObjectClassDiagram diagram : getObjectClassDiagrams()) {
+				if (diagram.getID().equals(objectId)) {
+					return diagram;
+				}
+			}
+			// System.out.println("Tiens je cherche l'objet: " + objectId + " of " + className + " in " + this);
+			logger.warning("Cannot find object with ID: " + objectId + " class: " + className + " in " + this);
+			Thread.dumpStack();
+			return null;
 		}
 
 	}

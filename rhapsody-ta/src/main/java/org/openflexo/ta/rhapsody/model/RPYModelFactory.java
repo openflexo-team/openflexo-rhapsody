@@ -52,6 +52,8 @@ import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty.PropertyType;
+import org.openflexo.ta.rhapsody.model.cgi.CGIClassChart;
+import org.openflexo.ta.rhapsody.model.cgi.CGIText;
 import org.openflexo.ta.rhapsody.rm.RPYResource;
 
 /**
@@ -73,6 +75,8 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 	private RelativePathResourceConverter relativePathResourceConverter;
 
 	private RPYTechnologyContextManager technologyContextManager;
+
+	private RD rootObject;
 
 	public RPYModelFactory(Class<RD> resourceDataClass, R resource, RPYTechnologyContextManager technologyContextManager)
 			throws ModelDefinitionException {
@@ -117,7 +121,39 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 	}
 
 	public RPYObject makeObject(RPYConcept concept) {
-		RPYObject returned = newInstance(RPYObject.class);
+		if (concept.getName().equals("IHandle")) {
+			RPYHandle<?> returned = newInstance(RPYHandle.class);
+			returned.setConcept(concept);
+			returned.setRootObject(getRootObject());
+			return returned;
+		}
+		if (concept.getName().equals("IRPYRawContainer")) {
+			RPYRawContainer returned = newInstance(RPYRawContainer.class);
+			returned.setRootObject(getRootObject());
+			returned.setConcept(concept);
+			return returned;
+		}
+		if (concept.getName().equals("IDiagram")) {
+			RPYObjectClassDiagram returned = newInstance(RPYObjectClassDiagram.class);
+			returned.setConcept(concept);
+			return returned;
+		}
+		if (concept.getName().equals("IMSC")) {
+			RPYSequenceDiagram returned = newInstance(RPYSequenceDiagram.class);
+			returned.setConcept(concept);
+			return returned;
+		}
+		if (concept.getName().equals("CGIClassChart")) {
+			CGIClassChart returned = newInstance(CGIClassChart.class);
+			returned.setConcept(concept);
+			return returned;
+		}
+		if (concept.getName().equals("CGIText")) {
+			CGIText returned = newInstance(CGIText.class);
+			returned.setConcept(concept);
+			return returned;
+		}
+		RPYUnmappedObject returned = newInstance(RPYUnmappedObject.class);
 		returned.setConcept(concept);
 		return returned;
 	}
@@ -126,4 +162,11 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 		return technologyContextManager.ensureProperty(propertyName, type, concept);
 	}
 
+	public RD getRootObject() {
+		return rootObject;
+	}
+
+	protected void setRootObject(RD rootObject) {
+		this.rootObject = rootObject;
+	}
 }
