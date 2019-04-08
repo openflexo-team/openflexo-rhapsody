@@ -45,7 +45,6 @@ import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
@@ -85,14 +84,6 @@ public interface RPYProjectObject extends RPYObject, InnerResourceData<RPYProjec
 		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
 
 		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getResourceData() != null && getResourceData().getResource() != null) {
-				return ((RPYProjectResource) getResourceData().getResource()).getTechnologyAdapter();
-			}
-			return null;
-		}
-
-		@Override
 		public RPYProjectFactory getFactory() {
 			return ((RPYProjectResource) getResourceData().getResource()).getFactory();
 		}
@@ -102,5 +93,9 @@ public interface RPYProjectObject extends RPYObject, InnerResourceData<RPYProjec
 			return getProject();
 		}
 
+		@Override
+		public final RPYRootObject<?> getRootObject() {
+			return getResourceData();
+		}
 	}
 }

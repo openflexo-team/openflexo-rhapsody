@@ -45,9 +45,9 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
 import org.openflexo.ta.rhapsody.model.RPYObject;
+import org.openflexo.ta.rhapsody.model.RPYRootObject;
 
 /**
  * Represents a class chart<br>
@@ -88,17 +88,17 @@ public interface CGIText extends RPYObject {
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
 
 		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getChart() != null) {
-				return getChart().getTechnologyAdapter();
-			}
-			return null;
-		}
-
-		@Override
 		public void mapProperties() {
 			super.mapProperties();
 			setText(getPropertyValue("m_str"));
+		}
+
+		@Override
+		public RPYRootObject<?> getRootObject() {
+			if (getChart() != null) {
+				return getChart().getRootObject();
+			}
+			return null;
 		}
 
 	}

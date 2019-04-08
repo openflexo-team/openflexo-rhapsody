@@ -42,7 +42,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 
 /**
@@ -73,16 +72,13 @@ public interface RPYPackageObject extends RPYObject, InnerResourceData<RPYPackag
 		private static final Logger logger = Logger.getLogger(RPYPackageObjectImpl.class.getPackage().getName());
 
 		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getResourceData() != null && getResourceData().getResource() != null) {
-				return ((RPYPackageResource) getResourceData().getResource()).getTechnologyAdapter();
-			}
-			return null;
+		public RPYPackageFactory getFactory() {
+			return ((RPYPackageResource) getResourceData().getResource()).getFactory();
 		}
 
 		@Override
-		public RPYPackageFactory getFactory() {
-			return ((RPYPackageResource) getResourceData().getResource()).getFactory();
+		public final RPYRootObject<?> getRootObject() {
+			return getResourceData();
 		}
 
 	}

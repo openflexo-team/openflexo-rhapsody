@@ -45,7 +45,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 
 /**
  * Represents a RPY diagram<br>
@@ -68,6 +67,7 @@ public interface RPYDiagram extends RPYObject {
 	@Setter(NAME_KEY)
 	public void setName(String aName);
 
+	@Override
 	@Getter(value = ROOT_OBJECT_KEY)
 	public RPYRootObject<?> getRootObject();
 
@@ -84,14 +84,6 @@ public interface RPYDiagram extends RPYObject {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
-
-		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getRootObject() != null) {
-				return getRootObject().getTechnologyAdapter();
-			}
-			return null;
-		}
 
 		@Override
 		public void mapProperties() {

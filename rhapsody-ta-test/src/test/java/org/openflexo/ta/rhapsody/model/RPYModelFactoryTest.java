@@ -61,10 +61,10 @@ import org.openflexo.test.TestOrder;
  * 
  */
 @RunWith(OrderedRunner.class)
-public class RPYProjectFactoryTest extends AbstractModelFactoryIntegrationTestCase {
+public class RPYModelFactoryTest extends AbstractModelFactoryIntegrationTestCase {
 
 	@SuppressWarnings("unused")
-	private static final Logger LOGGER = FlexoLogger.getLogger(RPYProjectFactoryTest.class.getPackage().getName());
+	private static final Logger LOGGER = FlexoLogger.getLogger(RPYModelFactoryTest.class.getPackage().getName());
 
 	private static TechnologyAdapterService taService;
 	private static RPYTechnologyAdapter technologyAdapter;
@@ -92,14 +92,14 @@ public class RPYProjectFactoryTest extends AbstractModelFactoryIntegrationTestCa
 
 	@Test
 	@TestOrder(2)
-	public void instanciateRPYProjectFactory() throws ModelDefinitionException, MissingImplementationException {
+	public void testRPYProjectFactory() throws ModelDefinitionException, MissingImplementationException {
 		RPYProjectFactory factory = new RPYProjectFactory(null, technologyAdapterContextManager);
 		factory.checkMethodImplementations();
 	}
 
 	@Test
 	@TestOrder(3)
-	public void checkMethodImplementations() throws ModelDefinitionException, MissingImplementationException {
+	public void testRPYPackageFactory() throws ModelDefinitionException, MissingImplementationException {
 		RPYPackageFactory factory = new RPYPackageFactory(null, technologyAdapterContextManager);
 		factory.checkMethodImplementations();
 	}

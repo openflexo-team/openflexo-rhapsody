@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
@@ -108,6 +109,8 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 
 	public String toExtendedString(int indent);
 
+	public RPYRootObject<?> getRootObject();
+
 	/**
 	 * Default base implementation for {@link RPYObject}
 	 * 
@@ -118,6 +121,14 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYObjectImpl.class.getPackage().getName());
+
+		@Override
+		public final RPYTechnologyAdapter getTechnologyAdapter() {
+			if (getRootObject() != null && getRootObject().getResource() != null) {
+				return (RPYTechnologyAdapter) ((TechnologyAdapterResource) getRootObject().getResource()).getTechnologyAdapter();
+			}
+			return null;
+		}
 
 		@Override
 		public final String toString() {

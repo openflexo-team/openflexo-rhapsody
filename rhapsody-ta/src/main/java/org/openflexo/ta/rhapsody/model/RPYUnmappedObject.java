@@ -43,7 +43,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 
 /**
  * Represents a collection of objects
@@ -58,6 +57,7 @@ public interface RPYUnmappedObject extends RPYObject {
 	@PropertyIdentifier(type = RPYRootObject.class)
 	public static final String ROOT_OBJECT_KEY = "rootObject";
 
+	@Override
 	@Getter(value = ROOT_OBJECT_KEY)
 	public RPYRootObject<?> getRootObject();
 
@@ -72,13 +72,6 @@ public interface RPYUnmappedObject extends RPYObject {
 	 */
 	public static abstract class RPYUnmappedObjectImpl extends RPYObjectImpl implements RPYUnmappedObject {
 
-		@Override
-		public RPYTechnologyAdapter getTechnologyAdapter() {
-			if (getRootObject() != null) {
-				return getRootObject().getTechnologyAdapter();
-			}
-			return null;
-		}
 	}
 
 }
