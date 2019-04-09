@@ -52,6 +52,7 @@ import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty.PropertyType;
+import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClassChart;
 import org.openflexo.ta.rhapsody.model.cgi.CGIText;
 import org.openflexo.ta.rhapsody.rm.RPYResource;
@@ -121,7 +122,8 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 	}
 
 	public RPYObject makeObject(RPYConcept concept) {
-		if (concept.getName().equals("IHandle")) {
+		if (concept.getName().equals("IHandle") || concept.getName().equals("ISubsystemHandle")
+				|| concept.getName().equals("IClassifierHandle")) {
 			RPYHandle<?> returned = newInstance(RPYHandle.class);
 			returned.setConcept(concept);
 			returned.setRootObject(getRootObject());
@@ -148,12 +150,18 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 			returned.setConcept(concept);
 			return returned;
 		}
+		if (concept.getName().equals("CGIClass")) {
+			CGIClass returned = newInstance(CGIClass.class);
+			returned.setConcept(concept);
+			return returned;
+		}
 		if (concept.getName().equals("CGIText")) {
 			CGIText returned = newInstance(CGIText.class);
 			returned.setConcept(concept);
 			return returned;
 		}
 		RPYUnmappedObject returned = newInstance(RPYUnmappedObject.class);
+		returned.setRootObject(getRootObject());
 		returned.setConcept(concept);
 		return returned;
 	}

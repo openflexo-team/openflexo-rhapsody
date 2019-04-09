@@ -309,10 +309,9 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 		 */
 		@Override
 		public RPYObject getObjectWithID(String objectId, String className) {
-			for (RPYObjectClassDiagram diagram : getDiagrams()) {
-				if (diagram.getID().equals(objectId)) {
-					return diagram;
-				}
+			RPYObject returned = findObjectWithID(objectId, className);
+			if (returned != null) {
+				return returned;
 			}
 			// System.out.println("Tiens je cherche l'objet: " + objectId + " of " + className + " in " + this);
 			logger.warning("Cannot find object with ID: " + objectId + " class: " + className + " in " + this);
@@ -322,19 +321,19 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 
 	}
 
-	public static interface ComponentsList {
+	public static interface ComponentsList extends RPYFacet {
 		// public List<RPYComponent> getComponents();
 	}
 
-	public static interface ObjectModelDiagramsList {
+	public static interface ObjectModelDiagramsList extends RPYFacet {
 		public List<RPYObjectClassDiagram> getDiagrams();
 	}
 
-	public static interface PackagesList {
+	public static interface PackagesList extends RPYFacet {
 		public List<RPYPackage> getPackages();
 	}
 
-	public static interface ProfilesList {
+	public static interface ProfilesList extends RPYFacet {
 		public List<RPYProfile> getProfiles();
 	}
 

@@ -45,6 +45,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Represents a reference to an object
@@ -90,6 +91,8 @@ public interface RPYHandle<T extends RPYObject> extends RPYObject {
 	@Setter(ROOT_OBJECT_KEY)
 	public void setRootObject(RPYRootObject<?> aRootObject);
 
+	public boolean isNullReference();
+
 	/**
 	 * Default base implementation for {@link RPYHandle}
 	 * 
@@ -112,9 +115,14 @@ public interface RPYHandle<T extends RPYObject> extends RPYObject {
 		public T getReferencedObject() {
 			T returned = (T) getRootObject().getObjectWithID(getID(), getClassName());
 			if (returned == null) {
-				logger.warning("Cannot find object with ID: " + getID() + " in " + getRootObject());
+				logger.warning("Cannot find object with ID: " + getID() + " and class " + getClassName() + " in " + getRootObject());
 			}
 			return returned;
+		}
+
+		@Override
+		public boolean isNullReference() {
+			return StringUtils.isEmpty(getClassName());
 		}
 	}
 

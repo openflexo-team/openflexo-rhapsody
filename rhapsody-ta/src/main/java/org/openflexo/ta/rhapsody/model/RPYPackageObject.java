@@ -41,7 +41,10 @@ package org.openflexo.ta.rhapsody.model;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.InnerResourceData;
+import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 
 /**
@@ -52,6 +55,15 @@ import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
  */
 @ModelEntity(isAbstract = true)
 public interface RPYPackageObject extends RPYObject, InnerResourceData<RPYPackage> {
+
+	@PropertyIdentifier(type = RPYPackage.class)
+	public static final String PACKAGE_KEY = "package";
+
+	@Getter(value = PACKAGE_KEY)
+	public RPYPackage getPackage();
+
+	@Setter(PACKAGE_KEY)
+	public void setPackage(RPYPackage aProject);
 
 	/**
 	 * Return the model factory which manages this {@link RPYPackageObject}
@@ -74,6 +86,11 @@ public interface RPYPackageObject extends RPYObject, InnerResourceData<RPYPackag
 		@Override
 		public RPYPackageFactory getFactory() {
 			return ((RPYPackageResource) getResourceData().getResource()).getFactory();
+		}
+
+		@Override
+		public RPYPackage getResourceData() {
+			return getPackage();
 		}
 
 		@Override

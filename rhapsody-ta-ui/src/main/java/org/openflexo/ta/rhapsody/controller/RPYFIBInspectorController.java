@@ -1,8 +1,9 @@
 /**
  * 
- * Copyright (c) 2014, Openflexo
+ * Copyright (c) 2013-2014, Openflexo
+ * Copyright (c) 2011-2012, AgileBirds
  * 
- * This file is part of Openflexo-technology-adapters-ui, a component of the software infrastructure 
+ * This file is part of Flexo-ui, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -40,51 +41,22 @@ package org.openflexo.ta.rhapsody.controller;
 
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
-
-import org.openflexo.connie.annotations.NotificationUnsafe;
 import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.view.GinaViewFactory;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.ta.rhapsody.gui.RPYIconLibrary;
-import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
-import org.openflexo.ta.rhapsody.model.RPYObject.RPYFacet;
-import org.openflexo.ta.rhapsody.model.RPYUnmappedObject;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.FlexoFIBController;
 
-public class RPYFIBController extends FlexoFIBController {
+/**
+ * Represents the controller of a FIBInspector (FIBComponent) in the context of RPY
+ * 
+ * @author sylvain
+ * 
+ */
+public class RPYFIBInspectorController extends RPYFIBController {
 
-	protected static final Logger logger = FlexoLogger.getLogger(RPYFIBController.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(RPYFIBInspectorController.class.getPackage().getName());
 
-	public RPYFIBController(FIBComponent component, GinaViewFactory<?> viewFactory) {
+	public RPYFIBInspectorController(FIBComponent component, GinaViewFactory<?> viewFactory) {
 		super(component, viewFactory);
-	}
-
-	public RPYFIBController(FIBComponent component, GinaViewFactory<?> viewFactory, FlexoController controller) {
-		super(component, viewFactory, controller);
-	}
-
-	@Override
-	@NotificationUnsafe
-	protected ImageIcon retrieveIconForObject(Object object) {
-		if (object instanceof RPYFacet) {
-			return RPYIconLibrary.RPY_FOLDER_ICON;
-		}
-		if (object instanceof RPYUnmappedObject) {
-			return RPYIconLibrary.UNMAPPED_OBJECT_ICON;
-		}
-		if (object instanceof RPYProperty) {
-			switch (((RPYProperty) object).getType()) {
-				case Id:
-					return RPYIconLibrary.ID_PROPERTY_ICON;
-				case Object:
-					return RPYIconLibrary.OBJECT_PROPERTY_ICON;
-				default:
-					return RPYIconLibrary.SIMPLE_PROPERTY_ICON;
-			}
-		}
-		return super.retrieveIconForObject(object);
 	}
 
 }

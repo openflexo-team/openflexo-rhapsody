@@ -40,47 +40,49 @@ package org.openflexo.ta.rhapsody.model;
 
 import java.util.logging.Logger;
 
-import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.ModelFactory;
-import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
-import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
-import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
+import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
+import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.ta.rhapsody.model.RPYProjectObject.RPYProjectObjectImpl;
 
 /**
- * A {@link ModelFactory} used to manage a {@link RPYPackage}<br>
- * One instance of this class should be used for each {@link RPYPackageResource}
+ * Represents a RPY class in a RPYPackage <br>
  * 
  * @author sylvain
- * 
+ *
  */
-public class RPYPackageFactory extends RPYModelFactory<RPYPackage, RPYPackageResource> {
+@ModelEntity
+@ImplementationClass(value = RPYClass.RPYClassImpl.class)
+public interface RPYClass extends RPYPackageObject {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(RPYPackageFactory.class.getPackage().getName());
+	@PropertyIdentifier(type = String.class)
+	public static final String NAME_KEY = "name";
 
-	public RPYPackageFactory(RPYPackageResource resource, RPYTechnologyContextManager technologyContextManager)
-			throws ModelDefinitionException {
-		super(RPYPackage.class, resource, technologyContextManager);
-	}
+	@Getter(value = NAME_KEY)
+	public String getName();
 
-	public RPYPackage makePackage() {
-		return newInstance(RPYPackage.class);
-	}
+	@Setter(NAME_KEY)
+	public void setName(String aName);
 
-	@Override
-	public RPYObject makeObject(RPYConcept concept) {
-		if (concept.getName().equals("ISubsystem")) {
-			RPYPackage returned = makePackage();
-			returned.setConcept(concept);
-			setRootObject(returned);
-			return returned;
+	/**
+	 * Default base implementation for {@link RPYClass}
+	 * 
+	 * @author sylvain
+	 *
+	 */
+	public static abstract class RPYClassImpl extends RPYPackageObjectImpl implements RPYClass {
+
+		@SuppressWarnings("unused")
+		private static final Logger logger = Logger.getLogger(RPYProjectObjectImpl.class.getPackage().getName());
+
+		@Override
+		public void mapProperties() {
+			super.mapProperties();
+			setName(getPropertyValue("_name"));
 		}
-		else if (concept.getName().equals("IClass")) {
-			RPYClass returned = newInstance(RPYClass.class);
-			returned.setConcept(concept);
-			return returned;
-		}
-		return super.makeObject(concept);
+
 	}
 
 }

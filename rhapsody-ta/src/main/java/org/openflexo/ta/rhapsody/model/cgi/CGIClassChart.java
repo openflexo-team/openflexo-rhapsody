@@ -38,10 +38,16 @@
 
 package org.openflexo.ta.rhapsody.model.cgi;
 
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.pamela.annotations.Adder;
+import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.Getter.Cardinality;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Remover;
 
 /**
  * Represents a class chart<br>
@@ -52,6 +58,18 @@ import org.openflexo.pamela.annotations.ModelEntity;
 @ModelEntity
 @ImplementationClass(value = CGIClassChart.CGIClassChartImpl.class)
 public interface CGIClassChart extends CGIChart {
+
+	@PropertyIdentifier(type = CGIClass.class, cardinality = Cardinality.LIST)
+	public static final String CLASSES_KEY = "classes";
+
+	@Getter(value = CLASSES_KEY, cardinality = Cardinality.LIST, inverse = CGIClass.CHART_KEY)
+	public List<CGIClass> getClasses();
+
+	@Adder(CLASSES_KEY)
+	public void addToClasses(CGIClass aClass);
+
+	@Remover(CLASSES_KEY)
+	public void removeFromClasses(CGIClass aClass);
 
 	/**
 	 * Default base implementation for {@link CGIClassChart}
@@ -67,7 +85,13 @@ public interface CGIClassChart extends CGIChart {
 		@Override
 		public void mapProperties() {
 			super.mapProperties();
-			System.out.println("Coucou ici avec " + getPropertyValue("_id"));
+			setName(getPropertyValue("m_name"));
+			List<Object> elements = getPropertyValue("elementList");
+			for (Object element : elements) {
+				if (element instanceof CGIClass) {
+					addToClasses((CGIClass) element);
+				}
+			}
 		}
 
 	}

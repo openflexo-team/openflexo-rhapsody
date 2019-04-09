@@ -65,6 +65,8 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 
 	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = RPYClass.class, cardinality = Cardinality.LIST)
+	public static final String CLASSES_KEY = "classes";
 	@PropertyIdentifier(type = RPYObjectClassDiagram.class, cardinality = Cardinality.LIST)
 	public static final String OBJECT_CLASS_DIAGRAMS_KEY = "objectClassDiagrams";
 	@PropertyIdentifier(type = RPYSequenceDiagram.class, cardinality = Cardinality.LIST)
@@ -85,6 +87,15 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 	 */
 	@Setter(NAME_KEY)
 	public void setName(String aName);
+
+	@Getter(value = CLASSES_KEY, cardinality = Cardinality.LIST, inverse = RPYClass.PACKAGE_KEY)
+	public List<RPYClass> getClasses();
+
+	@Adder(CLASSES_KEY)
+	public void addToClasses(RPYClass aClass);
+
+	@Remover(CLASSES_KEY)
+	public void removeFromClasses(RPYClass aClass);
 
 	@Getter(value = OBJECT_CLASS_DIAGRAMS_KEY, cardinality = Cardinality.LIST, inverse = RPYDiagram.ROOT_OBJECT_KEY)
 	public List<RPYObjectClassDiagram> getObjectClassDiagrams();
@@ -110,6 +121,12 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 	@Override
 	public void setResource(FlexoResource<RPYPackage> resource);
 
+	public ClassesList getClassesList();
+
+	public ObjectModelDiagramsList getObjectModelDiagramsList();
+
+	public SequenceDiagramsList getSequenceDiagramsList();
+
 	/**
 	 * Default base implementation for {@link RPYPackage}
 	 * 
@@ -120,6 +137,44 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYPackageImpl.class.getPackage().getName());
+
+		private ClassesList classesList = new ClassesList() {
+			@Override
+			public List<RPYClass> getClasses() {
+				return RPYPackageImpl.this.getClasses();
+			}
+		};
+
+		private ObjectModelDiagramsList objectModelDiagramsList = new ObjectModelDiagramsList() {
+
+			@Override
+			public List<RPYObjectClassDiagram> getDiagrams() {
+				return RPYPackageImpl.this.getObjectClassDiagrams();
+			}
+		};
+
+		private SequenceDiagramsList sequenceDiagramsList = new SequenceDiagramsList() {
+
+			@Override
+			public List<RPYSequenceDiagram> getDiagrams() {
+				return RPYPackageImpl.this.getSequenceDiagrams();
+			}
+		};
+
+		@Override
+		public ClassesList getClassesList() {
+			return classesList;
+		}
+
+		@Override
+		public ObjectModelDiagramsList getObjectModelDiagramsList() {
+			return objectModelDiagramsList;
+		}
+
+		@Override
+		public SequenceDiagramsList getSequenceDiagramsList() {
+			return sequenceDiagramsList;
+		}
 
 		@Override
 		public RPYPackage getResourceData() {
@@ -140,9 +195,17 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 		public void mapProperties() {
 			super.mapProperties();
 			setName(getPropertyValue("_name"));
+			RPYRawContainer classes = getPropertyValue("Classes");
+			for (Object object : classes.getValues()) {
+				if (object instanceof RPYClass) {
+					addToClasses((RPYClass) object);
+				}
+				else {
+					logger.warning("Unexpected object: " + object);
+				}
+			}
 			RPYRawContainer diagrams = getPropertyValue("Declaratives");
 			for (Object object : diagrams.getValues()) {
-				System.out.println("Declaratives: " + object);
 				if (object instanceof RPYObjectClassDiagram) {
 					addToObjectClassDiagrams((RPYObjectClassDiagram) object);
 				}
@@ -163,17 +226,30 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 		 */
 		@Override
 		public RPYObject getObjectWithID(String objectId, String className) {
-			for (RPYObjectClassDiagram diagram : getObjectClassDiagrams()) {
-				if (diagram.getID().equals(objectId)) {
-					return diagram;
-				}
+
+			RPYObject returned = findObjectWithID(objectId, className);
+			if (returned != null) {
+				return returned;
 			}
+
 			// System.out.println("Tiens je cherche l'objet: " + objectId + " of " + className + " in " + this);
 			logger.warning("Cannot find object with ID: " + objectId + " class: " + className + " in " + this);
 			Thread.dumpStack();
 			return null;
 		}
 
+	}
+
+	public static interface ClassesList extends RPYFacet {
+		public List<RPYClass> getClasses();
+	}
+
+	public static interface ObjectModelDiagramsList extends RPYFacet {
+		public List<RPYObjectClassDiagram> getDiagrams();
+	}
+
+	public static interface SequenceDiagramsList extends RPYFacet {
+		public List<RPYSequenceDiagram> getDiagrams();
 	}
 
 }

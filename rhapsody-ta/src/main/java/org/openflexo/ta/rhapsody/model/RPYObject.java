@@ -38,11 +38,14 @@
 
 package org.openflexo.ta.rhapsody.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.resource.PamelaResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.pamela.annotations.Getter;
@@ -52,6 +55,7 @@ import org.openflexo.pamela.annotations.Imports;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.pamela.factory.ModelFactory;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
@@ -101,6 +105,8 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 
 	public <T extends RPYObject> T getReference(String propertyName);
 
+	public String getPropertyValueAsString(String propertyName);
+
 	public void mapProperties();
 
 	public void mapReferences();
@@ -110,6 +116,16 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 	public String toExtendedString(int indent);
 
 	public RPYRootObject<?> getRootObject();
+
+	public List<RPYObject> getUnmappedChildren();
+
+	/**
+	 * Retrieve object with supplied serialization identifier, asserting this object resides in this {@link RPYObject}
+	 * 
+	 * @param objectId
+	 * @return
+	 */
+	public RPYObject findObjectWithID(String objectId, String className);
 
 	/**
 	 * Default base implementation for {@link RPYObject}
@@ -131,10 +147,8 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 		}
 
 		@Override
-		public final String toString() {
-			StringBuffer sb = new StringBuffer();
-			sb.append("[" + getConcept().getName() + "]");
-			return sb.toString();
+		public String toString() {
+			return "[" + getConcept().getName() /*+ ":" + getID()*/ + "]";
 		}
 
 		@Override
@@ -190,7 +204,56 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 			return handle.getReferencedObject();
 		}
 
+		@Override
+		public String getPropertyValueAsString(String propertyName) {
+			Object value = getPropertyValue(propertyName);
+			if (value instanceof RPYHandle) {
+				RPYHandle handle = (RPYHandle) value;
+				if (handle.isNullReference()) {
+					return "<null reference>";
+				}
+				Object referencedObject = handle.getReferencedObject();
+				if (referencedObject == null) {
+					return "<unkwown reference to " + handle.getClassName() + ":" + handle.getID() + ">";
+				}
+				else {
+					return "<reference to " + ((RPYObject) referencedObject).toString() + ">";
+				}
+			}
+			if (value instanceof RPYRawContainer) {
+				List<?> list = ((RPYRawContainer) value).getValues();
+				if (list.size() == 0) {
+					return "<Empty list>";
+				}
+				else {
+					Object firstObject = list.get(0);
+					if (firstObject instanceof RPYObject) {
+						return "<" + list.size() + " instances of " + ((RPYObject) firstObject).getConcept().getName() + ">";
+					}
+					else {
+						return "<" + list.size() + " instances of " + firstObject.getClass().getSimpleName() + ">";
+					}
+				}
+			}
+			if (value != null) {
+				return value.toString();
+			}
+			return "null";
+		}
+
+		@Override
+		public Class<?> getImplementedInterface() {
+			if (getRootObject() != null) {
+				ModelFactory f = ((PamelaResource<?, ?>) getRootObject().getResource()).getFactory();
+				if (f != null) {
+					return f.getModelEntityForInstance(this).getImplementedInterface();
+				}
+			}
+			return getClass();
+		}
+
 		private RPYProperty getProperty(String propertyName) {
+
 			if (getConcept() == null) {
 				return null;
 			}
@@ -219,8 +282,66 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 						}
 					}
 				}
+				if (object instanceof List) {
+					for (Object o : (List) object) {
+						if (o instanceof RPYObject) {
+							((RPYObject) o).lookupReferences();
+						}
+					}
+				}
 			}
 			mapReferences();
+		}
+
+		/**
+		 * Retrieve object with supplied serialization identifier, asserting this object resides in this {@link RPYRootObject}
+		 * 
+		 * @param objectId
+		 * @return
+		 */
+		@Override
+		public final RPYObject findObjectWithID(String objectId, String className) {
+
+			if (!(this instanceof RPYHandle) && objectId.equals(getID())) {
+				if (getConcept() == null) {
+					logger.warning("Unexpected null concept");
+				}
+				else if (!className.equals(getConcept().getName())) {
+					logger.warning("Unexpected concept " + getConcept().getName() + " instead of " + className);
+				}
+				return this;
+			}
+
+			for (Object object : propertyValues.values()) {
+				if (object instanceof RPYObject) {
+					RPYObject returned = ((RPYObject) object).findObjectWithID(objectId, className);
+					if (returned != null) {
+						return returned;
+					}
+				}
+				if (object instanceof RPYRawContainer) {
+					for (Object o : ((RPYRawContainer) object).getValues()) {
+						if (o instanceof RPYObject) {
+							RPYObject returned = ((RPYObject) o).findObjectWithID(objectId, className);
+							if (returned != null) {
+								return returned;
+							}
+						}
+					}
+				}
+				if (object instanceof List) {
+					for (Object o : (List) object) {
+						if (o instanceof RPYObject) {
+							RPYObject returned = ((RPYObject) o).findObjectWithID(objectId, className);
+							if (returned != null) {
+								return returned;
+							}
+						}
+					}
+				}
+			}
+
+			return null;
 		}
 
 		@Override
@@ -228,5 +349,42 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 			return getID();
 		}
 
+		private List<RPYObject> unmappedChildren = null;
+
+		@Override
+		public List<RPYObject> getUnmappedChildren() {
+			if (unmappedChildren == null) {
+				unmappedChildren = new ArrayList<>();
+				for (Object object : propertyValues.values()) {
+					if (object instanceof RPYRawContainer) {
+						for (Object object2 : ((RPYRawContainer) object).getValues()) {
+							if (object2 instanceof RPYObject) {
+								unmappedChildren.add((RPYObject) object2);
+							}
+						}
+					}
+					else if (object instanceof RPYHandle) {
+						/*if (((RPYHandle) object).getReferencedObject() instanceof RPYObject) {
+							unmappedChildren.add(((RPYHandle) object).getReferencedObject());
+						}*/
+					}
+					else if (object instanceof RPYObject) {
+						unmappedChildren.add((RPYObject) object);
+					}
+					else if (object instanceof List) {
+						for (Object object2 : (List) object) {
+							if (object2 instanceof RPYObject) {
+								unmappedChildren.add((RPYObject) object2);
+							}
+						}
+					}
+				}
+			}
+			return unmappedChildren;
+		}
 	}
+
+	public static interface RPYFacet {
+	}
+
 }

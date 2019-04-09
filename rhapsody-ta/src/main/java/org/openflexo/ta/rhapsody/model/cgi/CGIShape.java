@@ -36,51 +36,59 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.ta.rhapsody.model.cgi;
 
-import java.util.logging.Logger;
-
-import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.ModelFactory;
-import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
-import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
-import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
+import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.pamela.annotations.XMLAttribute;
+import org.openflexo.ta.rhapsody.model.RPYObject;
 
 /**
- * A {@link ModelFactory} used to manage a {@link RPYPackage}<br>
- * One instance of this class should be used for each {@link RPYPackageResource}
+ * Represents a shape facet<br>
  * 
  * @author sylvain
- * 
+ *
  */
-public class RPYPackageFactory extends RPYModelFactory<RPYPackage, RPYPackageResource> {
+@ModelEntity(isAbstract = true)
+public interface CGIShape extends RPYObject {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(RPYPackageFactory.class.getPackage().getName());
+	@PropertyIdentifier(type = Double.class)
+	public static final String X_KEY = "x";
+	@PropertyIdentifier(type = Double.class)
+	public static final String Y_KEY = "y";
+	@PropertyIdentifier(type = Double.class)
+	public static final String WIDTH_KEY = "width";
+	@PropertyIdentifier(type = Double.class)
+	public static final String HEIGHT_KEY = "height";
 
-	public RPYPackageFactory(RPYPackageResource resource, RPYTechnologyContextManager technologyContextManager)
-			throws ModelDefinitionException {
-		super(RPYPackage.class, resource, technologyContextManager);
-	}
+	@Getter(value = X_KEY, defaultValue = "0.0")
+	@XMLAttribute
+	public double getX();
 
-	public RPYPackage makePackage() {
-		return newInstance(RPYPackage.class);
-	}
+	@Setter(value = X_KEY)
+	public void setX(double aValue);
 
-	@Override
-	public RPYObject makeObject(RPYConcept concept) {
-		if (concept.getName().equals("ISubsystem")) {
-			RPYPackage returned = makePackage();
-			returned.setConcept(concept);
-			setRootObject(returned);
-			return returned;
-		}
-		else if (concept.getName().equals("IClass")) {
-			RPYClass returned = newInstance(RPYClass.class);
-			returned.setConcept(concept);
-			return returned;
-		}
-		return super.makeObject(concept);
-	}
+	@Getter(value = Y_KEY, defaultValue = "0.0")
+	@XMLAttribute
+	public double getY();
+
+	@Setter(value = Y_KEY)
+	public void setY(double aValue);
+
+	@Getter(value = WIDTH_KEY, defaultValue = "100.0")
+	@XMLAttribute
+	public abstract double getWidth();
+
+	@Setter(value = WIDTH_KEY)
+	public abstract void setWidth(double aValue);
+
+	@Getter(value = HEIGHT_KEY, defaultValue = "60.0")
+	@XMLAttribute
+	public abstract double getHeight();
+
+	@Setter(value = HEIGHT_KEY)
+	public abstract void setHeight(double aValue);
 
 }

@@ -157,6 +157,7 @@ public class RPYObjectFactory extends DepthFirstAdapter {
 				return (T) getNumber(nList.get(0));
 			}
 			else {
+				RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.NumberList, concept);
 				return (T) getNumbers(nList);
 			}
 		}

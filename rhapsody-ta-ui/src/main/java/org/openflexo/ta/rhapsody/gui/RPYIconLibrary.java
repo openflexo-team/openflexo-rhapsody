@@ -26,12 +26,15 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.icon.ImageIconResource;
 import org.openflexo.rm.ResourceLocator;
+import org.openflexo.ta.rhapsody.model.RPYClass;
 import org.openflexo.ta.rhapsody.model.RPYObject;
 import org.openflexo.ta.rhapsody.model.RPYObjectClassDiagram;
 import org.openflexo.ta.rhapsody.model.RPYPackage;
 import org.openflexo.ta.rhapsody.model.RPYProfile;
 import org.openflexo.ta.rhapsody.model.RPYProject;
 import org.openflexo.ta.rhapsody.model.RPYSequenceDiagram;
+import org.openflexo.ta.rhapsody.model.RPYUnmappedObject;
+import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
 
 public class RPYIconLibrary {
 	private static final Logger logger = Logger.getLogger(RPYIconLibrary.class.getPackage().getName());
@@ -45,10 +48,24 @@ public class RPYIconLibrary {
 	public static final ImageIcon RPY_PACKAGE_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/RPYPackage_16x16.png"));
 	public static final ImageIcon RPY_FOLDER_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/Folder_16x16.png"));
 	public static final ImageIcon RPY_PROFILE_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/RPYProfile_16x16.png"));
+	public static final ImageIcon RPY_CLASS_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/RPYClass_16x16.png"));
 	public static final ImageIcon RPY_OBJECT_CLASS_DIAGRAM_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/RPYObjectClassDiagram_16x16.png"));
 	public static final ImageIcon RPY_SEQUENCE_DIAGRAM_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/RPYSequenceDiagram_16x16.png"));
+
+	public static final ImageIcon SIMPLE_PROPERTY_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/MetaModel/EEnumLiteral.gif"));
+	public static final ImageIcon ID_PROPERTY_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/MetaModel/EOperation.gif"));
+	public static final ImageIcon REFERENCE_PROPERTY_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/MetaModel/EReference.gif"));
+	public static final ImageIcon OBJECT_PROPERTY_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/MetaModel/EClass.gif"));
+	public static final ImageIcon UNMAPPED_OBJECT_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/MetaModel/EDataType.gif"));
+
+	public static final ImageIcon CGI_CLASS_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/MetaModel/EClass.gif"));
 
 	/*public static ImageIcon iconForObject(Class<? extends TechnologyObject<?>> objectClass) {
 		return null;
@@ -64,14 +81,23 @@ public class RPYIconLibrary {
 		else if (RPYProfile.class.isAssignableFrom(objectClass)) {
 			return RPY_PROFILE_ICON;
 		}
+		else if (RPYClass.class.isAssignableFrom(objectClass)) {
+			return RPY_CLASS_ICON;
+		}
 		else if (RPYObjectClassDiagram.class.isAssignableFrom(objectClass)) {
 			return RPY_OBJECT_CLASS_DIAGRAM_ICON;
 		}
 		else if (RPYSequenceDiagram.class.isAssignableFrom(objectClass)) {
 			return RPY_SEQUENCE_DIAGRAM_ICON;
 		}
+		else if (CGIClass.class.isAssignableFrom(objectClass)) {
+			return CGI_CLASS_ICON;
+		}
+		else if (RPYUnmappedObject.class.isAssignableFrom(objectClass)) {
+			return UNMAPPED_OBJECT_ICON;
+		}
 		logger.warning("No icon for " + objectClass);
-		return null;
+		return UNMAPPED_OBJECT_ICON;
 	}
 
 }

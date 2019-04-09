@@ -58,6 +58,8 @@ import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
+import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
+import org.openflexo.ta.rhapsody.model.cgi.CGIClassChart;
 import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResourceRepository;
@@ -110,9 +112,9 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		project = getRPYProject("PingPongProject");
 		System.out.println("PingPongProject:\n" + project);
 
-		debugMetaModel();
+		// debugMetaModel();
 
-		System.out.println("*************************");
+		// System.out.println("*************************");
 
 		System.out.println(project.toExtendedString(0));
 
@@ -144,12 +146,46 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 
 		RPYPackage defaultPackage = defaultPackageResource.getLoadedResourceData();
 
+		assertEquals(3, defaultPackage.getClasses().size());
+		RPYClass topLevel = defaultPackage.getClasses().get(0);
+		RPYClass ping = defaultPackage.getClasses().get(1);
+		RPYClass pong = defaultPackage.getClasses().get(2);
+
 		assertEquals(2, defaultPackage.getObjectClassDiagrams().size());
 		RPYObjectClassDiagram diagram1 = defaultPackage.getObjectClassDiagrams().get(0);
 		assertNotNull(diagram1);
 		assertNotNull(diagram1.getClassChart());
 		assertSame(diagram1, diagram1.getClassChart().getModelObject());
 		assertEquals("DiagramClassPingPong", diagram1.getName());
+
+		assertNotNull(diagram1.getClassChart());
+		CGIClassChart chart = diagram1.getClassChart();
+		assertSame(defaultPackage, chart.getRootObject());
+		assertEquals(3, chart.getClasses().size());
+		CGIClass topLevelCGI = chart.getClasses().get(0);
+		CGIClass pingCGI = chart.getClasses().get(1);
+		CGIClass pongCGI = chart.getClasses().get(2);
+		assertEquals("Ping", pingCGI.getName().getText());
+		assertSame(defaultPackage, pingCGI.getRootObject());
+
+		assertSame(topLevel, topLevelCGI.getModelObject());
+
+		/*List<Object> elementList = (List) diagram1.getClassChart().getPropertyValue("elementList");
+		System.out.println("elementList=" + elementList);
+		System.out.println("elementList of " + elementList.getClass());
+		
+		for (Object object : elementList) {
+			System.out.println("object: " + object);
+		}
+		
+		RPYUnmappedObject cgiClass = (RPYUnmappedObject) elementList.get(2);
+		System.out.println("et donc: " + cgiClass.getPropertyValue("m_transform"));
+		
+		RPYConcept concept = cgiClass.getConcept();
+		System.out.println("concept=" + concept);
+		for (RPYProperty rpyProperty : concept.getProperties()) {
+			System.out.println("property: " + rpyProperty.getName());
+		}*/
 
 		RPYObjectClassDiagram diagram2 = defaultPackage.getObjectClassDiagrams().get(1);
 		assertNotNull(diagram2);
@@ -167,6 +203,7 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		assertNotNull(seqDiag2.getClassChart());
 		assertSame(seqDiag2, seqDiag2.getClassChart().getModelObject());*/
 
+		// debugMetaModel();
 	}
 
 	private void debugMetaModel() {

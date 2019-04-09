@@ -55,7 +55,41 @@
 			label="package.name"
 			icon="controller.iconForObject(package)" isEditable="false"
 			filtered="false" defaultVisible="true" name="package">
+			<Children data="package.classesList" name="classesList" />
+			<Children data="package.objectModelDiagramsList" name="objectModelDiagramsList" />
+			<Children data="package.sequenceDiagramsList" name="sequenceDiagramsList" />
 		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYPackage$ClassesList"
+			label="'Classes'"
+			icon="controller.iconForObject(classesList)" isEditable="false"
+			filtered="false" defaultVisible="true" name="classesList">
+			<Children data="classesList.classes" name="classes" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass"
+			label="class.name"
+			icon="controller.iconForObject(class)" isEditable="false"
+			filtered="false" defaultVisible="true" name="class">
+			<!--  <Children data="package.classesList" name="classesList" />
+			<Children data="package.objectModelDiagramsList" name="objectModelDiagramsList" />
+			<Children data="package.sequenceDiagramsList" name="sequenceDiagramsList" /> -->
+			<Children data="class.unmappedChildren" name="unmappedChildren" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYPackage$ObjectModelDiagramsList"
+			label="'Object Model Diagrams'"
+			icon="controller.iconForObject(diagramsList)" isEditable="false"
+			filtered="false" defaultVisible="true" name="diagramsList">
+			<Children data="diagramsList.diagrams" name="diagrams" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYPackage$SequenceDiagramsList"
+			label="'Sequence Diagrams'"
+			icon="controller.iconForObject(diagramsList)" isEditable="false"
+			filtered="false" defaultVisible="true" name="diagramsList">
+			<Children data="diagramsList.diagrams" name="diagrams" />
+		</BrowserElement>		
 		<BrowserElement
 			dataClassName="org.openflexo.ta.rhapsody.model.RPYProfile"
 			label="profile.fileName"
@@ -67,6 +101,37 @@
 			label="diagram.name"
 			icon="controller.iconForObject(diagram)" isEditable="false"
 			filtered="false" defaultVisible="true" name="diagram">
+			<Children data="diagram.classChart" name="chart" />
+			<Children data="diagram.unmappedChildren" name="unmappedChildren" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYSequenceDiagram"
+			label="diagram.name"
+			icon="controller.iconForObject(diagram)" isEditable="false"
+			filtered="false" defaultVisible="true" name="diagram">
+			<Children data="diagram.unmappedChildren" name="unmappedChildren" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.cgi.CGIClassChart"
+			label="'CGIClassChart'"
+			icon="controller.iconForObject(chart)" isEditable="false"
+			filtered="false" defaultVisible="true" name="chart">
+			<Children data="chart.classes" name="classes" />
+			<!--  <Children data="chart.unmappedChildren" name="unmappedChildren" /> -->
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.cgi.CGIClass"
+			label="class.name.text"
+			icon="controller.iconForObject(class)" isEditable="false"
+			filtered="false" defaultVisible="true" name="class">
+			<Children data="class.unmappedChildren" name="unmappedChildren" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYObject"
+			label="object.toString"
+			icon="controller.iconForObject(object)" isEditable="false"
+			filtered="false" defaultVisible="true" name="object">
+			<Children data="object.unmappedChildren" name="unmappedChildren" />
 		</BrowserElement>
 	</Browser>
 	<LocalizedDictionary />
