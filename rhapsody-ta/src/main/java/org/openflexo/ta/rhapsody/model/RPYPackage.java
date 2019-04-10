@@ -67,6 +67,8 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 	public static final String NAME_KEY = "name";
 	@PropertyIdentifier(type = RPYClass.class, cardinality = Cardinality.LIST)
 	public static final String CLASSES_KEY = "classes";
+	@PropertyIdentifier(type = RPYEvent.class, cardinality = Cardinality.LIST)
+	public static final String EVENTS_KEY = "events";
 	@PropertyIdentifier(type = RPYObjectClassDiagram.class, cardinality = Cardinality.LIST)
 	public static final String OBJECT_CLASS_DIAGRAMS_KEY = "objectClassDiagrams";
 	@PropertyIdentifier(type = RPYSequenceDiagram.class, cardinality = Cardinality.LIST)
@@ -97,6 +99,15 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 	@Remover(CLASSES_KEY)
 	public void removeFromClasses(RPYClass aClass);
 
+	@Getter(value = EVENTS_KEY, cardinality = Cardinality.LIST, inverse = RPYEvent.PACKAGE_KEY)
+	public List<RPYEvent> getEvents();
+
+	@Adder(EVENTS_KEY)
+	public void addToEvents(RPYEvent anEvent);
+
+	@Remover(EVENTS_KEY)
+	public void removeFromEvents(RPYEvent anEvent);
+
 	@Getter(value = OBJECT_CLASS_DIAGRAMS_KEY, cardinality = Cardinality.LIST, inverse = RPYDiagram.ROOT_OBJECT_KEY)
 	public List<RPYObjectClassDiagram> getObjectClassDiagrams();
 
@@ -123,6 +134,8 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 
 	public ClassesList getClassesList();
 
+	public EventsList getEventsList();
+
 	public ObjectModelDiagramsList getObjectModelDiagramsList();
 
 	public SequenceDiagramsList getSequenceDiagramsList();
@@ -145,6 +158,13 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 			}
 		};
 
+		private EventsList eventsList = new EventsList() {
+			@Override
+			public List<RPYEvent> getEvents() {
+				return RPYPackageImpl.this.getEvents();
+			}
+		};
+
 		private ObjectModelDiagramsList objectModelDiagramsList = new ObjectModelDiagramsList() {
 
 			@Override
@@ -164,6 +184,11 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 		@Override
 		public ClassesList getClassesList() {
 			return classesList;
+		}
+
+		@Override
+		public EventsList getEventsList() {
+			return eventsList;
 		}
 
 		@Override
@@ -199,6 +224,15 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 			for (Object object : classes.getValues()) {
 				if (object instanceof RPYClass) {
 					addToClasses((RPYClass) object);
+				}
+				else {
+					logger.warning("Unexpected object: " + object);
+				}
+			}
+			RPYRawContainer events = getPropertyValue("Events");
+			for (Object object : events.getValues()) {
+				if (object instanceof RPYEvent) {
+					addToEvents((RPYEvent) object);
 				}
 				else {
 					logger.warning("Unexpected object: " + object);
@@ -242,6 +276,10 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 
 	public static interface ClassesList extends RPYFacet {
 		public List<RPYClass> getClasses();
+	}
+
+	public static interface EventsList extends RPYFacet {
+		public List<RPYEvent> getEvents();
 	}
 
 	public static interface ObjectModelDiagramsList extends RPYFacet {

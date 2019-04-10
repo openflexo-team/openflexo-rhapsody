@@ -146,10 +146,32 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 
 		RPYPackage defaultPackage = defaultPackageResource.getLoadedResourceData();
 
+		assertEquals(3, defaultPackage.getEvents().size());
+		RPYEvent event1 = defaultPackage.getEvents().get(0);
+		RPYEvent event2 = defaultPackage.getEvents().get(1);
+		RPYEvent event3 = defaultPackage.getEvents().get(2);
+		assertEquals("receivePing", event1.getName());
+		assertEquals("sendFromPing", event2.getName());
+		assertEquals("sendFromPong", event3.getName());
+
 		assertEquals(3, defaultPackage.getClasses().size());
 		RPYClass topLevel = defaultPackage.getClasses().get(0);
 		RPYClass ping = defaultPackage.getClasses().get(1);
 		RPYClass pong = defaultPackage.getClasses().get(2);
+
+		assertEquals(1, ping.getAssociationEnds().size());
+		assertEquals(4, ping.getOperations().size());
+		RPYReception reception1 = (RPYReception) ping.getOperations().get(0);
+		assertSame(event1, reception1.getEvent());
+		RPYReception reception2 = (RPYReception) ping.getOperations().get(1);
+		assertSame(event3, reception2.getEvent());
+		RPYPrimitiveOperation operation1 = (RPYPrimitiveOperation) ping.getOperations().get(2);
+		assertEquals("sendMessagePong", operation1.getName());
+		RPYPrimitiveOperation operation2 = (RPYPrimitiveOperation) ping.getOperations().get(3);
+		assertEquals("sendMessageToPong", operation2.getName());
+
+		assertEquals(1, pong.getAssociationEnds().size());
+		assertEquals(4, pong.getOperations().size());
 
 		assertEquals(2, defaultPackage.getObjectClassDiagrams().size());
 		RPYObjectClassDiagram diagram1 = defaultPackage.getObjectClassDiagrams().get(0);

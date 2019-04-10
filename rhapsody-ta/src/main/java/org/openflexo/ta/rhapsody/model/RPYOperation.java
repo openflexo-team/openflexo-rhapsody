@@ -36,70 +36,68 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model.cgi;
+package org.openflexo.ta.rhapsody.model;
 
 import java.util.logging.Logger;
 
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
+import org.openflexo.pamela.annotations.Import;
+import org.openflexo.pamela.annotations.Imports;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
+import org.openflexo.ta.rhapsody.model.RPYProjectObject.RPYProjectObjectImpl;
 
 /**
- * Represents a class chart<br>
+ * Represents a RPY operation end in a RPYClass <br>
  * 
  * @author sylvain
  *
  */
-@ModelEntity
-@ImplementationClass(value = CGIText.CGITextImpl.class)
-public interface CGIText extends CGIObject {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(value = RPYOperation.RPYOperationImpl.class)
+@Imports({ @Import(RPYPrimitiveOperation.class), @Import(RPYReception.class) })
+public interface RPYOperation extends RPYPackageObject {
 
 	@PropertyIdentifier(type = String.class)
-	public static final String TEXT_KEY = "text";
-	@PropertyIdentifier(type = CGIObject.class)
-	public static final String OBJECT_KEY = "object";
+	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = RPYClass.class)
+	public static final String OWNER_CLASS_KEY = "ownerClass";
 
-	@Getter(value = TEXT_KEY)
-	public String getText();
+	@Getter(value = NAME_KEY)
+	public String getName();
 
-	@Setter(TEXT_KEY)
-	public void setText(String aText);
+	@Setter(NAME_KEY)
+	public void setName(String aName);
 
-	@Getter(value = OBJECT_KEY)
-	public CGIObject getObject();
+	@Getter(value = OWNER_CLASS_KEY)
+	public RPYClass getOwnerClass();
 
-	@Setter(OBJECT_KEY)
-	public void setObject(CGIObject anObject);
+	@Setter(OWNER_CLASS_KEY)
+	public void setOwnerClass(RPYClass aClass);
 
 	/**
-	 * Default base implementation for {@link CGIText}
+	 * Default base implementation for {@link RPYOperation}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGITextImpl extends CGIObjectImpl implements CGIText {
+	public static abstract class RPYOperationImpl extends RPYPackageObjectImpl implements RPYOperation {
 
 		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
-
-		@Override
-		public String toString() {
-			return "[CGIText/" + getText() + "/]";
-		}
+		private static final Logger logger = Logger.getLogger(RPYProjectObjectImpl.class.getPackage().getName());
 
 		@Override
 		public void mapProperties() {
 			super.mapProperties();
-			setText(getPropertyValue("m_str"));
+			setName(getPropertyValue("_name"));
 		}
 
 		@Override
-		public CGIChart getChart() {
-			if (getObject() != null) {
-				return getObject().getChart();
+		public RPYPackage getPackage() {
+			if (getOwnerClass() != null) {
+				return getOwnerClass().getPackage();
 			}
 			return null;
 		}

@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.rhapsody.model.cgi;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.pamela.annotations.Getter;
@@ -45,63 +46,91 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.ta.rhapsody.model.RPYClass;
+import org.openflexo.ta.rhapsody.model.RPYDiagram;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
 
 /**
- * Represents a class chart<br>
+ * Represents a class representation<br>
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(value = CGIText.CGITextImpl.class)
-public interface CGIText extends CGIObject {
+@ImplementationClass(value = CGIAssociationEnd.CGIClassImpl.class)
+public interface CGIAssociationEnd extends CGIShape {
 
-	@PropertyIdentifier(type = String.class)
-	public static final String TEXT_KEY = "text";
-	@PropertyIdentifier(type = CGIObject.class)
-	public static final String OBJECT_KEY = "object";
+	@PropertyIdentifier(type = CGIText.class)
+	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = RPYDiagram.class)
+	public static final String MODEL_OBJECT_KEY = "modelObject";
+	@PropertyIdentifier(type = CGIClassChart.class)
+	public static final String CHART_KEY = "chart";
 
-	@Getter(value = TEXT_KEY)
-	public String getText();
+	@Getter(value = NAME_KEY, inverse = CGIText.OBJECT_KEY)
+	public CGIText getName();
 
-	@Setter(TEXT_KEY)
-	public void setText(String aText);
+	@Setter(NAME_KEY)
+	public void setName(CGIText aName);
 
-	@Getter(value = OBJECT_KEY)
-	public CGIObject getObject();
+	@Getter(value = MODEL_OBJECT_KEY)
+	public RPYClass getModelObject();
 
-	@Setter(OBJECT_KEY)
-	public void setObject(CGIObject anObject);
+	@Setter(MODEL_OBJECT_KEY)
+	public void setModelObject(RPYClass aClass);
+
+	@Override
+	@Getter(value = CHART_KEY)
+	public CGIClassChart getChart();
+
+	@Setter(CHART_KEY)
+	public void setChart(CGIClassChart aChart);
+
+	public boolean hasShape();
 
 	/**
-	 * Default base implementation for {@link CGIText}
+	 * Default base implementation for {@link CGIAssociationEnd}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGITextImpl extends CGIObjectImpl implements CGIText {
+	public static abstract class CGIClassImpl extends CGIObjectImpl implements CGIAssociationEnd {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
 
 		@Override
 		public String toString() {
-			return "[CGIText/" + getText() + "/]";
+			if (getName() != null) {
+				return getName().getText();
+			}
+			return super.toString();
 		}
 
 		@Override
 		public void mapProperties() {
 			super.mapProperties();
-			setText(getPropertyValue("m_str"));
+
+			setName(getPropertyValue("m_name"));
+
+			List<Number> geometry = getPropertyValue("m_transform");
+			if (geometry != null) {
+				setX(geometry.get(4).doubleValue());
+				setY(geometry.get(5).doubleValue());
+				setWidth(geometry.get(0).doubleValue() * 1000);
+				setHeight(geometry.get(3).doubleValue() * 1000);
+			}
 		}
 
 		@Override
-		public CGIChart getChart() {
-			if (getObject() != null) {
-				return getObject().getChart();
-			}
-			return null;
+		public boolean hasShape() {
+			return getPropertyValue("m_transform") != null;
+		}
+
+		@Override
+		public void mapReferences() {
+			super.mapReferences();
+			setModelObject(getReference("m_pModelObject"));
 		}
 
 	}

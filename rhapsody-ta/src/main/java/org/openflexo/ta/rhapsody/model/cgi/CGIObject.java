@@ -40,66 +40,39 @@ package org.openflexo.ta.rhapsody.model.cgi;
 
 import java.util.logging.Logger;
 
-import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.PropertyIdentifier;
-import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
+import org.openflexo.ta.rhapsody.model.RPYObject;
+import org.openflexo.ta.rhapsody.model.RPYRootObject;
 
 /**
- * Represents a class chart<br>
+ * Abstract CGI object, an object that resides in a {@link CGIChart}<br>
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(value = CGIText.CGITextImpl.class)
-public interface CGIText extends CGIObject {
+@ImplementationClass(value = CGIObject.CGIObjectImpl.class)
+public interface CGIObject extends RPYObject {
 
-	@PropertyIdentifier(type = String.class)
-	public static final String TEXT_KEY = "text";
-	@PropertyIdentifier(type = CGIObject.class)
-	public static final String OBJECT_KEY = "object";
-
-	@Getter(value = TEXT_KEY)
-	public String getText();
-
-	@Setter(TEXT_KEY)
-	public void setText(String aText);
-
-	@Getter(value = OBJECT_KEY)
-	public CGIObject getObject();
-
-	@Setter(OBJECT_KEY)
-	public void setObject(CGIObject anObject);
+	public CGIChart getChart();
 
 	/**
-	 * Default base implementation for {@link CGIText}
+	 * Default base implementation for {@link CGIObject}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGITextImpl extends CGIObjectImpl implements CGIText {
+	public static abstract class CGIObjectImpl extends RPYObjectImpl implements CGIObject {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
 
 		@Override
-		public String toString() {
-			return "[CGIText/" + getText() + "/]";
-		}
-
-		@Override
-		public void mapProperties() {
-			super.mapProperties();
-			setText(getPropertyValue("m_str"));
-		}
-
-		@Override
-		public CGIChart getChart() {
-			if (getObject() != null) {
-				return getObject().getChart();
+		public RPYRootObject<?> getRootObject() {
+			if (getChart() != null) {
+				return getChart().getRootObject();
 			}
 			return null;
 		}

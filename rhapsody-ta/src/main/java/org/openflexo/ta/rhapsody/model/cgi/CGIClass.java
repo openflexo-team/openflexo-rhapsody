@@ -47,10 +47,7 @@ import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.model.RPYClass;
-import org.openflexo.ta.rhapsody.model.RPYDiagram;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
-import org.openflexo.ta.rhapsody.model.RPYObject;
-import org.openflexo.ta.rhapsody.model.RPYRootObject;
 
 /**
  * Represents a class representation<br>
@@ -60,24 +57,16 @@ import org.openflexo.ta.rhapsody.model.RPYRootObject;
  */
 @ModelEntity
 @ImplementationClass(value = CGIClass.CGIClassImpl.class)
-public interface CGIClass extends RPYObject, CGIShape {
+public interface CGIClass extends CGIShape {
 
 	@PropertyIdentifier(type = CGIText.class)
 	public static final String NAME_KEY = "name";
-	@PropertyIdentifier(type = RPYDiagram.class)
+	@PropertyIdentifier(type = RPYClass.class)
 	public static final String MODEL_OBJECT_KEY = "modelObject";
 	@PropertyIdentifier(type = CGIClassChart.class)
 	public static final String CHART_KEY = "chart";
-	/*@PropertyIdentifier(type = Double.class)
-	public static final String X_KEY = "x";
-	@PropertyIdentifier(type = Double.class)
-	public static final String Y_KEY = "y";
-	@PropertyIdentifier(type = Double.class)
-	public static final String WIDTH_KEY = "width";
-	@PropertyIdentifier(type = Double.class)
-	public static final String HEIGHT_KEY = "height";*/
 
-	@Getter(value = NAME_KEY)
+	@Getter(value = NAME_KEY, inverse = CGIText.OBJECT_KEY)
 	public CGIText getName();
 
 	@Setter(NAME_KEY)
@@ -89,47 +78,14 @@ public interface CGIClass extends RPYObject, CGIShape {
 	@Setter(MODEL_OBJECT_KEY)
 	public void setModelObject(RPYClass aClass);
 
+	@Override
 	@Getter(value = CHART_KEY)
 	public CGIClassChart getChart();
 
 	@Setter(CHART_KEY)
 	public void setChart(CGIClassChart aChart);
 
-	/*@Override
-	@Getter(value = X_KEY, defaultValue = "0.0")
-	@XMLAttribute
-	public double getX();
-	
-	@Override
-	@Setter(value = X_KEY)
-	public void setX(double aValue);
-	
-	@Override
-	@Getter(value = Y_KEY, defaultValue = "0.0")
-	@XMLAttribute
-	public double getY();
-	
-	@Override
-	@Setter(value = Y_KEY)
-	public void setY(double aValue);
-	
-	@Override
-	@Getter(value = WIDTH_KEY, defaultValue = "100.0")
-	@XMLAttribute
-	public abstract double getWidth();
-	
-	@Override
-	@Setter(value = WIDTH_KEY)
-	public abstract void setWidth(double aValue);
-	
-	@Override
-	@Getter(value = HEIGHT_KEY, defaultValue = "60.0")
-	@XMLAttribute
-	public abstract double getHeight();
-	
-	@Override
-	@Setter(value = HEIGHT_KEY)
-	public abstract void setHeight(double aValue);*/
+	public boolean hasShape();
 
 	/**
 	 * Default base implementation for {@link CGIClass}
@@ -137,7 +93,7 @@ public interface CGIClass extends RPYObject, CGIShape {
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGIClassImpl extends RPYObjectImpl implements CGIClass {
+	public static abstract class CGIClassImpl extends CGIObjectImpl implements CGIClass {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
@@ -166,16 +122,14 @@ public interface CGIClass extends RPYObject, CGIShape {
 		}
 
 		@Override
-		public void mapReferences() {
-			setModelObject(getReference("m_pModelObject"));
+		public boolean hasShape() {
+			return getPropertyValue("m_transform") != null;
 		}
 
 		@Override
-		public RPYRootObject<?> getRootObject() {
-			if (getChart() != null) {
-				return getChart().getRootObject();
-			}
-			return null;
+		public void mapReferences() {
+			super.mapReferences();
+			setModelObject(getReference("m_pModelObject"));
 		}
 
 	}

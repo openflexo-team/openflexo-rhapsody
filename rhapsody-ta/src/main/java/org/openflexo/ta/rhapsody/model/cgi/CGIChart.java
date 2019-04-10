@@ -47,7 +47,6 @@ import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.model.RPYDiagram;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
-import org.openflexo.ta.rhapsody.model.RPYObject;
 import org.openflexo.ta.rhapsody.model.RPYRootObject;
 
 /**
@@ -58,14 +57,14 @@ import org.openflexo.ta.rhapsody.model.RPYRootObject;
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(value = CGIChart.CGIChartImpl.class)
-public interface CGIChart extends RPYObject {
+public interface CGIChart extends CGIObject {
 
 	@PropertyIdentifier(type = CGIText.class)
 	public static final String NAME_KEY = "name";
 	@PropertyIdentifier(type = RPYDiagram.class)
 	public static final String MODEL_OBJECT_KEY = "modelObject";
 
-	@Getter(value = NAME_KEY, inverse = CGIText.CHART_KEY)
+	@Getter(value = NAME_KEY, inverse = CGIText.OBJECT_KEY)
 	public CGIText getName();
 
 	@Setter(NAME_KEY)
@@ -83,7 +82,7 @@ public interface CGIChart extends RPYObject {
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGIChartImpl extends RPYObjectImpl implements CGIChart {
+	public static abstract class CGIChartImpl extends CGIObjectImpl implements CGIChart {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
@@ -100,13 +99,14 @@ public interface CGIChart extends RPYObject {
 		}
 
 		@Override
-		public RPYRootObject<?> getRootObject() {
-			if (getModelObject() != null) {
-				return getModelObject().getRootObject();
-			}
-			return null;
+		public CGIChart getChart() {
+			return this;
 		}
 
+		@Override
+		public RPYRootObject<?> getRootObject() {
+			return getModelObject().getRootObject();
+		}
 	}
 
 }

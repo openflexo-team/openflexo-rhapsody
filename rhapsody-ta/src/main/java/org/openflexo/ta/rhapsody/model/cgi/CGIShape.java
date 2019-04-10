@@ -43,16 +43,15 @@ import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.ta.rhapsody.model.RPYObject;
 
 /**
- * Represents a shape facet<br>
+ * Represents a {@link CGIObject} that defines a shape<br>
  * 
  * @author sylvain
  *
  */
 @ModelEntity(isAbstract = true)
-public interface CGIShape extends RPYObject {
+public interface CGIShape extends CGIObject {
 
 	@PropertyIdentifier(type = Double.class)
 	public static final String X_KEY = "x";

@@ -31,8 +31,10 @@ import org.openflexo.gina.utils.InspectorGroup;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.gui.RPYIconLibrary;
 import org.openflexo.ta.rhapsody.model.RPYObject;
+import org.openflexo.ta.rhapsody.model.RPYObjectClassDiagram;
 import org.openflexo.ta.rhapsody.model.RPYProject;
 import org.openflexo.ta.rhapsody.view.RPYProjectModuleView;
+import org.openflexo.ta.rhapsody.view.diagram.ObjectClassDiagramModuleView;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -161,6 +163,9 @@ public class RPYAdapterController extends TechnologyAdapterController<RPYTechnol
 
 	@Override
 	public boolean hasModuleViewForObject(TechnologyObject<RPYTechnologyAdapter> object, FlexoController controller) {
+		if (object instanceof RPYObjectClassDiagram) {
+			return true;
+		}
 		return object instanceof RPYProject;
 	}
 
@@ -175,6 +180,9 @@ public class RPYAdapterController extends TechnologyAdapterController<RPYTechnol
 	@Override
 	public ModuleView<?> createModuleViewForObject(TechnologyObject<RPYTechnologyAdapter> object, FlexoController controller,
 			FlexoPerspective perspective) {
+		if (object instanceof RPYObjectClassDiagram) {
+			return new ObjectClassDiagramModuleView((RPYObjectClassDiagram) object, perspective);
+		}
 		if (object instanceof RPYProject) {
 			RPYProjectModuleView returned = new RPYProjectModuleView((RPYProject) object, controller, perspective);
 			return returned;

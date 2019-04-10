@@ -80,6 +80,26 @@ public class RPYPackageFactory extends RPYModelFactory<RPYPackage, RPYPackageRes
 			returned.setConcept(concept);
 			return returned;
 		}
+		else if (concept.getName().equals("IEvent")) {
+			RPYEvent returned = newInstance(RPYEvent.class);
+			returned.setConcept(concept);
+			return returned;
+		}
+		else if (concept.getName().equals("IAssociationEnd")) {
+			RPYAssociationEnd returned = newInstance(RPYAssociationEnd.class);
+			returned.setConcept(concept);
+			return returned;
+		}
+		else if (concept.getName().equals("IReception")) {
+			RPYReception returned = newInstance(RPYReception.class);
+			returned.setConcept(concept);
+			return returned;
+		}
+		else if (concept.getName().equals("IPrimitiveOperation")) {
+			RPYPrimitiveOperation returned = newInstance(RPYPrimitiveOperation.class);
+			returned.setConcept(concept);
+			return returned;
+		}
 		return super.makeObject(concept);
 	}
 

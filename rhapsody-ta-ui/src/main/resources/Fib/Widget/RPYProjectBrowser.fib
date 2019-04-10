@@ -56,6 +56,7 @@
 			icon="controller.iconForObject(package)" isEditable="false"
 			filtered="false" defaultVisible="true" name="package">
 			<Children data="package.classesList" name="classesList" />
+			<Children data="package.eventsList" name="eventsList" />
 			<Children data="package.objectModelDiagramsList" name="objectModelDiagramsList" />
 			<Children data="package.sequenceDiagramsList" name="sequenceDiagramsList" />
 		</BrowserElement>
@@ -67,14 +68,11 @@
 			<Children data="classesList.classes" name="classes" />
 		</BrowserElement>
 		<BrowserElement
-			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass"
-			label="class.name"
-			icon="controller.iconForObject(class)" isEditable="false"
-			filtered="false" defaultVisible="true" name="class">
-			<!--  <Children data="package.classesList" name="classesList" />
-			<Children data="package.objectModelDiagramsList" name="objectModelDiagramsList" />
-			<Children data="package.sequenceDiagramsList" name="sequenceDiagramsList" /> -->
-			<Children data="class.unmappedChildren" name="unmappedChildren" />
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYPackage$EventsList"
+			label="'Events'"
+			icon="controller.iconForObject(eventsList)" isEditable="false"
+			filtered="false" defaultVisible="true" name="eventsList">
+			<Children data="eventsList.events" name="events" />
 		</BrowserElement>
 		<BrowserElement
 			dataClassName="org.openflexo.ta.rhapsody.model.RPYPackage$ObjectModelDiagramsList"
@@ -89,7 +87,62 @@
 			icon="controller.iconForObject(diagramsList)" isEditable="false"
 			filtered="false" defaultVisible="true" name="diagramsList">
 			<Children data="diagramsList.diagrams" name="diagrams" />
-		</BrowserElement>		
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass"
+			label="class.name"
+			icon="controller.iconForObject(class)" isEditable="false"
+			filtered="false" defaultVisible="true" name="class">
+			<Children data="class.associationEndsList" name="associationEndsList" />
+			<Children data="class.operationsList" name="operationsList" />
+			<Children data="class.statechart" name="statechart" />
+			<!--  <Children data="class.unmappedChildren" name="unmappedChildren" />-->
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYEvent"
+			label="event.name+'()'"
+			icon="controller.iconForObject(event)" isEditable="false"
+			filtered="false" defaultVisible="true" name="event">
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass$AssociationEndsList"
+			label="'Association Ends'"
+			icon="controller.iconForObject(associationEndsList)" isEditable="false"
+			filtered="false" defaultVisible="true" name="associationEndsList">
+			<Children data="associationEndsList.associationEnds" name="associationEnds" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass$OperationsList"
+			label="'Operations'"
+			icon="controller.iconForObject(operationsList)" isEditable="false"
+			filtered="false" defaultVisible="true" name="operationsList">
+			<Children data="operationsList.operations" name="operations" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass$Statechart"
+			label="'Statechart'"
+			icon="controller.iconForObject(statechart)" isEditable="false"
+			filtered="false" defaultVisible="true" name="statechart">
+			<!--  <Children data="statechart.operations" name="operations" /> -->
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYAssociationEnd"
+			label="associationEnd.name"
+			icon="controller.iconForObject(associationEnd)" isEditable="false"
+			filtered="false" defaultVisible="true" name="associationEnd">
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYReception"
+			label="reception.event.name+'()'"
+			icon="controller.iconForObject(reception)" isEditable="false"
+			filtered="false" defaultVisible="true" name="reception">
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYPrimitiveOperation"
+			label="operation.name+'()'"
+			icon="controller.iconForObject(operation)" isEditable="false"
+			filtered="false" defaultVisible="true" name="operation">
+		</BrowserElement>
 		<BrowserElement
 			dataClassName="org.openflexo.ta.rhapsody.model.RPYProfile"
 			label="profile.fileName"
@@ -117,7 +170,7 @@
 			icon="controller.iconForObject(chart)" isEditable="false"
 			filtered="false" defaultVisible="true" name="chart">
 			<Children data="chart.classes" name="classes" />
-			<!--  <Children data="chart.unmappedChildren" name="unmappedChildren" /> -->
+			<Children data="chart.unmappedChildren" name="unmappedChildren" />
 		</BrowserElement>
 		<BrowserElement
 			dataClassName="org.openflexo.ta.rhapsody.model.cgi.CGIClass"

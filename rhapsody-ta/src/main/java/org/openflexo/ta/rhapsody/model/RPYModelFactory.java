@@ -122,8 +122,7 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 	}
 
 	public RPYObject makeObject(RPYConcept concept) {
-		if (concept.getName().equals("IHandle") || concept.getName().equals("ISubsystemHandle")
-				|| concept.getName().equals("IClassifierHandle")) {
+		if (concept.getName().contains("Handle")) {
 			RPYHandle<?> returned = newInstance(RPYHandle.class);
 			returned.setConcept(concept);
 			returned.setRootObject(getRootObject());

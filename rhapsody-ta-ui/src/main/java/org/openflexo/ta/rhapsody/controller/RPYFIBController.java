@@ -48,7 +48,12 @@ import org.openflexo.gina.view.GinaViewFactory;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.ta.rhapsody.gui.RPYIconLibrary;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
+import org.openflexo.ta.rhapsody.model.RPYClass.AssociationEndsList;
+import org.openflexo.ta.rhapsody.model.RPYClass.OperationsList;
+import org.openflexo.ta.rhapsody.model.RPYClass.Statechart;
 import org.openflexo.ta.rhapsody.model.RPYObject.RPYFacet;
+import org.openflexo.ta.rhapsody.model.RPYPackage.ClassesList;
+import org.openflexo.ta.rhapsody.model.RPYPackage.EventsList;
 import org.openflexo.ta.rhapsody.model.RPYUnmappedObject;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
@@ -68,6 +73,21 @@ public class RPYFIBController extends FlexoFIBController {
 	@Override
 	@NotificationUnsafe
 	protected ImageIcon retrieveIconForObject(Object object) {
+		if (object instanceof ClassesList) {
+			return RPYIconLibrary.CLASSES_LIST_ICON;
+		}
+		if (object instanceof EventsList) {
+			return RPYIconLibrary.EVENTS_LIST_ICON;
+		}
+		if (object instanceof AssociationEndsList) {
+			return RPYIconLibrary.ASSOCIATION_ENDS_LIST_ICON;
+		}
+		if (object instanceof OperationsList) {
+			return RPYIconLibrary.OPERATION_LIST_ICON;
+		}
+		if (object instanceof Statechart) {
+			return RPYIconLibrary.STATECHART_ICON;
+		}
 		if (object instanceof RPYFacet) {
 			return RPYIconLibrary.RPY_FOLDER_ICON;
 		}

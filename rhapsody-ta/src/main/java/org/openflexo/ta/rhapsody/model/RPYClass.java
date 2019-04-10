@@ -38,12 +38,16 @@
 
 package org.openflexo.ta.rhapsody.model;
 
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.pamela.annotations.Adder;
 import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.Getter.Cardinality;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.model.RPYProjectObject.RPYProjectObjectImpl;
 
@@ -59,12 +63,40 @@ public interface RPYClass extends RPYPackageObject {
 
 	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = RPYAssociationEnd.class, cardinality = Cardinality.LIST)
+	public static final String ASSOCIATION_ENDS_KEY = "associationEnds";
+	@PropertyIdentifier(type = RPYOperation.class, cardinality = Cardinality.LIST)
+	public static final String OPERATIONS_KEY = "operations";
 
 	@Getter(value = NAME_KEY)
 	public String getName();
 
 	@Setter(NAME_KEY)
 	public void setName(String aName);
+
+	@Getter(value = ASSOCIATION_ENDS_KEY, cardinality = Cardinality.LIST, inverse = RPYAssociationEnd.OWNER_CLASS_KEY)
+	public List<RPYAssociationEnd> getAssociationEnds();
+
+	@Adder(ASSOCIATION_ENDS_KEY)
+	public void addToAssociationEnds(RPYAssociationEnd anAssociation);
+
+	@Remover(ASSOCIATION_ENDS_KEY)
+	public void removeFromAssociationEnds(RPYAssociationEnd anAssociation);
+
+	@Getter(value = OPERATIONS_KEY, cardinality = Cardinality.LIST, inverse = RPYOperation.OWNER_CLASS_KEY)
+	public List<RPYOperation> getOperations();
+
+	@Adder(OPERATIONS_KEY)
+	public void addToOperations(RPYOperation anOperation);
+
+	@Remover(OPERATIONS_KEY)
+	public void removeFromOperations(RPYOperation anOperation);
+
+	public AssociationEndsList getAssociationEndsList();
+
+	public OperationsList getOperationsList();
+
+	public Statechart getStatechart();
 
 	/**
 	 * Default base implementation for {@link RPYClass}
@@ -81,8 +113,76 @@ public interface RPYClass extends RPYPackageObject {
 		public void mapProperties() {
 			super.mapProperties();
 			setName(getPropertyValue("_name"));
+			RPYRawContainer associations = getPropertyValue("Associations");
+			if (associations != null) {
+				for (Object object : associations.getValues()) {
+					if (object instanceof RPYAssociationEnd) {
+						addToAssociationEnds((RPYAssociationEnd) object);
+					}
+					else {
+						logger.warning("Unexpected object: " + object);
+					}
+				}
+			}
+			RPYRawContainer operations = getPropertyValue("Operations");
+			if (operations != null) {
+				for (Object object : operations.getValues()) {
+					if (object instanceof RPYOperation) {
+						addToOperations((RPYOperation) object);
+					}
+					else {
+						logger.warning("Unexpected object: " + object);
+					}
+				}
+			}
 		}
 
+		private AssociationEndsList associationEndsList = new AssociationEndsList() {
+			@Override
+			public List<RPYAssociationEnd> getAssociationEnds() {
+				return RPYClassImpl.this.getAssociationEnds();
+			}
+		};
+
+		private OperationsList operationsList = new OperationsList() {
+
+			@Override
+			public List<RPYOperation> getOperations() {
+				return RPYClassImpl.this.getOperations();
+			}
+		};
+
+		private Statechart statechart = new Statechart() {
+
+		};
+
+		@Override
+		public AssociationEndsList getAssociationEndsList() {
+			return associationEndsList;
+		}
+
+		@Override
+		public OperationsList getOperationsList() {
+			return operationsList;
+		}
+
+		@Override
+		public Statechart getStatechart() {
+			return statechart;
+		}
+
+	}
+
+	public static interface AssociationEndsList extends RPYFacet {
+		public List<RPYAssociationEnd> getAssociationEnds();
+	}
+
+	public static interface OperationsList extends RPYFacet {
+		public List<RPYOperation> getOperations();
+	}
+
+	public static interface Statechart extends RPYFacet {
+		// public List<RPYSequenceDiagram> getDiagrams();
 	}
 
 }
