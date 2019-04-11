@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.openflexo.diana.ConnectorGraphicalRepresentation;
 import org.openflexo.diana.DianaModelFactory;
 import org.openflexo.diana.DianaModelFactoryImpl;
 import org.openflexo.diana.ShapeGraphicalRepresentation;
@@ -81,6 +82,7 @@ public abstract class RPYDiagramDrawing<D extends RPYDiagram> extends DrawingImp
 	}
 
 	private Map<String, Map<RPYObject, ShapeGraphicalRepresentation>> shapesMap = new HashMap<>();
+	private Map<String, Map<RPYObject, ConnectorGraphicalRepresentation>> connectorsMap = new HashMap<>();
 
 	protected ShapeGraphicalRepresentation getShapeGraphicalRepresentation(RPYObject anObject, String name) {
 		Map<RPYObject, ShapeGraphicalRepresentation> map = shapesMap.get(name);
@@ -97,5 +99,21 @@ public abstract class RPYDiagramDrawing<D extends RPYDiagram> extends DrawingImp
 	}
 
 	protected abstract ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(RPYObject object, String name);
+
+	protected ConnectorGraphicalRepresentation getConnectorGraphicalRepresentation(RPYObject anObject, String name) {
+		Map<RPYObject, ConnectorGraphicalRepresentation> map = connectorsMap.get(name);
+		if (map == null) {
+			map = new HashMap<>();
+			connectorsMap.put(name, map);
+		}
+		ConnectorGraphicalRepresentation returned = map.get(anObject);
+		if (returned == null) {
+			returned = makeConnectorGraphicalRepresentation(anObject, name);
+			map.put(anObject, returned);
+		}
+		return returned;
+	}
+
+	protected abstract ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation(RPYObject object, String name);
 
 }

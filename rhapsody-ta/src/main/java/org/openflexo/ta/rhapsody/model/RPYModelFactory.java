@@ -52,6 +52,7 @@ import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty.PropertyType;
+import org.openflexo.ta.rhapsody.model.cgi.CGIAssociationEnd;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClassChart;
 import org.openflexo.ta.rhapsody.model.cgi.CGIText;
@@ -151,6 +152,11 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 		}
 		if (concept.getName().equals("CGIClass")) {
 			CGIClass returned = newInstance(CGIClass.class);
+			returned.setConcept(concept);
+			return returned;
+		}
+		if (concept.getName().equals("CGIAssociationEnd")) {
+			CGIAssociationEnd returned = newInstance(CGIAssociationEnd.class);
 			returned.setConcept(concept);
 			return returned;
 		}

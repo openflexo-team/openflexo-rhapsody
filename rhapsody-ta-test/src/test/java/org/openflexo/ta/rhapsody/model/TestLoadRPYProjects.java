@@ -58,6 +58,7 @@ import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
+import org.openflexo.ta.rhapsody.model.cgi.CGIAssociationEnd;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClassChart;
 import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
@@ -173,6 +174,22 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		assertEquals(1, pong.getAssociationEnds().size());
 		assertEquals(4, pong.getOperations().size());
 
+		assertEquals(1, ping.getAssociationEnds().size());
+		assertEquals(4, ping.getOperations().size());
+
+		RPYAssociationEnd unPing = pong.getAssociationEnds().get(0);
+		RPYAssociationEnd unPong = ping.getAssociationEnds().get(0);
+
+		assertEquals("unPing", unPing.getName());
+		assertSame(pong, unPing.getOwnerClass());
+		assertSame(ping, unPing.getOtherClass());
+		assertSame(unPong, unPing.getInverse());
+
+		assertEquals("unPong", unPong.getName());
+		assertSame(ping, unPong.getOwnerClass());
+		assertSame(pong, unPong.getOtherClass());
+		assertSame(unPing, unPong.getInverse());
+
 		assertEquals(2, defaultPackage.getObjectClassDiagrams().size());
 		RPYObjectClassDiagram diagram1 = defaultPackage.getObjectClassDiagrams().get(0);
 		assertNotNull(diagram1);
@@ -186,9 +203,20 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		assertEquals(3, chart.getClasses().size());
 		CGIClass topLevelCGI = chart.getClasses().get(0);
 		CGIClass pingCGI = chart.getClasses().get(1);
-		CGIClass pongCGI = chart.getClasses().get(2);
 		assertEquals("Ping", pingCGI.getName().getText());
 		assertSame(defaultPackage, pingCGI.getRootObject());
+		assertSame(ping, pingCGI.getModelObject());
+		CGIClass pongCGI = chart.getClasses().get(2);
+		assertEquals("Pong", pongCGI.getName().getText());
+		assertSame(defaultPackage, pongCGI.getRootObject());
+		assertSame(pong, pongCGI.getModelObject());
+		CGIAssociationEnd unPongCGI = chart.getAssociationEnds().get(0);
+
+		assertSame(ping.getAssociationEnds().get(0), unPongCGI.getModelObject());
+		assertEquals("unPong", unPongCGI.getModelObject().getName());
+
+		assertSame(pingCGI, unPongCGI.getChart().getCGIClass(unPongCGI.getModelObject().getOwnerClass()));
+		assertSame(pongCGI, unPongCGI.getChart().getCGIClass(unPongCGI.getModelObject().getOtherClass()));
 
 		assertSame(topLevel, topLevelCGI.getModelObject());
 

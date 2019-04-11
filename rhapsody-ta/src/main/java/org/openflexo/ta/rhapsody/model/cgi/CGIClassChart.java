@@ -48,6 +48,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Remover;
+import org.openflexo.ta.rhapsody.model.RPYClass;
 
 /**
  * Represents a class chart<br>
@@ -61,6 +62,8 @@ public interface CGIClassChart extends CGIChart {
 
 	@PropertyIdentifier(type = CGIClass.class, cardinality = Cardinality.LIST)
 	public static final String CLASSES_KEY = "classes";
+	@PropertyIdentifier(type = CGIAssociationEnd.class, cardinality = Cardinality.LIST)
+	public static final String ASSOCIATION_ENDS_KEY = "associationEnds";
 
 	@Getter(value = CLASSES_KEY, cardinality = Cardinality.LIST, inverse = CGIClass.CHART_KEY)
 	public List<CGIClass> getClasses();
@@ -70,6 +73,17 @@ public interface CGIClassChart extends CGIChart {
 
 	@Remover(CLASSES_KEY)
 	public void removeFromClasses(CGIClass aClass);
+
+	@Getter(value = ASSOCIATION_ENDS_KEY, cardinality = Cardinality.LIST, inverse = CGIClass.CHART_KEY)
+	public List<CGIAssociationEnd> getAssociationEnds();
+
+	@Adder(ASSOCIATION_ENDS_KEY)
+	public void addToAssociationEnds(CGIAssociationEnd anAssociationEnd);
+
+	@Remover(ASSOCIATION_ENDS_KEY)
+	public void removeFromAssociationEnds(CGIAssociationEnd anAssociationEnd);
+
+	public CGIClass getCGIClass(RPYClass aClass);
 
 	/**
 	 * Default base implementation for {@link CGIClassChart}
@@ -91,7 +105,20 @@ public interface CGIClassChart extends CGIChart {
 				if (element instanceof CGIClass) {
 					addToClasses((CGIClass) element);
 				}
+				if (element instanceof CGIAssociationEnd) {
+					addToAssociationEnds((CGIAssociationEnd) element);
+				}
 			}
+		}
+
+		@Override
+		public CGIClass getCGIClass(RPYClass aClass) {
+			for (CGIClass cgiClass : getClasses()) {
+				if (cgiClass.getModelObject() == aClass) {
+					return cgiClass;
+				}
+			}
+			return null;
 		}
 
 	}

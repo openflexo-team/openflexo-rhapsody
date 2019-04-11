@@ -61,6 +61,10 @@ public interface RPYAssociationEnd extends RPYPackageObject {
 	public static final String NAME_KEY = "name";
 	@PropertyIdentifier(type = RPYClass.class)
 	public static final String OWNER_CLASS_KEY = "ownerClass";
+	@PropertyIdentifier(type = RPYClass.class)
+	public static final String OTHER_CLASS_KEY = "otherClass";
+	@PropertyIdentifier(type = RPYAssociationEnd.class)
+	public static final String INVERSE_KEY = "inverse";
 
 	@Getter(value = NAME_KEY)
 	public String getName();
@@ -73,6 +77,18 @@ public interface RPYAssociationEnd extends RPYPackageObject {
 
 	@Setter(OWNER_CLASS_KEY)
 	public void setOwnerClass(RPYClass aClass);
+
+	@Getter(value = OTHER_CLASS_KEY)
+	public RPYClass getOtherClass();
+
+	@Setter(OTHER_CLASS_KEY)
+	public void setOtherClass(RPYClass aClass);
+
+	@Getter(value = INVERSE_KEY)
+	public RPYAssociationEnd getInverse();
+
+	@Setter(INVERSE_KEY)
+	public void setInverse(RPYAssociationEnd anAssociationEnd);
 
 	/**
 	 * Default base implementation for {@link RPYAssociationEnd}
@@ -89,6 +105,13 @@ public interface RPYAssociationEnd extends RPYPackageObject {
 		public void mapProperties() {
 			super.mapProperties();
 			setName(getPropertyValue("_name"));
+		}
+
+		@Override
+		public void mapReferences() {
+			super.mapReferences();
+			setInverse(getReference("_inverse"));
+			setOtherClass(getReference("_otherClass"));
 		}
 
 		@Override

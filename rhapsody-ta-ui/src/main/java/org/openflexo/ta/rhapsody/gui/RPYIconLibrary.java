@@ -38,6 +38,7 @@ import org.openflexo.ta.rhapsody.model.RPYProject;
 import org.openflexo.ta.rhapsody.model.RPYReception;
 import org.openflexo.ta.rhapsody.model.RPYSequenceDiagram;
 import org.openflexo.ta.rhapsody.model.RPYUnmappedObject;
+import org.openflexo.ta.rhapsody.model.cgi.CGIAssociationEnd;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
 
 public class RPYIconLibrary {
@@ -85,6 +86,8 @@ public class RPYIconLibrary {
 			ResourceLocator.locateResource("Icons/MetaModel/EDataType.gif"));
 
 	public static final ImageIcon CGI_CLASS_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/MetaModel/EClass.gif"));
+	public static final ImageIcon CGI_ASSOCIATION_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/MetaModel/EEnumLiteral.gif"));
 
 	/*public static ImageIcon iconForObject(Class<? extends TechnologyObject<?>> objectClass) {
 		return null;
@@ -123,6 +126,9 @@ public class RPYIconLibrary {
 		}
 		else if (CGIClass.class.isAssignableFrom(objectClass)) {
 			return CGI_CLASS_ICON;
+		}
+		else if (CGIAssociationEnd.class.isAssignableFrom(objectClass)) {
+			return CGI_ASSOCIATION_ICON;
 		}
 		else if (RPYUnmappedObject.class.isAssignableFrom(objectClass)) {
 			return UNMAPPED_OBJECT_ICON;

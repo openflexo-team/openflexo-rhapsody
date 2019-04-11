@@ -38,7 +38,6 @@
 
 package org.openflexo.ta.rhapsody.model.cgi;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.pamela.annotations.Getter;
@@ -46,8 +45,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.model.RPYClass;
-import org.openflexo.ta.rhapsody.model.RPYDiagram;
+import org.openflexo.ta.rhapsody.model.RPYAssociationEnd;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
 
 /**
@@ -57,12 +55,12 @@ import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
  *
  */
 @ModelEntity
-@ImplementationClass(value = CGIAssociationEnd.CGIClassImpl.class)
-public interface CGIAssociationEnd extends CGIShape {
+@ImplementationClass(value = CGIAssociationEnd.CGIAssociationEndImpl.class)
+public interface CGIAssociationEnd extends CGIConnector {
 
 	@PropertyIdentifier(type = CGIText.class)
 	public static final String NAME_KEY = "name";
-	@PropertyIdentifier(type = RPYDiagram.class)
+	@PropertyIdentifier(type = RPYAssociationEnd.class)
 	public static final String MODEL_OBJECT_KEY = "modelObject";
 	@PropertyIdentifier(type = CGIClassChart.class)
 	public static final String CHART_KEY = "chart";
@@ -74,10 +72,10 @@ public interface CGIAssociationEnd extends CGIShape {
 	public void setName(CGIText aName);
 
 	@Getter(value = MODEL_OBJECT_KEY)
-	public RPYClass getModelObject();
+	public RPYAssociationEnd getModelObject();
 
 	@Setter(MODEL_OBJECT_KEY)
-	public void setModelObject(RPYClass aClass);
+	public void setModelObject(RPYAssociationEnd aClass);
 
 	@Override
 	@Getter(value = CHART_KEY)
@@ -86,7 +84,7 @@ public interface CGIAssociationEnd extends CGIShape {
 	@Setter(CHART_KEY)
 	public void setChart(CGIClassChart aChart);
 
-	public boolean hasShape();
+	public String getInverseLabel();
 
 	/**
 	 * Default base implementation for {@link CGIAssociationEnd}
@@ -94,7 +92,7 @@ public interface CGIAssociationEnd extends CGIShape {
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGIClassImpl extends CGIObjectImpl implements CGIAssociationEnd {
+	public static abstract class CGIAssociationEndImpl extends CGIObjectImpl implements CGIAssociationEnd {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
@@ -113,24 +111,22 @@ public interface CGIAssociationEnd extends CGIShape {
 
 			setName(getPropertyValue("m_name"));
 
-			List<Number> geometry = getPropertyValue("m_transform");
-			if (geometry != null) {
-				setX(geometry.get(4).doubleValue());
-				setY(geometry.get(5).doubleValue());
-				setWidth(geometry.get(0).doubleValue() * 1000);
-				setHeight(geometry.get(3).doubleValue() * 1000);
-			}
-		}
-
-		@Override
-		public boolean hasShape() {
-			return getPropertyValue("m_transform") != null;
 		}
 
 		@Override
 		public void mapReferences() {
 			super.mapReferences();
 			setModelObject(getReference("m_pModelObject"));
+		}
+
+		@Override
+		public String getLabel() {
+			return "1\n" + getModelObject().getName();
+		}
+
+		@Override
+		public String getInverseLabel() {
+			return "1\n" + getModelObject().getInverse().getName();
 		}
 
 	}

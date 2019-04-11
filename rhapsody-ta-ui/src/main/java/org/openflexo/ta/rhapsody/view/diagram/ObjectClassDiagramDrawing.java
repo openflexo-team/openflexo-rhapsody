@@ -43,19 +43,25 @@ import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
 import org.openflexo.diana.ColorGradientBackgroundStyle.ColorGradientDirection;
+import org.openflexo.diana.ConnectorGraphicalRepresentation;
+import org.openflexo.diana.DianaConstants;
 import org.openflexo.diana.DianaModelFactory;
 import org.openflexo.diana.DrawingGraphicalRepresentation;
+import org.openflexo.diana.GRBinding.ConnectorGRBinding;
 import org.openflexo.diana.GRBinding.DrawingGRBinding;
 import org.openflexo.diana.GRBinding.ShapeGRBinding;
+import org.openflexo.diana.GRProvider.ConnectorGRProvider;
 import org.openflexo.diana.GRProvider.DrawingGRProvider;
 import org.openflexo.diana.GRProvider.ShapeGRProvider;
 import org.openflexo.diana.GRStructureVisitor;
 import org.openflexo.diana.ShapeGraphicalRepresentation;
 import org.openflexo.diana.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.diana.ShapeGraphicalRepresentation.LocationConstraints;
+import org.openflexo.diana.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.diana.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.ta.rhapsody.model.RPYObject;
 import org.openflexo.ta.rhapsody.model.RPYObjectClassDiagram;
+import org.openflexo.ta.rhapsody.model.cgi.CGIAssociationEnd;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
 
 /**
@@ -68,8 +74,10 @@ public class ObjectClassDiagramDrawing extends RPYDiagramDrawing<RPYObjectClassD
 
 	private static final Logger logger = Logger.getLogger(ObjectClassDiagramDrawing.class.getPackage().getName());
 
-	private static final String CONTAINER = "Container";
+	private static final String CLASS = "Class";
 	private static final String HEADER = "Header";
+	private static final String ASSOCIATION = "Association";
+	private static final String INVERSE_ASSOCIATION = "InverseAssociation";
 
 	private static Color BLUE_COLOR = new Color(109, 163, 217);
 
@@ -91,7 +99,7 @@ public class ObjectClassDiagramDrawing extends RPYDiagramDrawing<RPYObjectClassD
 		ShapeGraphicalRepresentation returned = null;
 		if (object instanceof CGIClass) {
 			CGIClass aClass = (CGIClass) object;
-			if (name.equals(CONTAINER)) {
+			if (name.equals(CLASS)) {
 				returned = getFactory().makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
 				returned.setBackground(getFactory().makeColoredBackground(Color.white));
 				returned.setForeground(getFactory().makeForegroundStyle(BLUE_COLOR, 0.5f));
@@ -126,6 +134,23 @@ public class ObjectClassDiagramDrawing extends RPYDiagramDrawing<RPYObjectClassD
 		return returned;
 	}
 
+	@Override
+	protected ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation(RPYObject object, String name) {
+		ConnectorGraphicalRepresentation returned = null;
+		if (object instanceof CGIAssociationEnd) {
+			CGIAssociationEnd anAssociation = (CGIAssociationEnd) object;
+			if (name.equals(ASSOCIATION) || name.equals(INVERSE_ASSOCIATION)) {
+				Color darkBlueColor = new Color(0, 17, 153);
+				returned = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.RECT_POLYLIN);
+				returned.setForeground(getFactory().makeForegroundStyle(darkBlueColor, 0.5f));
+				returned.setIsMultilineAllowed(true);
+				returned.setTextStyle(getFactory().makeTextStyle(darkBlueColor, DianaConstants.DEFAULT_TEXT_FONT.deriveFont(9.0f)));
+				returned.getConnectorSpecification().setRelativeLabelLocation(0.9);
+			}
+		}
+		return returned;
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void init() {
@@ -135,28 +160,6 @@ public class ObjectClassDiagramDrawing extends RPYDiagramDrawing<RPYObjectClassD
 
 		Color BLUE_COLOR = new Color(109, 163, 217);
 
-		/*classRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
-		classRepresentation.setBackground(getFactory().makeColoredBackground(Color.white));
-		classRepresentation.setForeground(getFactory().makeForegroundStyle(BLUE_COLOR, 0.5f));
-		classRepresentation.setSelectedForeground(getFactory().makeForegroundStyle(Color.BLUE, 1.0f));
-		classRepresentation.setShadowStyle(getFactory().makeDefaultShadowStyle());
-		classRepresentation.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
-		classRepresentation.setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
-		classRepresentation.setIsFloatingLabel(false);*/
-
-		/*classHeaderRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
-		classHeaderRepresentation.setBackground(
-				getFactory().makeColorGradientBackground(BLUE_COLOR, Color.white, ColorGradientDirection.NORTH_WEST_SOUTH_EAST));
-		classHeaderRepresentation.setForeground(getFactory().makeForegroundStyle(BLUE_COLOR, 0.5f));
-		classHeaderRepresentation.setIsFocusable(false);
-		classHeaderRepresentation.setIsFloatingLabel(false);
-		classHeaderRepresentation.setShadowStyle(getFactory().makeNoneShadowStyle());
-		
-		classHeaderRepresentation.setXConstraints(new DataBinding<>("0"));
-		classHeaderRepresentation.setYConstraints(new DataBinding<>("0"));
-		classHeaderRepresentation.setWidthConstraints(new DataBinding<>("parent.width"));
-		classHeaderRepresentation.setHeightConstraints(new DataBinding<>("20"));*/
-
 		final DrawingGRBinding<RPYObjectClassDiagram> drawingBinding = bindDrawing(RPYObjectClassDiagram.class, "drawing",
 				new DrawingGRProvider<RPYObjectClassDiagram>() {
 					@Override
@@ -164,10 +167,10 @@ public class ObjectClassDiagramDrawing extends RPYDiagramDrawing<RPYObjectClassD
 						return drawingRepresentation;
 					}
 				});
-		final ShapeGRBinding<CGIClass> cgiClassBinding = bindShape(CGIClass.class, CONTAINER, new ShapeGRProvider<CGIClass>() {
+		final ShapeGRBinding<CGIClass> cgiClassBinding = bindShape(CGIClass.class, CLASS, new ShapeGRProvider<CGIClass>() {
 			@Override
 			public ShapeGraphicalRepresentation provideGR(CGIClass drawable, DianaModelFactory factory) {
-				return getShapeGraphicalRepresentation(drawable, CONTAINER);
+				return getShapeGraphicalRepresentation(drawable, CLASS);
 			}
 		});
 		final ShapeGRBinding<CGIClass> cgiClassHeaderBinding = bindShape(CGIClass.class, HEADER, new ShapeGRProvider<CGIClass>() {
@@ -177,12 +180,36 @@ public class ObjectClassDiagramDrawing extends RPYDiagramDrawing<RPYObjectClassD
 			}
 		});
 
+		final ConnectorGRBinding<CGIAssociationEnd> cgiAssociationEndBinding = bindConnector(CGIAssociationEnd.class, ASSOCIATION,
+				new ConnectorGRProvider<CGIAssociationEnd>() {
+					@Override
+					public ConnectorGraphicalRepresentation provideGR(CGIAssociationEnd drawable, DianaModelFactory factory) {
+						return getConnectorGraphicalRepresentation(drawable, ASSOCIATION);
+					}
+				});
+		final ConnectorGRBinding<CGIAssociationEnd> cgiAssociationEndInverseBinding = bindConnector(CGIAssociationEnd.class,
+				INVERSE_ASSOCIATION, new ConnectorGRProvider<CGIAssociationEnd>() {
+					@Override
+					public ConnectorGraphicalRepresentation provideGR(CGIAssociationEnd drawable, DianaModelFactory factory) {
+						return getConnectorGraphicalRepresentation(drawable, INVERSE_ASSOCIATION);
+					}
+				});
+
 		drawingBinding.addToWalkers(new GRStructureVisitor<RPYObjectClassDiagram>() {
 			@Override
 			public void visit(RPYObjectClassDiagram diagram) {
 				for (CGIClass cgiClass : diagram.getClassChart().getClasses()) {
 					if (cgiClass.hasShape()) {
 						drawShape(cgiClassBinding, cgiClass);
+					}
+				}
+				for (CGIAssociationEnd cgiAssociationEnd : diagram.getClassChart().getAssociationEnds()) {
+					CGIClass startClass = diagram.getClassChart().getCGIClass(cgiAssociationEnd.getModelObject().getOwnerClass());
+					CGIClass endClass = diagram.getClassChart().getCGIClass(cgiAssociationEnd.getModelObject().getOtherClass());
+					drawConnector(cgiAssociationEndBinding, cgiAssociationEnd, cgiClassBinding, startClass, cgiClassBinding, endClass);
+					if (cgiAssociationEnd.getModelObject().getInverse() != null) {
+						drawConnector(cgiAssociationEndInverseBinding, cgiAssociationEnd, cgiClassBinding, endClass, cgiClassBinding,
+								startClass);
 					}
 				}
 			}
@@ -202,6 +229,11 @@ public class ObjectClassDiagramDrawing extends RPYDiagramDrawing<RPYObjectClassD
 
 		cgiClassHeaderBinding.setDynamicPropertyValue(ShapeGraphicalRepresentation.TEXT, new DataBinding<String>("drawable.name.text"),
 				true);
+
+		cgiAssociationEndBinding.setDynamicPropertyValue(ConnectorGraphicalRepresentation.TEXT, new DataBinding<String>("drawable.label"),
+				false);
+		cgiAssociationEndInverseBinding.setDynamicPropertyValue(ShapeGraphicalRepresentation.TEXT,
+				new DataBinding<String>("drawable.inverseLabel"), false);
 
 	}
 }

@@ -59,6 +59,7 @@ import org.openflexo.pamela.factory.ModelFactory;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
+import org.openflexo.ta.rhapsody.model.cgi.CGIText;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -369,7 +370,9 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 						}*/
 					}
 					else if (object instanceof RPYObject) {
-						unmappedChildren.add((RPYObject) object);
+						if (!(object instanceof CGIText)) {
+							unmappedChildren.add((RPYObject) object);
+						}
 					}
 					else if (object instanceof List) {
 						for (Object object2 : (List) object) {
