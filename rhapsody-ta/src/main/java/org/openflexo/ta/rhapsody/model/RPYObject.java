@@ -70,7 +70,7 @@ import org.openflexo.toolbox.StringUtils;
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(value = RPYObject.RPYObjectImpl.class)
-@Imports({ @Import(RPYRawContainer.class), @Import(RPYHandle.class), @Import(RPYUnmappedObject.class) })
+@Imports({ @Import(RPYRawContainer.class), @Import(RPYHandle.class), @Import(RPYUnmappedObject.class), @Import(RPYStyle.class) })
 public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAdapter> {
 
 	@PropertyIdentifier(type = RPYConcept.class)

@@ -38,7 +38,10 @@
 
 package org.openflexo.ta.rhapsody.model.parser;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -48,6 +51,7 @@ import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty.PropertyType;
 import org.openflexo.ta.rhapsody.model.RPYModelFactory;
 import org.openflexo.ta.rhapsody.model.RPYObject;
+import org.openflexo.ta.rhapsody.model.RPYStyle;
 import org.openflexo.ta.rhapsody.parser.analysis.DepthFirstAdapter;
 import org.openflexo.ta.rhapsody.parser.node.ACharsLiteralRpySingleObject;
 import org.openflexo.ta.rhapsody.parser.node.AFloatNumber;
@@ -63,12 +67,14 @@ import org.openflexo.ta.rhapsody.parser.node.ARpyPropertyValue;
 import org.openflexo.ta.rhapsody.parser.node.ASingleObjectRpyObject;
 import org.openflexo.ta.rhapsody.parser.node.AStringLiteralRpySingleObject;
 import org.openflexo.ta.rhapsody.parser.node.AStyleRpySingleObject;
+import org.openflexo.ta.rhapsody.parser.node.ATimeLiteral;
 import org.openflexo.ta.rhapsody.parser.node.ATimeLiteralRpySingleObject;
 import org.openflexo.ta.rhapsody.parser.node.Node;
 import org.openflexo.ta.rhapsody.parser.node.PNumber;
 import org.openflexo.ta.rhapsody.parser.node.PRpyObject;
 import org.openflexo.ta.rhapsody.parser.node.PRpyPropertyValue;
 import org.openflexo.ta.rhapsody.parser.node.PRpySingleObject;
+import org.openflexo.ta.rhapsody.parser.node.PTimeLiteral;
 
 /**
  * 
@@ -173,15 +179,12 @@ public class RPYObjectFactory extends DepthFirstAdapter {
 		}
 		if (node instanceof AStyleRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.Style, concept);
-			// return ((AStyleRpySingleObject) node).getCharsLiteral().getText();
-			logger.warning("Style not implemented");
-			return null;
+			return (T) getStyle((AStyleRpySingleObject) node);
 		}
 		if (node instanceof ATimeLiteralRpySingleObject) {
 			RPYProperty property = getModelFactory().ensureProperty(propertyName, PropertyType.DateTime, concept);
 			// return ((ATimeLiteralRpySingleObject) node).getCharsLiteral().getText();
-			logger.warning("DateTime not implemented");
-			return null;
+			return (T) getDate(((ATimeLiteralRpySingleObject) node).getTimeLiteral());
 		}
 		return null;
 	}
@@ -228,4 +231,32 @@ public class RPYObjectFactory extends DepthFirstAdapter {
 		}
 		return returned;
 	}
+
+	private Date getDate(PTimeLiteral dateLiteral) {
+		if (dateLiteral instanceof ATimeLiteral) {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm.yyyy::hh:mm:ss");
+			Date date;
+			try {
+				date = simpleDateFormat.parse(getText(dateLiteral));
+				return date;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		return null;
+	}
+
+	private RPYStyle getStyle(AStyleRpySingleObject node) {
+		RPYStyle returned = getModelFactory().newInstance(RPYStyle.class);
+		returned.setFontName(node.getStringLiteral().getText());
+		returned.setV1(Integer.parseInt(node.getS1().getText()));
+		returned.setV2(Integer.parseInt(node.getS2().getText()));
+		returned.setV3(Integer.parseInt(node.getS3().getText()));
+		returned.setV4(Integer.parseInt(node.getS4().getText()));
+		returned.setV5(Integer.parseInt(node.getS5().getText()));
+		return returned;
+	}
+
 }
