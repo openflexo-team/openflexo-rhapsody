@@ -1,0 +1,97 @@
+I-Logix-RPY-Archive version 8.12.0 * 9728113
+
+- m_fileModifyTime = { IRPYRawContainer 
+	- size = 8;
+	- value = "DefaultComponent/DefaultConfig/Default/Button.java" 6.14.2017::11:56:52
+	"DefaultComponent/DefaultConfig/Default/Button_Inhibition.java" 6.14.2017::11:56:53
+	"DefaultComponent/DefaultConfig/Default/Default_pkgClass.java" 6.14.2017::11:56:53
+	"DefaultComponent/DefaultConfig/Default/Door.java" 6.19.2017::8:14:59
+	"DefaultComponent/DefaultConfig/Default/EV.java" 6.14.2017::11:56:53
+	"DefaultComponent/DefaultConfig/Default/Filter.java" 6.14.2017::12:4:41
+	"DefaultComponent/DefaultConfig/Default/General_Command.java" 6.19.2017::8:15:0
+	"DefaultComponent/DefaultConfig/Default/Locks.java" 6.14.2017::11:56:53
+	
+}
+- size = 9;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "Locks";
+	- _id = GUID 03d73f16-9cb0-4b2a-8b39-e7b5c029c7ba;
+}
+- genTime = 6.14.2017::11:56:53;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "EV";
+	- _id = GUID 9dac9923-1fb0-41ee-8682-32ac2e539f68;
+}
+- genTime = 6.14.2017::11:56:53;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "General_Command";
+	- _id = GUID 5f854f33-c66d-402a-8718-fa1626f3eafc;
+}
+- genTime = 6.19.2017::8:15:5;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "Filter";
+	- _id = GUID b2e2dba4-ba1a-4822-813a-c4b6c4d924c7;
+}
+- genTime = 6.19.2017::8:15:5;
+- hElement = { IHandle 
+	- _m2Class = "ICodeGenConfigInfo";
+	- _filename = "DefaultComponent.cmp";
+	- _subsystem = "";
+	- _class = "";
+	- _name = "DefaultComponent\\DefaultConfig";
+	- _id = GUID b2119917-6553-4996-a7e4-f18120331b85;
+}
+- genTime = 7.6.2017::8:6:43;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "Door";
+	- _id = GUID 99a98cf8-0db1-428c-b28e-06dbe24440e6;
+}
+- genTime = 6.19.2017::8:15:5;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "Button_Inhibition";
+	- _id = GUID 8ba7e315-fd8b-4961-be78-ecee129fa4cd;
+}
+- genTime = 6.14.2017::11:56:53;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Default.sbs";
+	- _subsystem = "Default";
+	- _class = "";
+	- _name = "Button";
+	- _id = GUID 2e7c7a1d-7c89-4402-85f2-827879c0459f;
+}
+- genTime = 6.14.2017::11:56:53;
+- hElement = { IHandle 
+	- _m2Class = "ISubsystem";
+	- _filename = "Default.sbs";
+	- _subsystem = "";
+	- _class = "";
+	- _name = "Default";
+	- _id = GUID 2d4d1a29-1491-404e-9137-21959bf92f13;
+}
+- genTime = 6.19.2017::8:15:5;
+

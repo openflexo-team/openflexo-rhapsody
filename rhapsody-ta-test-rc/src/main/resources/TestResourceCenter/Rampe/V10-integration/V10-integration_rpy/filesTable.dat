@@ -1,0 +1,12 @@
+I-Logix-RPY-Archive version 8.12.0 * 9728113
+
+- filesTable = { IRPYRawContainer 
+	- size = 5;
+	- value = "V10-integration.rpy" ""
+	"V10-integration_rpy\\DefaultComponent.cmp" "DefaultComponent"
+	"V10-integration_rpy\\Door.cls" "rampe::Door"
+	"V10-integration_rpy\\rampe.sbs" "rampe"
+	"V10-integration_rpy\\types.sbs" "types"
+	
+}
+

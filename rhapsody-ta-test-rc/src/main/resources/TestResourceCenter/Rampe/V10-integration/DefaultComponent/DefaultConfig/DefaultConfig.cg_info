@@ -1,0 +1,207 @@
+I-Logix-RPY-Archive version 8.12.0 * 9728113
+
+- m_fileModifyTime = { IRPYRawContainer 
+	- size = 19;
+	- value = "DefaultComponent/DefaultConfig/rampe/Button.java" 9.12.2017::20:54:28
+	"DefaultComponent/DefaultConfig/rampe/CompositeController.java" 9.18.2017::17:14:35
+	"DefaultComponent/DefaultConfig/rampe/Controller.java" 9.20.2017::16:41:50
+	"DefaultComponent/DefaultConfig/rampe/Data.java" 9.18.2017::19:4:55
+	"DefaultComponent/DefaultConfig/rampe/Door.java" 9.12.2017::17:56:14
+	"DefaultComponent/DefaultConfig/rampe/ElectroVanne.java" 9.12.2017::17:39:32
+	"DefaultComponent/DefaultConfig/rampe/Inputs.java" 9.18.2017::17:14:35
+	"DefaultComponent/DefaultConfig/rampe/InternalState.java" 9.18.2017::17:14:35
+	"DefaultComponent/DefaultConfig/rampe/Lock.java" 9.12.2017::17:38:3
+	"DefaultComponent/DefaultConfig/rampe/Outputs.java" 9.18.2017::17:14:35
+	"DefaultComponent/DefaultConfig/rampe/Pannel.java" 9.18.2017::17:14:35
+	"DefaultComponent/DefaultConfig/rampe/Pilot.java" 9.18.2017::17:19:53
+	"DefaultComponent/DefaultConfig/rampe/PilotPannel.java" 9.13.2017::17:40:32
+	"DefaultComponent/DefaultConfig/rampe/Reader.java" 9.18.2017::17:14:36
+	"DefaultComponent/DefaultConfig/rampe/SharedData.java" 9.18.2017::17:14:36
+	"DefaultComponent/DefaultConfig/rampe/Utilisateur.java" 9.12.2017::17:44:22
+	"DefaultComponent/DefaultConfig/rampe/Wrapper.java" 9.18.2017::17:14:36
+	"DefaultComponent/DefaultConfig/rampe/Writer.java" 9.18.2017::17:14:36
+	"DefaultComponent/DefaultConfig/rampe/rampe_pkgClass.java" 9.18.2017::17:17:18
+	
+}
+- size = 20;
+- hElement = { IHandle 
+	- _m2Class = "ISubsystem";
+	- _filename = "rampe.sbs";
+	- _subsystem = "";
+	- _class = "";
+	- _name = "rampe";
+	- _id = GUID 017450e8-16aa-4eb6-af9c-64233068b2ee;
+}
+- genTime = 9.20.2017::16:40:32;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "PilotPannel";
+	- _id = GUID 14e96d2b-d569-401d-a9bb-dcd4f67b4323;
+}
+- genTime = 9.18.2017::17:24:1;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "Door.cls";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Door";
+	- _id = GUID dab67241-192c-4d77-be97-e79751495898;
+}
+- genTime = 9.13.2017::17:40:32;
+- hElement = { IHandle 
+	- _m2Class = "ICodeGenConfigInfo";
+	- _filename = "DefaultComponent.cmp";
+	- _subsystem = "";
+	- _class = "";
+	- _name = "DefaultComponent\\DefaultConfig";
+	- _id = GUID e41f71b0-175a-4b05-9818-f5456171ecd6;
+}
+- genTime = 9.20.2017::16:41:51;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Inputs";
+	- _id = GUID ceb446d3-a2f4-4415-ae06-ed45fdddf752;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "CompositeController";
+	- _id = GUID ec5a9b19-836c-406e-92b2-bb4431ef2412;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Data";
+	- _id = GUID e0333fd0-f0c3-486c-9961-3819a6e82842;
+}
+- genTime = 9.18.2017::19:4:55;
+- hElement = { IHandle 
+	- _m2Class = "IActor";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Pilot";
+	- _id = GUID c50647fe-faca-450f-9aad-8d0511f696cf;
+}
+- genTime = 9.18.2017::17:24:1;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "InternalState";
+	- _id = GUID 5eac032e-0b40-47c8-a98d-c71f3883b93f;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Pannel";
+	- _id = GUID 44e69a17-7199-4c56-9ec6-aec2fd911469;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Lock";
+	- _id = GUID 2ec6e4a9-2232-48a0-a275-51a6f12705e8;
+}
+- genTime = 9.12.2017::17:38:3;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Wrapper";
+	- _id = GUID 16e8a081-3e68-4690-8f9c-dc6665277d1b;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Button";
+	- _id = GUID 68c04715-4cc6-4642-9f88-56ea93dd7995;
+}
+- genTime = 9.13.2017::17:26:41;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Outputs";
+	- _id = GUID a4a0c567-09df-4a6d-ba29-8d2736cb910b;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "SharedData";
+	- _id = GUID 5dc02a50-4872-45fa-88da-c68239b41a0c;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IActor";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Utilisateur";
+	- _id = GUID 44565416-17fc-4fde-b77f-b61606c926d1;
+}
+- genTime = 9.18.2017::17:24:1;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "ElectroVanne";
+	- _id = GUID 4ce05f29-db8e-4e8c-bd30-aea168b2e8e3;
+}
+- genTime = 9.12.2017::17:39:33;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Reader";
+	- _id = GUID e64c4c20-d69e-4357-97a7-d5c4bb410b62;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Writer";
+	- _id = GUID 08537e9d-d36c-48ed-8fad-97ea2027fa5d;
+}
+- genTime = 9.18.2017::17:14:36;
+- hElement = { IHandle 
+	- _m2Class = "IClass";
+	- _filename = "rampe.sbs";
+	- _subsystem = "rampe";
+	- _class = "";
+	- _name = "Controller";
+	- _id = GUID 6ae51e41-d723-46bc-932e-19265d57f1b6;
+}
+- genTime = 9.20.2017::16:41:51;
+

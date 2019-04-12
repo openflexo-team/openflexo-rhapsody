@@ -1,0 +1,6 @@
+[Op Calls]
+[Events]
+Utilisateur[0]->GEN(e1())`Utilisateur
+externalUser->GEN(e2())`Utilisateur
+externalUser->GEN(e1())`Utilisateur
+[Breakpoints]
