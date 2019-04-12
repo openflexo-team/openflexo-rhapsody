@@ -204,12 +204,14 @@ public class ObjectClassDiagramDrawing extends RPYDiagramDrawing<RPYObjectClassD
 					}
 				}
 				for (CGIAssociationEnd cgiAssociationEnd : diagram.getClassChart().getAssociationEnds()) {
-					CGIClass startClass = diagram.getClassChart().getCGIClass(cgiAssociationEnd.getModelObject().getOwnerClass());
-					CGIClass endClass = diagram.getClassChart().getCGIClass(cgiAssociationEnd.getModelObject().getOtherClass());
-					drawConnector(cgiAssociationEndBinding, cgiAssociationEnd, cgiClassBinding, startClass, cgiClassBinding, endClass);
-					if (cgiAssociationEnd.getModelObject().getInverse() != null) {
-						drawConnector(cgiAssociationEndInverseBinding, cgiAssociationEnd, cgiClassBinding, endClass, cgiClassBinding,
-								startClass);
+					if (diagram.getClassChart() != null && cgiAssociationEnd.getModelObject() != null) {
+						CGIClass startClass = diagram.getClassChart().getCGIClass(cgiAssociationEnd.getModelObject().getOwnerClass());
+						CGIClass endClass = diagram.getClassChart().getCGIClass(cgiAssociationEnd.getModelObject().getOtherClass());
+						drawConnector(cgiAssociationEndBinding, cgiAssociationEnd, cgiClassBinding, startClass, cgiClassBinding, endClass);
+						if (cgiAssociationEnd.getModelObject().getInverse() != null) {
+							drawConnector(cgiAssociationEndInverseBinding, cgiAssociationEnd, cgiClassBinding, endClass, cgiClassBinding,
+									startClass);
+						}
 					}
 				}
 			}
