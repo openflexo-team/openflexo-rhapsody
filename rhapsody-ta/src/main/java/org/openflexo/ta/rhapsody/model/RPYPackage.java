@@ -221,33 +221,39 @@ public interface RPYPackage extends RPYPackageObject, RPYRootObject<RPYPackage> 
 			super.mapProperties();
 			setName(getPropertyValue("_name"));
 			RPYRawContainer classes = getPropertyValue("Classes");
-			for (Object object : classes.getValues()) {
-				if (object instanceof RPYClass) {
-					addToClasses((RPYClass) object);
-				}
-				else {
-					logger.warning("Unexpected object: " + object);
+			if (classes != null) {
+				for (Object object : classes.getValues()) {
+					if (object instanceof RPYClass) {
+						addToClasses((RPYClass) object);
+					}
+					else {
+						logger.warning("Unexpected object: " + object);
+					}
 				}
 			}
 			RPYRawContainer events = getPropertyValue("Events");
-			for (Object object : events.getValues()) {
-				if (object instanceof RPYEvent) {
-					addToEvents((RPYEvent) object);
-				}
-				else {
-					logger.warning("Unexpected object: " + object);
+			if (events != null) {
+				for (Object object : events.getValues()) {
+					if (object instanceof RPYEvent) {
+						addToEvents((RPYEvent) object);
+					}
+					else {
+						logger.warning("Unexpected object: " + object);
+					}
 				}
 			}
 			RPYRawContainer diagrams = getPropertyValue("Declaratives");
-			for (Object object : diagrams.getValues()) {
-				if (object instanceof RPYObjectClassDiagram) {
-					addToObjectClassDiagrams((RPYObjectClassDiagram) object);
-				}
-				else if (object instanceof RPYSequenceDiagram) {
-					addToSequenceDiagrams((RPYSequenceDiagram) object);
-				}
-				else {
-					logger.warning("Unexpected object: " + object);
+			if (diagrams != null) {
+				for (Object object : diagrams.getValues()) {
+					if (object instanceof RPYObjectClassDiagram) {
+						addToObjectClassDiagrams((RPYObjectClassDiagram) object);
+					}
+					else if (object instanceof RPYSequenceDiagram) {
+						addToSequenceDiagrams((RPYSequenceDiagram) object);
+					}
+					else {
+						logger.warning("Unexpected object: " + object);
+					}
 				}
 			}
 		}

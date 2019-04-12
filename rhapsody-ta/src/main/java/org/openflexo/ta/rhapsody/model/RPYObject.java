@@ -202,7 +202,10 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 		@Override
 		public <T extends RPYObject> T getReference(String propertyName) {
 			RPYHandle<T> handle = getPropertyValue(propertyName);
-			return handle.getReferencedObject();
+			if (handle != null) {
+				return handle.getReferencedObject();
+			}
+			return null;
 		}
 
 		@Override

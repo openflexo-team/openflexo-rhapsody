@@ -72,6 +72,11 @@ public interface RPYUnmappedObject extends RPYObject {
 	 */
 	public static abstract class RPYUnmappedObjectImpl extends RPYObjectImpl implements RPYUnmappedObject {
 
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return super.toString();
+		}
 	}
 
 }

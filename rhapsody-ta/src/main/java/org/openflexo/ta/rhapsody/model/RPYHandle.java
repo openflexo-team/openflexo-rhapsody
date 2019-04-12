@@ -113,6 +113,10 @@ public interface RPYHandle<T extends RPYObject> extends RPYObject {
 
 		@Override
 		public T getReferencedObject() {
+			if (StringUtils.isEmpty(getID())) {
+				logger.warning("No referenced object in : " + this);
+				return null;
+			}
 			T returned = (T) getRootObject().getObjectWithID(getID(), getClassName());
 			if (returned == null) {
 				logger.warning("Cannot find object with ID: " + getID() + " and class " + getClassName() + " in " + getRootObject());

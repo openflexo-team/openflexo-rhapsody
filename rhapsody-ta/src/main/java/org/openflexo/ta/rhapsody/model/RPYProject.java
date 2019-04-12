@@ -315,7 +315,7 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 			}
 			// System.out.println("Tiens je cherche l'objet: " + objectId + " of " + className + " in " + this);
 			logger.warning("Cannot find object with ID: " + objectId + " class: " + className + " in " + this);
-			Thread.dumpStack();
+			// Thread.dumpStack();
 			return null;
 		}
 
