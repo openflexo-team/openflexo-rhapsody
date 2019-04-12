@@ -93,7 +93,7 @@
 			label="class.name"
 			icon="controller.iconForObject(class)" isEditable="false"
 			filtered="false" defaultVisible="true" name="class">
-			<Children data="class.associationEndsList" name="associationEndsList" />
+			<Children data="class.associationsList" name="associationsList" />
 			<Children data="class.operationsList" name="operationsList" />
 			<Children data="class.statechart" name="statechart" />
 			<!--  <Children data="class.unmappedChildren" name="unmappedChildren" />-->
@@ -105,11 +105,11 @@
 			filtered="false" defaultVisible="true" name="event">
 		</BrowserElement>
 		<BrowserElement
-			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass$AssociationEndsList"
-			label="'Association Ends'"
-			icon="controller.iconForObject(associationEndsList)" isEditable="false"
-			filtered="false" defaultVisible="true" name="associationEndsList">
-			<Children data="associationEndsList.associationEnds" name="associationEnds" />
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass$AssociationsList"
+			label="'Associations'"
+			icon="controller.iconForObject(associationsList)" isEditable="false"
+			filtered="false" defaultVisible="true" name="associationsList">
+			<Children data="associationsList.associations" name="associations" />
 		</BrowserElement>
 		<BrowserElement
 			dataClassName="org.openflexo.ta.rhapsody.model.RPYClass$OperationsList"
@@ -126,10 +126,10 @@
 			<!--  <Children data="statechart.operations" name="operations" /> -->
 		</BrowserElement>
 		<BrowserElement
-			dataClassName="org.openflexo.ta.rhapsody.model.RPYAssociationEnd"
-			label="associationEnd.name"
-			icon="controller.iconForObject(associationEnd)" isEditable="false"
-			filtered="false" defaultVisible="true" name="associationEnd">
+			dataClassName="org.openflexo.ta.rhapsody.model.RPYAssociation"
+			label="association.name"
+			icon="controller.iconForObject(association)" isEditable="false"
+			filtered="false" defaultVisible="true" name="association">
 		</BrowserElement>
 		<BrowserElement
 			dataClassName="org.openflexo.ta.rhapsody.model.RPYReception"
@@ -170,7 +170,7 @@
 			icon="controller.iconForObject(chart)" isEditable="false"
 			filtered="false" defaultVisible="true" name="chart">
 			<Children data="chart.classes" name="classes" />
-			<Children data="chart.associationEnds" name="associationEnds" />
+			<Children data="chart.associations" name="associations" />
 			<Children data="chart.unmappedChildren" name="unmappedChildren" />
 		</BrowserElement>
 		<BrowserElement

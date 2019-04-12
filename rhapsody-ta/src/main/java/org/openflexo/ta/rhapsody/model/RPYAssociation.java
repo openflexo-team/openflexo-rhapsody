@@ -36,97 +36,102 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model.cgi;
+package org.openflexo.ta.rhapsody.model;
 
 import java.util.logging.Logger;
 
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
+import org.openflexo.pamela.annotations.Import;
+import org.openflexo.pamela.annotations.Imports;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.model.RPYAssociationEnd;
-import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
+import org.openflexo.ta.rhapsody.model.RPYProjectObject.RPYProjectObjectImpl;
 
 /**
- * Represents a class representation<br>
+ * Represents a RPY association end in a RPYClass <br>
  * 
  * @author sylvain
  *
  */
-@ModelEntity
-@ImplementationClass(value = CGIAssociationEnd.CGIAssociationEndImpl.class)
-public interface CGIAssociationEnd extends CGIConnector {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(value = RPYAssociation.RPYAssociationImpl.class)
+@Imports({ @Import(RPYAssociationEnd.class), @Import(RPYPart.class) })
+public interface RPYAssociation extends RPYPackageObject {
 
-	@PropertyIdentifier(type = CGIText.class)
+	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
-	@PropertyIdentifier(type = RPYAssociationEnd.class)
-	public static final String MODEL_OBJECT_KEY = "modelObject";
-	@PropertyIdentifier(type = CGIClassChart.class)
-	public static final String CHART_KEY = "chart";
+	@PropertyIdentifier(type = RPYClass.class)
+	public static final String OWNER_CLASS_KEY = "ownerClass";
+	@PropertyIdentifier(type = RPYClass.class)
+	public static final String OTHER_CLASS_KEY = "otherClass";
+	@PropertyIdentifier(type = String.class)
+	public static final String MULTIPLICITY_KEY = "multiplicity";
+	@PropertyIdentifier(type = RPYAssociation.class)
+	public static final String INVERSE_KEY = "inverse";
 
-	@Getter(value = NAME_KEY, inverse = CGIText.OBJECT_KEY)
-	public CGIText getName();
+	@Getter(value = NAME_KEY)
+	public String getName();
 
 	@Setter(NAME_KEY)
-	public void setName(CGIText aName);
+	public void setName(String aName);
 
-	@Getter(value = MODEL_OBJECT_KEY)
-	public RPYAssociationEnd getModelObject();
+	@Getter(value = OWNER_CLASS_KEY)
+	public RPYClass getOwnerClass();
 
-	@Setter(MODEL_OBJECT_KEY)
-	public void setModelObject(RPYAssociationEnd aClass);
+	@Setter(OWNER_CLASS_KEY)
+	public void setOwnerClass(RPYClass aClass);
 
-	@Override
-	@Getter(value = CHART_KEY)
-	public CGIClassChart getChart();
+	@Getter(value = OTHER_CLASS_KEY)
+	public RPYClass getOtherClass();
 
-	@Setter(CHART_KEY)
-	public void setChart(CGIClassChart aChart);
+	@Setter(OTHER_CLASS_KEY)
+	public void setOtherClass(RPYClass aClass);
 
-	public String getInverseLabel();
+	@Getter(value = MULTIPLICITY_KEY)
+	public String getMultiplicity();
+
+	@Setter(MULTIPLICITY_KEY)
+	public void setMultiplicity(String aMultiplicity);
+
+	@Getter(value = INVERSE_KEY)
+	public RPYAssociation getInverse();
+
+	@Setter(INVERSE_KEY)
+	public void setInverse(RPYAssociation anAssociationEnd);
 
 	/**
-	 * Default base implementation for {@link CGIAssociationEnd}
+	 * Default base implementation for {@link RPYAssociation}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGIAssociationEndImpl extends CGIObjectImpl implements CGIAssociationEnd {
+	public static abstract class RPYAssociationImpl extends RPYPackageObjectImpl implements RPYAssociation {
 
 		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
-
-		@Override
-		public String toString() {
-			if (getName() != null) {
-				return getName().getText();
-			}
-			return super.toString();
-		}
+		private static final Logger logger = Logger.getLogger(RPYProjectObjectImpl.class.getPackage().getName());
 
 		@Override
 		public void mapProperties() {
 			super.mapProperties();
-
-			setName(getPropertyValue("m_name"));
-
+			setName(getPropertyValue("_name"));
+			setMultiplicity(getPropertyValue("_multiplicity"));
 		}
 
 		@Override
 		public void mapReferences() {
 			super.mapReferences();
-			setModelObject(getReference("m_pModelObject"));
+			setInverse(getReference("_inverse"));
+			setOtherClass(getReference("_otherClass"));
 		}
 
 		@Override
-		public String getLabel() {
-			return getModelObject().getMultiplicity() + "\n" + getModelObject().getName();
-		}
-
-		@Override
-		public String getInverseLabel() {
-			return getModelObject().getInverse().getMultiplicity() + "\n" + getModelObject().getInverse().getName();
+		public RPYPackage getPackage() {
+			if (getOwnerClass() != null) {
+				return getOwnerClass().getPackage();
+			}
+			return null;
 		}
 
 	}

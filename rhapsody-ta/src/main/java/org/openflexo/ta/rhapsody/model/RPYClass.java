@@ -63,8 +63,8 @@ public interface RPYClass extends RPYPackageObject {
 
 	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
-	@PropertyIdentifier(type = RPYAssociationEnd.class, cardinality = Cardinality.LIST)
-	public static final String ASSOCIATION_ENDS_KEY = "associationEnds";
+	@PropertyIdentifier(type = RPYAssociation.class, cardinality = Cardinality.LIST)
+	public static final String ASSOCIATIONS_KEY = "associations";
 	@PropertyIdentifier(type = RPYOperation.class, cardinality = Cardinality.LIST)
 	public static final String OPERATIONS_KEY = "operations";
 
@@ -74,14 +74,14 @@ public interface RPYClass extends RPYPackageObject {
 	@Setter(NAME_KEY)
 	public void setName(String aName);
 
-	@Getter(value = ASSOCIATION_ENDS_KEY, cardinality = Cardinality.LIST, inverse = RPYAssociationEnd.OWNER_CLASS_KEY)
-	public List<RPYAssociationEnd> getAssociationEnds();
+	@Getter(value = ASSOCIATIONS_KEY, cardinality = Cardinality.LIST, inverse = RPYAssociationEnd.OWNER_CLASS_KEY)
+	public List<RPYAssociation> getAssociations();
 
-	@Adder(ASSOCIATION_ENDS_KEY)
-	public void addToAssociationEnds(RPYAssociationEnd anAssociation);
+	@Adder(ASSOCIATIONS_KEY)
+	public void addToAssociations(RPYAssociation anAssociation);
 
-	@Remover(ASSOCIATION_ENDS_KEY)
-	public void removeFromAssociationEnds(RPYAssociationEnd anAssociation);
+	@Remover(ASSOCIATIONS_KEY)
+	public void removeFromAssociations(RPYAssociation anAssociation);
 
 	@Getter(value = OPERATIONS_KEY, cardinality = Cardinality.LIST, inverse = RPYOperation.OWNER_CLASS_KEY)
 	public List<RPYOperation> getOperations();
@@ -92,7 +92,7 @@ public interface RPYClass extends RPYPackageObject {
 	@Remover(OPERATIONS_KEY)
 	public void removeFromOperations(RPYOperation anOperation);
 
-	public AssociationEndsList getAssociationEndsList();
+	public AssociationsList getAssociationsList();
 
 	public OperationsList getOperationsList();
 
@@ -116,8 +116,8 @@ public interface RPYClass extends RPYPackageObject {
 			RPYRawContainer associations = getPropertyValue("Associations");
 			if (associations != null) {
 				for (Object object : associations.getValues()) {
-					if (object instanceof RPYAssociationEnd) {
-						addToAssociationEnds((RPYAssociationEnd) object);
+					if (object instanceof RPYAssociation) {
+						addToAssociations((RPYAssociation) object);
 					}
 					else {
 						logger.warning("Unexpected object: " + object);
@@ -137,10 +137,10 @@ public interface RPYClass extends RPYPackageObject {
 			}
 		}
 
-		private AssociationEndsList associationEndsList = new AssociationEndsList() {
+		private AssociationsList associationEndsList = new AssociationsList() {
 			@Override
-			public List<RPYAssociationEnd> getAssociationEnds() {
-				return RPYClassImpl.this.getAssociationEnds();
+			public List<RPYAssociation> getAssociations() {
+				return RPYClassImpl.this.getAssociations();
 			}
 		};
 
@@ -157,7 +157,7 @@ public interface RPYClass extends RPYPackageObject {
 		};
 
 		@Override
-		public AssociationEndsList getAssociationEndsList() {
+		public AssociationsList getAssociationsList() {
 			return associationEndsList;
 		}
 
@@ -173,8 +173,8 @@ public interface RPYClass extends RPYPackageObject {
 
 	}
 
-	public static interface AssociationEndsList extends RPYFacet {
-		public List<RPYAssociationEnd> getAssociationEnds();
+	public static interface AssociationsList extends RPYFacet {
+		public List<RPYAssociation> getAssociations();
 	}
 
 	public static interface OperationsList extends RPYFacet {

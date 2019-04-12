@@ -274,7 +274,7 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 		}
 
 		@Override
-		public final void lookupReferences() {
+		public void lookupReferences() {
 			for (Object object : propertyValues.values()) {
 				if (object instanceof RPYObject) {
 					((RPYObject) object).lookupReferences();

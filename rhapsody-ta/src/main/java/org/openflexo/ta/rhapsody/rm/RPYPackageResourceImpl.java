@@ -135,4 +135,11 @@ public abstract class RPYPackageResourceImpl extends RPYResourceImpl<RPYPackage,
 			metaDataManager.setProperty("packageName", getLoadedResourceData().getName(), file, true);
 		}
 	}
+
+	/*@Override
+	public RPYPackage loadResourceData() throws IOFlexoException {
+		System.out.println("Hop c'est la !!!");
+		Thread.dumpStack();
+		return super.loadResourceData();
+	}*/
 }

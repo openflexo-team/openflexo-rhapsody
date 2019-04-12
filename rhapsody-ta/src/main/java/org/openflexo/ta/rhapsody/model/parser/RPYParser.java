@@ -108,8 +108,6 @@ public class RPYParser {
 			RPYSemanticsAnalyzer<RD> t = new RPYSemanticsAnalyzer<RD>(modelFactory);
 			tree.apply(t);
 
-			t.getRootObject().lookupReferences();
-
 			return t.getRootObject();
 		} catch (Exception e) {
 			e.printStackTrace();

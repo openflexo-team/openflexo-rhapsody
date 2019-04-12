@@ -90,6 +90,11 @@ public class RPYPackageFactory extends RPYModelFactory<RPYPackage, RPYPackageRes
 			returned.setConcept(concept);
 			return returned;
 		}
+		else if (concept.getName().equals("IPart")) {
+			RPYPart returned = newInstance(RPYPart.class);
+			returned.setConcept(concept);
+			return returned;
+		}
 		else if (concept.getName().equals("IReception")) {
 			RPYReception returned = newInstance(RPYReception.class);
 			returned.setConcept(concept);

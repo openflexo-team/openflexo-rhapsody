@@ -38,20 +38,16 @@ package org.openflexo.ta.rhapsody.model;
  */
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.ta.rhapsody.AbstractRPYTest;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
@@ -68,8 +64,8 @@ import org.openflexo.test.OrderedRunner;
 import org.openflexo.test.TestOrder;
 
 @RunWith(OrderedRunner.class)
-public class TestLoadRPYProjects extends AbstractRPYTest {
-	protected static final Logger logger = Logger.getLogger(TestLoadRPYProjects.class.getPackage().getName());
+public class TestPingPongProject extends AbstractRPYTest {
+	protected static final Logger logger = Logger.getLogger(TestPingPongProject.class.getPackage().getName());
 
 	@Test
 	@TestOrder(1)
@@ -88,18 +84,7 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 			assertNotNull(rpyProjectRepository);
 			Collection<RPYProjectResource> allRPYProjectResources = rpyProjectRepository.getAllResources();
 			for (RPYProjectResource rpyProjectResource : allRPYProjectResources) {
-				try {
-					rpyProjectResource.loadResourceData();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (ResourceLoadingCancelledException e) {
-					e.printStackTrace();
-				} catch (FlexoException e) {
-					e.printStackTrace();
-				}
-				assertNotNull(rpyProjectResource.getLoadedResourceData());
-				System.out.println("URI of document: " + rpyProjectResource.getURI());
-				System.out.println("ResourceData: " + rpyProjectResource.getLoadedResourceData());
+				System.out.println("Found RPY Project: " + rpyProjectResource);
 			}
 		}
 	}
@@ -123,7 +108,7 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		assertTrue(project.getResource().getContents().get(0) instanceof RPYPackageResource);
 
 		RPYPackageResource defaultPackageResource = (RPYPackageResource) project.getResource().getContents().get(0);
-		assertFalse(defaultPackageResource.isLoaded());
+		assertTrue(defaultPackageResource.isLoaded());
 
 		assertEquals(1, project.getProfiles().size());
 		RPYProfile profile = project.getProfiles().get(0);
@@ -160,7 +145,11 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		RPYClass ping = defaultPackage.getClasses().get(1);
 		RPYClass pong = defaultPackage.getClasses().get(2);
 
-		assertEquals(1, ping.getAssociationEnds().size());
+		assertEquals(2, topLevel.getAssociations().size());
+		assertTrue(topLevel.getAssociations().get(0) instanceof RPYPart);
+		assertTrue(topLevel.getAssociations().get(1) instanceof RPYPart);
+
+		assertEquals(1, ping.getAssociations().size());
 		assertEquals(4, ping.getOperations().size());
 		RPYReception reception1 = (RPYReception) ping.getOperations().get(0);
 		assertSame(event1, reception1.getEvent());
@@ -171,14 +160,14 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		RPYPrimitiveOperation operation2 = (RPYPrimitiveOperation) ping.getOperations().get(3);
 		assertEquals("sendMessageToPong", operation2.getName());
 
-		assertEquals(1, pong.getAssociationEnds().size());
+		assertEquals(1, pong.getAssociations().size());
 		assertEquals(4, pong.getOperations().size());
 
-		assertEquals(1, ping.getAssociationEnds().size());
+		assertEquals(1, ping.getAssociations().size());
 		assertEquals(4, ping.getOperations().size());
 
-		RPYAssociationEnd unPing = pong.getAssociationEnds().get(0);
-		RPYAssociationEnd unPong = ping.getAssociationEnds().get(0);
+		RPYAssociationEnd unPing = (RPYAssociationEnd) pong.getAssociations().get(0);
+		RPYAssociationEnd unPong = (RPYAssociationEnd) ping.getAssociations().get(0);
 
 		assertEquals("unPing", unPing.getName());
 		assertSame(pong, unPing.getOwnerClass());
@@ -212,7 +201,7 @@ public class TestLoadRPYProjects extends AbstractRPYTest {
 		assertSame(pong, pongCGI.getModelObject());
 		CGIAssociationEnd unPongCGI = chart.getAssociationEnds().get(0);
 
-		assertSame(ping.getAssociationEnds().get(0), unPongCGI.getModelObject());
+		assertSame(ping.getAssociations().get(0), unPongCGI.getModelObject());
 		assertEquals("unPong", unPongCGI.getModelObject().getName());
 
 		assertSame(pingCGI, unPongCGI.getChart().getCGIClass(unPongCGI.getModelObject().getOwnerClass()));

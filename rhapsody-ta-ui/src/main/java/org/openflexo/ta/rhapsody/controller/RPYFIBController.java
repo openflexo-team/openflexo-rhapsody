@@ -48,7 +48,7 @@ import org.openflexo.gina.view.GinaViewFactory;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.ta.rhapsody.gui.RPYIconLibrary;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
-import org.openflexo.ta.rhapsody.model.RPYClass.AssociationEndsList;
+import org.openflexo.ta.rhapsody.model.RPYClass.AssociationsList;
 import org.openflexo.ta.rhapsody.model.RPYClass.OperationsList;
 import org.openflexo.ta.rhapsody.model.RPYClass.Statechart;
 import org.openflexo.ta.rhapsody.model.RPYObject.RPYFacet;
@@ -79,8 +79,8 @@ public class RPYFIBController extends FlexoFIBController {
 		if (object instanceof EventsList) {
 			return RPYIconLibrary.EVENTS_LIST_ICON;
 		}
-		if (object instanceof AssociationEndsList) {
-			return RPYIconLibrary.ASSOCIATION_ENDS_LIST_ICON;
+		if (object instanceof AssociationsList) {
+			return RPYIconLibrary.ASSOCIATIONS_LIST_ICON;
 		}
 		if (object instanceof OperationsList) {
 			return RPYIconLibrary.OPERATION_LIST_ICON;

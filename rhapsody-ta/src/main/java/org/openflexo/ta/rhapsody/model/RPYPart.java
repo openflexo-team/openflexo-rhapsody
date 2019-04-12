@@ -45,22 +45,22 @@ import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.ta.rhapsody.model.RPYProjectObject.RPYProjectObjectImpl;
 
 /**
- * Represents a RPY association end in a RPYClass <br>
+ * Represents a RPY part in a RPYClass <br>
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(value = RPYAssociationEnd.RPYAssociationEndImpl.class)
-public interface RPYAssociationEnd extends RPYAssociation {
+@ImplementationClass(value = RPYPart.RPYAssociationEndImpl.class)
+public interface RPYPart extends RPYAssociation {
 
 	/**
-	 * Default base implementation for {@link RPYAssociationEnd}
+	 * Default base implementation for {@link RPYPart}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class RPYAssociationEndImpl extends RPYAssociationImpl implements RPYAssociationEnd {
+	public static abstract class RPYAssociationEndImpl extends RPYAssociationImpl implements RPYPart {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYProjectObjectImpl.class.getPackage().getName());

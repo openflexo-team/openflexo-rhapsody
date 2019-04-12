@@ -284,6 +284,7 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 		 */
 		private void loadPackagesWhenUnloaded() {
 			packages = new ArrayList<>();
+			System.out.println("contents: " + getResource().getContents());
 			if (getResource() != null) {
 				for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
 					if (r instanceof RPYPackageResource) {
@@ -313,12 +314,28 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 			if (returned != null) {
 				return returned;
 			}
+			if (packages != null) {
+				for (RPYPackage rpyPackage : packages) {
+					returned = rpyPackage.findObjectWithID(objectId, className);
+					if (returned != null) {
+						return returned;
+					}
+				}
+			}
+
 			// System.out.println("Tiens je cherche l'objet: " + objectId + " of " + className + " in " + this);
 			logger.warning("Cannot find object with ID: " + objectId + " class: " + className + " in " + this);
 			// Thread.dumpStack();
 			return null;
 		}
 
+		@Override
+		public void lookupReferences() {
+			// In order to lookup references, we must be sure that all packages are loaded, because
+			// we may reference some objects that are contained in packages
+			loadPackagesWhenUnloaded();
+			super.lookupReferences();
+		}
 	}
 
 	public static interface ComponentsList extends RPYFacet {

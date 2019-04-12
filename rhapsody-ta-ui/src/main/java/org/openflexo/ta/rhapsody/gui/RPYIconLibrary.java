@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.icon.ImageIconResource;
 import org.openflexo.rm.ResourceLocator;
-import org.openflexo.ta.rhapsody.model.RPYAssociationEnd;
+import org.openflexo.ta.rhapsody.model.RPYAssociation;
 import org.openflexo.ta.rhapsody.model.RPYClass;
 import org.openflexo.ta.rhapsody.model.RPYEvent;
 import org.openflexo.ta.rhapsody.model.RPYObject;
@@ -62,13 +62,13 @@ public class RPYIconLibrary {
 
 	public static final ImageIcon CLASSES_LIST_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/ClassesList_16x16.png"));
 	public static final ImageIcon EVENTS_LIST_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/EventsList_16x16.png"));
-	public static final ImageIcon ASSOCIATION_ENDS_LIST_ICON = new ImageIconResource(
-			ResourceLocator.locateResource("Icons/AssociationEndsList_16x16.png"));
+	public static final ImageIcon ASSOCIATIONS_LIST_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/AssociationsList_16x16.png"));
 	public static final ImageIcon OPERATION_LIST_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/OperationsList_16x16.png"));
 	public static final ImageIcon STATECHART_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/Statechart_16x16.png"));
-	public static final ImageIcon RPY_ASSOCIATION_ENDS_ICON = new ImageIconResource(
-			ResourceLocator.locateResource("Icons/RPYAssociationEnd_16x16.png"));
+	public static final ImageIcon RPY_ASSOCIATION_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/RPYAssociation_16x16.png"));
 	public static final ImageIcon RPY_RECEPTION_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/RPYReception_16x16.png"));
 	public static final ImageIcon RPY_PRIMITIVE_OPERATION_ICON = new ImageIconResource(
@@ -115,8 +115,8 @@ public class RPYIconLibrary {
 		else if (RPYPrimitiveOperation.class.isAssignableFrom(objectClass)) {
 			return RPY_PRIMITIVE_OPERATION_ICON;
 		}
-		else if (RPYAssociationEnd.class.isAssignableFrom(objectClass)) {
-			return RPY_ASSOCIATION_ENDS_ICON;
+		else if (RPYAssociation.class.isAssignableFrom(objectClass)) {
+			return RPY_ASSOCIATION_ICON;
 		}
 		else if (RPYObjectClassDiagram.class.isAssignableFrom(objectClass)) {
 			return RPY_OBJECT_CLASS_DIAGRAM_ICON;

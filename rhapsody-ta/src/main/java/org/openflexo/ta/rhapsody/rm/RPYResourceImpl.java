@@ -93,6 +93,8 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 	@Override
 	public RD loadResourceData() throws IOFlexoException {
 
+		System.out.println("********* Chargement de " + getIODelegate());
+
 		if (getFlexoIOStreamDelegate() == null) {
 			throw new IOFlexoException("Cannot load document with this IO/delegate: " + getIODelegate());
 		}
@@ -117,6 +119,8 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 
 		resourceData.setResource(this);
 		setResourceData(resourceData);
+
+		resourceData.lookupReferences();
 
 		return resourceData;
 	}
