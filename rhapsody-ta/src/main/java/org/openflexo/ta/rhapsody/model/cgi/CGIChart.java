@@ -47,6 +47,7 @@ import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.ta.rhapsody.model.RPYDiagram;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
+import org.openflexo.ta.rhapsody.model.RPYObject;
 import org.openflexo.ta.rhapsody.model.RPYRootObject;
 
 /**
@@ -71,10 +72,10 @@ public interface CGIChart extends CGIObject {
 	public void setName(CGIText aName);
 
 	@Getter(value = MODEL_OBJECT_KEY)
-	public RPYDiagram getModelObject();
+	public RPYObject getModelObject();
 
 	@Setter(MODEL_OBJECT_KEY)
-	public void setModelObject(RPYDiagram aDiagram);
+	public void setModelObject(RPYObject aDiagram);
 
 	/**
 	 * Default base implementation for {@link CGIChart}
