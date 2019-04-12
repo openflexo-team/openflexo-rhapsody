@@ -77,19 +77,23 @@ public class RPYProjectResourceFactory
 		if (resourceCenter.exists(serializationArtefact) && resourceCenter.isDirectory(serializationArtefact)
 				&& resourceCenter.canRead(serializationArtefact)) {
 			boolean hasCoreFile = false;
-			boolean hasDirectory = false;
-			String expectedCoreFile = resourceCenter.retrieveName(serializationArtefact) + CORE_FILE_SUFFIX;
-			String expectedDirectory = resourceCenter.retrieveName(serializationArtefact) + RPY_DIR_SUFFIX;
-
+			String baseName = null;
 			for (I i : resourceCenter.getContents(serializationArtefact)) {
-				if (resourceCenter.retrieveName(i).equals(expectedCoreFile)) {
+				if (resourceCenter.retrieveName(i).endsWith(CORE_FILE_SUFFIX)) {
 					hasCoreFile = true;
-				}
-				if (resourceCenter.retrieveName(i).equals(expectedDirectory)) {
-					hasDirectory = true;
+					baseName = resourceCenter.retrieveName(i).substring(0,
+							resourceCenter.retrieveName(i).length() - CORE_FILE_SUFFIX.length());
 				}
 			}
-			return hasCoreFile && hasDirectory;
+			if (hasCoreFile) {
+				String expectedDirectory = baseName + RPY_DIR_SUFFIX;
+				for (I i : resourceCenter.getContents(serializationArtefact)) {
+					if (resourceCenter.retrieveName(i).equals(expectedDirectory)) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 		return false;
 	}
@@ -146,13 +150,13 @@ public class RPYProjectResourceFactory
 
 	@Override
 	protected <I> FlexoIODelegate<I> makeFlexoIODelegate(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
-		String artefactName = resourceCenter.retrieveName(serializationArtefact);
-		System.out.println("On contruit le IODelegate pour " + serializationArtefact);
-		I rpyFile = resourceCenter.getEntry(artefactName + CORE_FILE_SUFFIX, serializationArtefact);
-		if (!resourceCenter.exists(rpyFile)) {
-			rpyFile = resourceCenter.createEntry(artefactName + CORE_FILE_SUFFIX, serializationArtefact);
+
+		for (I rpyFile : resourceCenter.getContents(serializationArtefact)) {
+			if (resourceCenter.retrieveName(rpyFile).endsWith(CORE_FILE_SUFFIX)) {
+				return resourceCenter.makeDirectoryBasedFlexoIODelegate(serializationArtefact, rpyFile, this);
+			}
 		}
-		return resourceCenter.makeDirectoryBasedFlexoIODelegate(serializationArtefact, rpyFile, this);
+		return null;
 	}
 
 	private void exploreRPYProjectContents(RPYProjectResource projectResource) {
