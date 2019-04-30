@@ -62,6 +62,8 @@ public interface CGIClassChart extends CGIChart {
 
 	@PropertyIdentifier(type = CGIClass.class, cardinality = Cardinality.LIST)
 	public static final String CLASSES_KEY = "classes";
+	@PropertyIdentifier(type = CGIObjectInstance.class, cardinality = Cardinality.LIST)
+	public static final String INSTANCES_KEY = "instances";
 	@PropertyIdentifier(type = CGIAssociationEnd.class, cardinality = Cardinality.LIST)
 	public static final String ASSOCIATION_ENDS_KEY = "associationEnds";
 
@@ -73,6 +75,15 @@ public interface CGIClassChart extends CGIChart {
 
 	@Remover(CLASSES_KEY)
 	public void removeFromClasses(CGIClass aClass);
+
+	@Getter(value = INSTANCES_KEY, cardinality = Cardinality.LIST, inverse = CGIObjectInstance.CHART_KEY)
+	public List<CGIObjectInstance> getInstances();
+
+	@Adder(INSTANCES_KEY)
+	public void addToInstances(CGIObjectInstance anInstance);
+
+	@Remover(INSTANCES_KEY)
+	public void removeFromInstances(CGIObjectInstance anInstance);
 
 	@Getter(value = ASSOCIATION_ENDS_KEY, cardinality = Cardinality.LIST, inverse = CGIClass.CHART_KEY)
 	public List<CGIAssociationEnd> getAssociationEnds();
@@ -104,6 +115,9 @@ public interface CGIClassChart extends CGIChart {
 			for (Object element : elements) {
 				if (element instanceof CGIClass) {
 					addToClasses((CGIClass) element);
+				}
+				if (element instanceof CGIObjectInstance) {
+					addToInstances((CGIObjectInstance) element);
 				}
 				if (element instanceof CGIAssociationEnd) {
 					addToAssociationEnds((CGIAssociationEnd) element);

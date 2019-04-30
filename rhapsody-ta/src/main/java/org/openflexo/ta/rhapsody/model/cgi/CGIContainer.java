@@ -36,76 +36,36 @@
  * 
  */
 
-package org.openflexo.ta.rhapsody.model;
+package org.openflexo.ta.rhapsody.model.cgi;
 
-import java.util.logging.Logger;
+import java.util.List;
 
+import org.openflexo.pamela.annotations.Adder;
 import org.openflexo.pamela.annotations.Getter;
-import org.openflexo.pamela.annotations.ImplementationClass;
-import org.openflexo.pamela.annotations.Import;
-import org.openflexo.pamela.annotations.Imports;
+import org.openflexo.pamela.annotations.Getter.Cardinality;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
-import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.model.RPYProjectObject.RPYProjectObjectImpl;
+import org.openflexo.pamela.annotations.Remover;
 
 /**
- * Represents a RPY operation end in a RPYClass <br>
+ * Represents a {@link CGIShape} that has compartments<br>
  * 
  * @author sylvain
  *
  */
 @ModelEntity(isAbstract = true)
-@ImplementationClass(value = RPYOperation.RPYOperationImpl.class)
-@Imports({ @Import(RPYPrimitiveOperation.class), @Import(RPYReception.class) })
-public interface RPYOperation extends RPYPackageObject {
+public interface CGIContainer extends CGIShape {
 
-	@PropertyIdentifier(type = String.class)
-	public static final String NAME_KEY = "name";
-	@PropertyIdentifier(type = RPYClass.class)
-	public static final String OWNER_CLASS_KEY = "ownerClass";
+	@PropertyIdentifier(type = CGICompartment.class, cardinality = Cardinality.LIST)
+	public static final String COMPARTMENTS_KEY = "compartments";
 
-	@Getter(value = NAME_KEY)
-	public String getName();
+	@Getter(value = COMPARTMENTS_KEY, cardinality = Cardinality.LIST, inverse = CGICompartment.CONTAINER_KEY)
+	public List<CGICompartment> getCompartments();
 
-	@Setter(NAME_KEY)
-	public void setName(String aName);
+	@Adder(COMPARTMENTS_KEY)
+	public void addToCompartments(CGICompartment aCompartment);
 
-	@Getter(value = OWNER_CLASS_KEY)
-	public RPYClass getOwnerClass();
-
-	@Setter(OWNER_CLASS_KEY)
-	public void setOwnerClass(RPYClass aClass);
-
-	/**
-	 * Default base implementation for {@link RPYOperation}
-	 * 
-	 * @author sylvain
-	 *
-	 */
-	public static abstract class RPYOperationImpl extends RPYPackageObjectImpl implements RPYOperation {
-
-		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(RPYProjectObjectImpl.class.getPackage().getName());
-
-		@Override
-		public void mapProperties() {
-			super.mapProperties();
-			setName(getPropertyValue("_name"));
-		}
-
-		@Override
-		public RPYPackage getPackage() {
-			if (getOwnerClass() != null) {
-				return getOwnerClass().getPackage();
-			}
-			return null;
-		}
-
-		@Override
-		public String getLabel() {
-			return getName() + "()";
-		}
-	}
+	@Remover(COMPARTMENTS_KEY)
+	public void removeFromCompartments(CGICompartment aCompartment);
 
 }

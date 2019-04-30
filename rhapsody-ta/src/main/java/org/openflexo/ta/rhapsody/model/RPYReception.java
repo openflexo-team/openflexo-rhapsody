@@ -82,6 +82,11 @@ public interface RPYReception extends RPYOperation {
 			setEvent(getReference("_event"));
 		}
 
+		@Override
+		public String getLabel() {
+			return getEvent().getName() + "()";
+		}
+
 	}
 
 }

@@ -170,6 +170,7 @@
 			icon="controller.iconForObject(chart)" isEditable="false"
 			filtered="false" defaultVisible="true" name="chart">
 			<Children data="chart.classes" name="classes" />
+			<Children data="chart.instances" name="instances" />
 			<Children data="chart.associations" name="associations" />
 			<Children data="chart.unmappedChildren" name="unmappedChildren" />
 		</BrowserElement>
@@ -178,14 +179,21 @@
 			label="class.name.text"
 			icon="controller.iconForObject(class)" isEditable="false"
 			filtered="false" defaultVisible="true" name="class">
-			<!--  <Children data="class.unmappedChildren" name="unmappedChildren" /> -->
+			<Children data="class.unmappedChildren" name="unmappedChildren" />
+		</BrowserElement>
+		<BrowserElement
+			dataClassName="org.openflexo.ta.rhapsody.model.cgi.CGIObjectInstance"
+			label="instance.name.text"
+			icon="controller.iconForObject(instance)" isEditable="false"
+			filtered="false" defaultVisible="true" name="instance">
+		    <Children data="instance.unmappedChildren" name="unmappedChildren" />
 		</BrowserElement>
 		<BrowserElement
 			dataClassName="org.openflexo.ta.rhapsody.model.cgi.CGIAssociationEnd"
 			label="associationEnd.modelObject.name+'-'+associationEnd.modelObject.inverse.name"
 			icon="controller.iconForObject(associationEnd)" isEditable="false"
 			filtered="false" defaultVisible="true" name="associationEnd">
-			<!--  <Children data="class.unmappedChildren" name="unmappedChildren" /> -->
+			<Children data="associationEnd.unmappedChildren" name="unmappedChildren" />
 		</BrowserElement>
 		<BrowserElement
 			dataClassName="org.openflexo.ta.rhapsody.model.RPYObject"

@@ -46,8 +46,8 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.model.RPYClass;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
+import org.openflexo.ta.rhapsody.model.RPYPart;
 import org.openflexo.ta.rhapsody.model.RPYRawContainer;
 
 /**
@@ -57,12 +57,12 @@ import org.openflexo.ta.rhapsody.model.RPYRawContainer;
  *
  */
 @ModelEntity
-@ImplementationClass(value = CGIClass.CGIClassImpl.class)
-public interface CGIClass extends CGIContainer {
+@ImplementationClass(value = CGIObjectInstance.CGIObjectInstanceImpl.class)
+public interface CGIObjectInstance extends CGIContainer {
 
 	@PropertyIdentifier(type = CGIText.class)
 	public static final String NAME_KEY = "name";
-	@PropertyIdentifier(type = RPYClass.class)
+	@PropertyIdentifier(type = RPYPart.class)
 	public static final String MODEL_OBJECT_KEY = "modelObject";
 	@PropertyIdentifier(type = CGIClassChart.class)
 	public static final String CHART_KEY = "chart";
@@ -74,10 +74,10 @@ public interface CGIClass extends CGIContainer {
 	public void setName(CGIText aName);
 
 	@Getter(value = MODEL_OBJECT_KEY)
-	public RPYClass getModelObject();
+	public RPYPart getModelObject();
 
 	@Setter(MODEL_OBJECT_KEY)
-	public void setModelObject(RPYClass aClass);
+	public void setModelObject(RPYPart aClass);
 
 	@Override
 	@Getter(value = CHART_KEY)
@@ -88,13 +88,15 @@ public interface CGIClass extends CGIContainer {
 
 	public boolean hasShape();
 
+	public String getLabel();
+
 	/**
-	 * Default base implementation for {@link CGIClass}
+	 * Default base implementation for {@link CGIObjectInstance}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGIClassImpl extends CGIObjectImpl implements CGIClass {
+	public static abstract class CGIObjectInstanceImpl extends CGIObjectImpl implements CGIObjectInstance {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
@@ -143,6 +145,11 @@ public interface CGIClass extends CGIContainer {
 		public void mapReferences() {
 			super.mapReferences();
 			setModelObject(getReference("m_pModelObject"));
+		}
+
+		@Override
+		public String getLabel() {
+			return getModelObject().getName() + ":" + getModelObject().getOtherClass().getName();
 		}
 
 	}

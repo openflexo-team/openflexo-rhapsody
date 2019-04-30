@@ -51,7 +51,7 @@ import org.openflexo.ta.rhapsody.model.RPYProjectObject.RPYProjectObjectImpl;
  *
  */
 @ModelEntity
-@ImplementationClass(value = RPYPart.RPYAssociationEndImpl.class)
+@ImplementationClass(value = RPYPart.RPYPartImpl.class)
 public interface RPYPart extends RPYAssociation {
 
 	/**
@@ -60,7 +60,7 @@ public interface RPYPart extends RPYAssociation {
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class RPYAssociationEndImpl extends RPYAssociationImpl implements RPYPart {
+	public static abstract class RPYPartImpl extends RPYAssociationImpl implements RPYPart {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYProjectObjectImpl.class.getPackage().getName());

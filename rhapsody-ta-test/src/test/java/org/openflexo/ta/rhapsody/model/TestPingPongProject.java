@@ -57,6 +57,7 @@ import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
 import org.openflexo.ta.rhapsody.model.cgi.CGIAssociationEnd;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClassChart;
+import org.openflexo.ta.rhapsody.model.cgi.CGICompartment.DisplayOption;
 import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResourceRepository;
@@ -195,6 +196,8 @@ public class TestPingPongProject extends AbstractRPYTest {
 		assertEquals("Ping", pingCGI.getName().getText());
 		assertSame(defaultPackage, pingCGI.getRootObject());
 		assertSame(ping, pingCGI.getModelObject());
+		assertEquals(2, pingCGI.getCompartments().size());
+		assertSame(DisplayOption.Explicit, pingCGI.getCompartments().get(0).getDisplayOption());
 		CGIClass pongCGI = chart.getClasses().get(2);
 		assertEquals("Pong", pongCGI.getName().getText());
 		assertSame(defaultPackage, pongCGI.getRootObject());

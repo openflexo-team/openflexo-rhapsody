@@ -46,9 +46,8 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.ta.rhapsody.model.RPYClass;
 import org.openflexo.ta.rhapsody.model.RPYDiagram.RPYDiagramImpl;
-import org.openflexo.ta.rhapsody.model.RPYRawContainer;
+import org.openflexo.ta.rhapsody.model.RPYObject;
 
 /**
  * Represents a class representation<br>
@@ -57,54 +56,59 @@ import org.openflexo.ta.rhapsody.model.RPYRawContainer;
  *
  */
 @ModelEntity
-@ImplementationClass(value = CGIClass.CGIClassImpl.class)
-public interface CGIClass extends CGIContainer {
+@ImplementationClass(value = CGICompartment.CGICompartmentImpl.class)
+public interface CGICompartment extends CGIShape {
 
-	@PropertyIdentifier(type = CGIText.class)
+	public enum DisplayOption {
+		Explicit, All, Public
+	}
+
+	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";
-	@PropertyIdentifier(type = RPYClass.class)
-	public static final String MODEL_OBJECT_KEY = "modelObject";
-	@PropertyIdentifier(type = CGIClassChart.class)
-	public static final String CHART_KEY = "chart";
+	@PropertyIdentifier(type = CGIContainer.class)
+	public static final String CONTAINER_KEY = "container";
+	@PropertyIdentifier(type = DisplayOption.class)
+	public static final String DISPLAY_OPTION_KEY = "displayOption";
 
-	@Getter(value = NAME_KEY, inverse = CGIText.OBJECT_KEY)
-	public CGIText getName();
+	@Getter(value = NAME_KEY)
+	public String getName();
 
 	@Setter(NAME_KEY)
-	public void setName(CGIText aName);
+	public void setName(String aName);
 
-	@Getter(value = MODEL_OBJECT_KEY)
-	public RPYClass getModelObject();
+	@Getter(value = CONTAINER_KEY)
+	public CGIContainer getContainer();
 
-	@Setter(MODEL_OBJECT_KEY)
-	public void setModelObject(RPYClass aClass);
+	@Setter(CONTAINER_KEY)
+	public void setContainer(CGIContainer aContainer);
 
-	@Override
-	@Getter(value = CHART_KEY)
-	public CGIClassChart getChart();
+	@Getter(value = DISPLAY_OPTION_KEY)
+	public DisplayOption getDisplayOption();
 
-	@Setter(CHART_KEY)
-	public void setChart(CGIClassChart aChart);
+	@Setter(DISPLAY_OPTION_KEY)
+	public void setDisplayOption(DisplayOption option);
 
-	public boolean hasShape();
+	public int getIndex();
+
+	public List<? extends RPYObject> getContents();
 
 	/**
-	 * Default base implementation for {@link CGIClass}
+	 * Default base implementation for {@link CGICompartment}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	public static abstract class CGIClassImpl extends CGIObjectImpl implements CGIClass {
+	public static abstract class CGICompartmentImpl extends CGIObjectImpl implements CGICompartment {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(RPYDiagramImpl.class.getPackage().getName());
 
 		@Override
-		public String toString() {
-			if (getName() != null) {
-				return getName().getText();
+		public CGIChart getChart() {
+			if (getContainer() != null) {
+				return getContainer().getChart();
 			}
-			return super.toString();
+			return null;
 		}
 
 		@Override
@@ -113,36 +117,55 @@ public interface CGIClass extends CGIContainer {
 
 			setName(getPropertyValue("m_name"));
 
-			RPYRawContainer compartments = getPropertyValue("Compartments");
-			if (compartments != null) {
-				for (Object compartment : compartments.getValues()) {
-					if (compartment instanceof CGICompartment) {
-						addToCompartments((CGICompartment) compartment);
-					}
-					else {
-						logger.warning("Unexpected object: " + compartment);
-					}
+			String dOption = getPropertyValue("m_displayOption");
+			if (dOption != null) {
+				setDisplayOption(DisplayOption.valueOf(dOption));
+			}
+
+		}
+
+		@Override
+		public int getIndex() {
+			if (getContainer() != null) {
+				return getContainer().getCompartments().indexOf(this);
+			}
+			return -1;
+		}
+
+		@Override
+		public double getX() {
+			return 0;
+		}
+
+		@Override
+		public double getY() {
+			return 20 + getIndex() * getHeight();
+		}
+
+		@Override
+		public double getWidth() {
+			if (getContainer() != null) {
+				return getContainer().getWidth();
+			}
+			return 0;
+		}
+
+		@Override
+		public double getHeight() {
+			if (getContainer() != null && getContainer().getCompartments().size() > 0) {
+				return (getContainer().getHeight() - 20) / getContainer().getCompartments().size();
+			}
+			return 0;
+		}
+
+		@Override
+		public List<? extends RPYObject> getContents() {
+			if (getName().equals("Operation")) {
+				if (getContainer() instanceof CGIClass) {
+					return ((CGIClass) getContainer()).getModelObject().getOperations();
 				}
 			}
-
-			List<Number> geometry = getPropertyValue("m_transform");
-			if (geometry != null) {
-				setX(geometry.get(4).doubleValue());
-				setY(geometry.get(5).doubleValue() + 50);
-				setWidth(geometry.get(0).doubleValue() * 1000);
-				setHeight(geometry.get(3).doubleValue() * 1000);
-			}
-		}
-
-		@Override
-		public boolean hasShape() {
-			return getPropertyValue("m_transform") != null;
-		}
-
-		@Override
-		public void mapReferences() {
-			super.mapReferences();
-			setModelObject(getReference("m_pModelObject"));
+			return null;
 		}
 
 	}

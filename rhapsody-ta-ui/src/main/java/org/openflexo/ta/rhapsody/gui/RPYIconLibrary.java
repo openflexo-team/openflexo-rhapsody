@@ -39,7 +39,9 @@ import org.openflexo.ta.rhapsody.model.RPYReception;
 import org.openflexo.ta.rhapsody.model.RPYSequenceDiagram;
 import org.openflexo.ta.rhapsody.model.RPYUnmappedObject;
 import org.openflexo.ta.rhapsody.model.cgi.CGIAssociationEnd;
+import org.openflexo.ta.rhapsody.model.cgi.CGIChart;
 import org.openflexo.ta.rhapsody.model.cgi.CGIClass;
+import org.openflexo.ta.rhapsody.model.cgi.CGIObjectInstance;
 
 public class RPYIconLibrary {
 	private static final Logger logger = Logger.getLogger(RPYIconLibrary.class.getPackage().getName());
@@ -85,7 +87,10 @@ public class RPYIconLibrary {
 	public static final ImageIcon UNMAPPED_OBJECT_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/MetaModel/EDataType.gif"));
 
+	public static final ImageIcon CGI_CHART_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/MetaModel/EStringToStringMapEntry.gif"));
 	public static final ImageIcon CGI_CLASS_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/MetaModel/EClass.gif"));
+	public static final ImageIcon CGI_INSTANCE_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/MetaModel/EObject.gif"));
 	public static final ImageIcon CGI_ASSOCIATION_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/MetaModel/EEnumLiteral.gif"));
 
@@ -124,8 +129,14 @@ public class RPYIconLibrary {
 		else if (RPYSequenceDiagram.class.isAssignableFrom(objectClass)) {
 			return RPY_SEQUENCE_DIAGRAM_ICON;
 		}
+		else if (CGIChart.class.isAssignableFrom(objectClass)) {
+			return CGI_CHART_ICON;
+		}
 		else if (CGIClass.class.isAssignableFrom(objectClass)) {
 			return CGI_CLASS_ICON;
+		}
+		else if (CGIObjectInstance.class.isAssignableFrom(objectClass)) {
+			return CGI_INSTANCE_ICON;
 		}
 		else if (CGIAssociationEnd.class.isAssignableFrom(objectClass)) {
 			return CGI_ASSOCIATION_ICON;

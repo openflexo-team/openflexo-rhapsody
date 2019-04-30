@@ -100,6 +100,8 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 	@Setter(CONCEPT_KEY)
 	public void setConcept(RPYConcept aConcept);
 
+	public String getLabel();
+
 	public <T> T getPropertyValue(String propertyName);
 
 	public <T> void setPropertyValue(String propertyName, T value);
@@ -145,6 +147,11 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 				return (RPYTechnologyAdapter) ((TechnologyAdapterResource) getRootObject().getResource()).getTechnologyAdapter();
 			}
 			return null;
+		}
+
+		@Override
+		public String getLabel() {
+			return toString();
 		}
 
 		@Override
