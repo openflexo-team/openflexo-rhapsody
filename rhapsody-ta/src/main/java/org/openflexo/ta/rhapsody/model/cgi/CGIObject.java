@@ -52,7 +52,7 @@ import org.openflexo.ta.rhapsody.model.RPYRootObject;
  * @author sylvain
  *
  */
-@ModelEntity
+@ModelEntity(isAbstract = true)
 @ImplementationClass(value = CGIObject.CGIObjectImpl.class)
 public interface CGIObject extends RPYObject {
 

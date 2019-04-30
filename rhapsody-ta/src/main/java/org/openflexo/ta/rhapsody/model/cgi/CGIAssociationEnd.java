@@ -129,6 +129,18 @@ public interface CGIAssociationEnd extends CGIConnector {
 			return getModelObject().getInverse().getMultiplicity() + "\n" + getModelObject().getInverse().getName();
 		}
 
+		@Override
+		public CGIShape getStartShape() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public CGIShape getEndShape() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 }
