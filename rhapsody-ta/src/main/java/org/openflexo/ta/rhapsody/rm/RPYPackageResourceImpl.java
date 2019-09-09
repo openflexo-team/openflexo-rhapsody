@@ -44,6 +44,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.IOFlexoException;
+import org.openflexo.foundation.InconsistentDataException;
+import org.openflexo.foundation.InvalidModelDefinitionException;
+import org.openflexo.foundation.InvalidXMLException;
+import org.openflexo.foundation.resource.FlexoFileNotFoundException;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.ta.rhapsody.model.RPYPackage;
@@ -107,6 +111,18 @@ public abstract class RPYPackageResourceImpl extends RPYResourceImpl<RPYPackage,
 						saveMetaData();
 					}
 				} catch (IOFlexoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FlexoFileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidXMLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InconsistentDataException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidModelDefinitionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

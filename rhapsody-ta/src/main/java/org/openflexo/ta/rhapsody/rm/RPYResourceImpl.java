@@ -80,62 +80,30 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 
 	private static final Logger logger = Logger.getLogger(RPYResourceImpl.class.getPackage().getName());
 
-	// private String rawSource = null;
-
-	private boolean isLoading = false;
-
-	/**
-	 * Load the resource data of this resource.
-	 * 
-	 * @return the resource data.
-	 * @throws IOFlexoException
-	 */
 	@Override
-	public RD loadResourceData() throws IOFlexoException {
-
-		System.out.println("********* Chargement de " + getIODelegate());
+	protected RD performLoad() throws IOException, Exception {
 
 		if (getFlexoIOStreamDelegate() == null) {
 			throw new IOFlexoException("Cannot load document with this IO/delegate: " + getIODelegate());
 		}
 
-		RD resourceData = null;
+		RD returned = null;
 		try {
-			isLoading = true;
-			resourceData = load(getFlexoIOStreamDelegate());
+			returned = load(getFlexoIOStreamDelegate());
 			getInputStream().close();
 		} catch (IOException e) {
 			throw new IOFlexoException(e);
 		} catch (ParseException e) {
 			throw new IOFlexoException(e.getMessage());
-		} finally {
-			isLoading = false;
 		}
 
-		if (resourceData == null) {
+		if (returned == null) {
 			logger.warning("canno't retrieve resource data from serialization artifact " + getIODelegate().toString());
 			return null;
 		}
+		returned.lookupReferences();
 
-		resourceData.setResource(this);
-		setResourceData(resourceData);
-
-		resourceData.lookupReferences();
-
-		return resourceData;
-	}
-
-	@Override
-	public boolean isLoading() {
-		return isLoading;
-	}
-
-	/**
-	 * Provides hook when {@link ResourceData} is unloaded
-	 */
-	@Override
-	public void unloadResourceData(boolean deleteResourceData) {
-		super.unloadResourceData(deleteResourceData);
+		return returned;
 	}
 
 	/**
@@ -144,7 +112,7 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 	 * performed
 	 */
 	@Override
-	protected void _saveResourceData(boolean clearIsModified) throws SaveResourceException {
+	protected void performSave(boolean clearIsModified) throws SaveResourceException {
 
 		if (getFlexoIOStreamDelegate() == null) {
 			throw new SaveResourceException(getIODelegate());
@@ -241,44 +209,6 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 	}
 
 	protected abstract void saveMetaData();
-
-	@Override
-	public void updateResourceData() {
-
-		if (resourceData == null) {
-			System.out.println("Do not update BResource since it this not loaded yet");
-			return;
-		}
-
-		System.out.println("Updating from disk version");
-		RD reloadedResourceData;
-		try {
-
-			System.out.println("On recharge la resource");
-			// Reload resource data
-			reloadedResourceData = load(getFlexoIOStreamDelegate());
-			reloadedResourceData.setResource(this);
-
-			System.out.println("On obtient " + getFactory().stringRepresentation(reloadedResourceData));
-
-			System.out.println("Et ensuite on update");
-
-			// Now perform PAMELA updating with reloaded resource data
-			// Existing model will be updated and notified
-			resourceData.updateWith(reloadedResourceData);
-
-			// TODO: set new pretty-print delegates to old objects
-
-			System.out.println("Hop");
-
-			System.out.println("Apres le updateWith " + getFactory().stringRepresentation(resourceData));
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Generic method used to retrieve in this resource an object with supplied objectIdentifier, userIdentifier, and type identifier<br>
