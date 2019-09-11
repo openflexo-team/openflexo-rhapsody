@@ -1,5 +1,4 @@
 buildscript {
-    configurations.classpath.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     repositories {
         maven { url uri('https://maven.openflexo.org/artifactory/openflexo-deps/') }
     }
@@ -12,8 +11,3 @@ buildscript {
 
 version = "2.0.0"
 apply plugin: 'org.openflexo.buildconfig'
-
-task gitPull(type: Exec) {
-    description 'Pulls git.'
-    commandLine "git", "pull"
-}
