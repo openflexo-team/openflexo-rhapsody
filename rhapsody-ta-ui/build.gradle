@@ -3,6 +3,7 @@ dependencies {
 
   // openflexo dep
   compile flexoUi()
+  compile pdfConnector()
   // external dep
 
   // testing dep

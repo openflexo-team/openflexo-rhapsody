@@ -70,7 +70,7 @@ Productions
     {chars_literal} chars_literal semi |
     {time_literal} time_literal semi |
     {identifier} identifier semi |
-    {numbers} [n_list]:number* semi |
+    {numbers} [n_list]:number+ semi |
     {style} string_literal [s1]:integer_literal [s2]:integer_literal [s3]:integer_literal [s4]:integer_literal [s5]:integer_literal semi |
     {id_value} guid_token extended_hex_identifier semi |
     {rpy_complex_object} rpy_complex_object;
