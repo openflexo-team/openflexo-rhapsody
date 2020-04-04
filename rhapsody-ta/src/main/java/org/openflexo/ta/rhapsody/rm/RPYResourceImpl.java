@@ -99,6 +99,8 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 			throw new IOFlexoException("Cannot load document with this IO/delegate: " + getIODelegate());
 		}
 
+		notifyResourceWillLoad();
+
 		RD resourceData = null;
 		try {
 			isLoading = true;
@@ -121,6 +123,8 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 		setResourceData(resourceData);
 
 		resourceData.lookupReferences();
+
+		notifyResourceLoaded();
 
 		return resourceData;
 	}
