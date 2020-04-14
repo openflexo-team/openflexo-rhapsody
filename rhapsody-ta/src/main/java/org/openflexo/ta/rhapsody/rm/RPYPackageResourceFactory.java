@@ -62,7 +62,7 @@ public class RPYPackageResourceFactory
 	}
 
 	@Override
-	protected <I> RPYPackageResource registerResource(RPYPackageResource resource, FlexoResourceCenter<I> resourceCenter) {
+	public <I> RPYPackageResource registerResource(RPYPackageResource resource, FlexoResourceCenter<I> resourceCenter) {
 		super.registerResource(resource, resourceCenter);
 
 		// Register the resource in the repository of supplied resource center
