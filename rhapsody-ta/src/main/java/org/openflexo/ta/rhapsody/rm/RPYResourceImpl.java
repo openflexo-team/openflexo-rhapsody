@@ -87,6 +87,8 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 			throw new IOFlexoException("Cannot load document with this IO/delegate: " + getIODelegate());
 		}
 
+		notifyResourceWillLoad();
+
 		RD returned = null;
 		try {
 			returned = load(getFlexoIOStreamDelegate());

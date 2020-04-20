@@ -109,7 +109,7 @@ public class RPYProjectResourceFactory
 	}
 
 	@Override
-	protected <I> RPYProjectResource registerResource(RPYProjectResource resource, FlexoResourceCenter<I> resourceCenter) {
+	public <I> RPYProjectResource registerResource(RPYProjectResource resource, FlexoResourceCenter<I> resourceCenter) {
 
 		System.out.println("On enregistre: " + resource);
 		System.out.println("artefact:" + resource.getIODelegate().getSerializationArtefact());
