@@ -242,6 +242,35 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 	}
 
 	/**
+	 * Generic method used to retrieve in this resource an object with supplied objectIdentifier, userIdentifier, and type identifier<br>
+	 * 
+	 * Note that for certain resources, some parameters might not be used (for example userIdentifier or typeIdentifier)
+	 * 
+	 * @param objectIdentifier
+	 * @param userIdentifier
+	 * @param typeIdentifier
+	 * @return
+	 */
+	@Override
+	public FlexoObject findObject(String objectIdentifier, String userIdentifier) {
+		System.out.println("Je dois trouver l'objet avec l'ID " + objectIdentifier);
+		// return getFlexoObject(Long.parseLong(objectIdentifier), userIdentifier);
+		try {
+			return getResourceData().getObjectWithID(objectIdentifier, null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ResourceLoadingCancelledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FlexoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
 	 * Used to compute identifier of an object asserting this object is the {@link ResourceData} itself, or a {@link InnerResourceData}
 	 * object stored inside this resource
 	 * 
