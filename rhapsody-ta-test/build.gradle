@@ -1,10 +1,10 @@
 dependencies {
-    compile project(':rhapsody-ta')
-    compile flexoFoundation()
+    implementation project(':rhapsody-ta')
+    implementation flexoFoundation()
 
-    compile testUtils()
-    compile flexoFoundationTest()
+    implementation testUtils()
+    implementation flexoFoundationTest()
 
     // Test resource center
-    testRuntime project(':rhapsody-ta-test-rc')
+    testRuntimeOnly project(':rhapsody-ta-test-rc')
 }

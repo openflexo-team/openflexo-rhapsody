@@ -1,11 +1,13 @@
 dependencies {
-  compile project(":rhapsody-ta")
+  implementation project(":rhapsody-ta")
 
   // openflexo dep
-  compile flexoUi()
-  compile pdfConnector()
+  implementation flexoUi()
+  implementation diana()
+  implementation dianaSwing()
+  implementation pdfConnector()
   // external dep
 
   // testing dep
-  testCompile flexoUiTest()
+  testImplementation flexoUiTest()
 }
