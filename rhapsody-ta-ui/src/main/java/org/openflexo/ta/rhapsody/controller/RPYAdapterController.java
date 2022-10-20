@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
@@ -162,13 +163,27 @@ public class RPYAdapterController extends TechnologyAdapterController<RPYTechnol
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(TechnologyObject<RPYTechnologyAdapter> object, FlexoController controller) {
+	public boolean isRepresentableInModuleView(TechnologyObject<RPYTechnologyAdapter> object) {
 		if (object instanceof RPYObjectClassDiagram) {
 			return true;
 		}
-		return object instanceof RPYProject;
+		if (object instanceof RPYProject) {
+			return true;
+		}
+		return false;
 	}
-
+	
+	@Override
+	public FlexoObject getRepresentableMasterObject(TechnologyObject<RPYTechnologyAdapter> object) {
+		if (object instanceof RPYObjectClassDiagram) {
+			return object;
+		}
+		if (object instanceof RPYProject) {
+			return object;
+		}
+		return null;
+	}
+	
 	@Override
 	public String getWindowTitleforObject(TechnologyObject<RPYTechnologyAdapter> object, FlexoController controller) {
 		if (object instanceof RPYProject) {
@@ -178,7 +193,7 @@ public class RPYAdapterController extends TechnologyAdapterController<RPYTechnol
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(TechnologyObject<RPYTechnologyAdapter> object, FlexoController controller,
+	public ModuleView<?> createModuleViewForMasterObject(TechnologyObject<RPYTechnologyAdapter> object, FlexoController controller,
 			FlexoPerspective perspective) {
 		if (object instanceof RPYObjectClassDiagram) {
 			return new ObjectClassDiagramModuleView((RPYObjectClassDiagram) object, perspective);
