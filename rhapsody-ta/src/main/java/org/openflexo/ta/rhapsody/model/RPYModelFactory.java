@@ -84,7 +84,7 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 
 	public RPYModelFactory(Class<RD> resourceDataClass, R resource, RPYTechnologyContextManager technologyContextManager)
 			throws ModelDefinitionException {
-		super(PamelaMetaModelLibrary.getCompoundModelContext(resourceDataClass));
+		super(PamelaMetaModelLibrary.retrieveMetaModel(resourceDataClass));
 		this.resource = resource;
 		this.technologyContextManager = technologyContextManager;
 		setEditingContext(technologyContextManager.getServiceManager().getEditingContext());
