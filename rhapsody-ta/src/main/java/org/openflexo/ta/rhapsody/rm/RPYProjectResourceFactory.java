@@ -225,8 +225,8 @@ public class RPYProjectResourceFactory
 			FlexoResourceCenter<?> resourceCenter, FlexoServiceManager serviceManager) {
 		try {
 			// File diagramSpecificationDirectory = new File(folder.getFile(), name + DIAGRAM_SPECIFICATION_SUFFIX);
-			ModelFactory factory = new ModelFactory(
-					ModelContextLibrary.getCompoundModelContext(DirectoryBasedFlexoIODelegate.class, AtelierBProjectResource.class));
+			PamelaModelFactory factory = new PamelaModelFactory(
+					PamelaMetaModelLibrary.getCompoundModelContext(DirectoryBasedFlexoIODelegate.class, AtelierBProjectResource.class));
 			AtelierBProjectResourceImpl returned = (AtelierBProjectResourceImpl) factory
 					.newInstance(AtelierBProjectResource.class);
 	
@@ -260,8 +260,8 @@ public class RPYProjectResourceFactory
 	public static AtelierBProjectResource retrieveAtelierBProjectResource(File diagramSpecificationDirectory,
 			RepositoryFolder<?> folder, FlexoResourceCenter<?> resourceCenter, FlexoServiceManager serviceManager) {
 		try {
-			ModelFactory factory = new ModelFactory(
-					ModelContextLibrary.getCompoundModelContext(DirectoryBasedFlexoIODelegate.class, AtelierBProjectResource.class));
+			PamelaModelFactory factory = new PamelaModelFactory(
+					PamelaMetaModelLibrary.getCompoundModelContext(DirectoryBasedFlexoIODelegate.class, AtelierBProjectResource.class));
 			AtelierBProjectResourceImpl returned = (AtelierBProjectResourceImpl) factory
 					.newInstance(AtelierBProjectResource.class);
 	
@@ -320,8 +320,8 @@ public class RPYProjectResourceFactory
 	public static AtelierBProjectResource retrieveAtelierBProjectResource(InJarResourceImpl inJarResource,
 			FlexoResourceCenter<?> resourceCenter, FlexoServiceManager serviceManager) {
 		try {
-			ModelFactory factory = new ModelFactory(
-					ModelContextLibrary.getCompoundModelContext(InJarFlexoIODelegate.class, AtelierBProjectResource.class));
+			PamelaModelFactory factory = new PamelaModelFactory(
+					PamelaMetaModelLibrary.getCompoundModelContext(InJarFlexoIODelegate.class, AtelierBProjectResource.class));
 			AtelierBProjectResourceImpl returned = (AtelierBProjectResourceImpl) factory
 					.newInstance(AtelierBProjectResource.class);
 			returned.setFlexoIODelegate(InJarFlexoIODelegateImpl.makeInJarFlexoIODelegate(inJarResource, factory));

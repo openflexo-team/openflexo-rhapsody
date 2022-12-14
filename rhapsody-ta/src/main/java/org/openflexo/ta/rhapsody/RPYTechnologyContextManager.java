@@ -27,19 +27,19 @@ import java.util.Map;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty.PropertyType;
 
 public class RPYTechnologyContextManager extends TechnologyContextManager<RPYTechnologyAdapter> {
 
-	private ModelFactory metaModelFactory;
+	private PamelaModelFactory metaModelFactory;
 
 	public RPYTechnologyContextManager(RPYTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super(adapter, resourceCenterService);
 		try {
-			metaModelFactory = new ModelFactory(RPYConcept.class);
+			metaModelFactory = new PamelaModelFactory(RPYConcept.class);
 		} catch (ModelDefinitionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

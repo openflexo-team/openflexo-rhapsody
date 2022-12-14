@@ -41,13 +41,13 @@ package org.openflexo.ta.rhapsody.model;
 import java.util.logging.Logger;
 
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.rm.RPYPackageResource;
 
 /**
- * A {@link ModelFactory} used to manage a {@link RPYPackage}<br>
+ * A {@link PamelaModelFactory} used to manage a {@link RPYPackage}<br>
  * One instance of this class should be used for each {@link RPYPackageResource}
  * 
  * @author sylvain

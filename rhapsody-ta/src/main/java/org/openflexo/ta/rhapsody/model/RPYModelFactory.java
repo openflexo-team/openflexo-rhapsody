@@ -43,11 +43,11 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.PamelaResourceModelFactory;
 import org.openflexo.foundation.action.FlexoUndoManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl.IgnoreLoadingEdits;
-import org.openflexo.pamela.ModelContextLibrary;
+import org.openflexo.pamela.PamelaMetaModelLibrary;
 import org.openflexo.pamela.converter.RelativePathResourceConverter;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.EditingContext;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.ta.rhapsody.RPYTechnologyContextManager;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
@@ -61,12 +61,12 @@ import org.openflexo.ta.rhapsody.model.cgi.CGIText;
 import org.openflexo.ta.rhapsody.rm.RPYResource;
 
 /**
- * Abstract base {@link ModelFactory} for a Rhapsody resource
+ * Abstract base {@link PamelaModelFactory} for a Rhapsody resource
  * 
  * @author sylvain
  * 
  */
-public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RPYResource<RD, ?>> extends ModelFactory
+public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RPYResource<RD, ?>> extends PamelaModelFactory
 		implements PamelaResourceModelFactory<R> {
 
 	@SuppressWarnings("unused")
@@ -84,7 +84,7 @@ public abstract class RPYModelFactory<RD extends RPYRootObject<RD>, R extends RP
 
 	public RPYModelFactory(Class<RD> resourceDataClass, R resource, RPYTechnologyContextManager technologyContextManager)
 			throws ModelDefinitionException {
-		super(ModelContextLibrary.getCompoundModelContext(resourceDataClass));
+		super(PamelaMetaModelLibrary.getCompoundModelContext(resourceDataClass));
 		this.resource = resource;
 		this.technologyContextManager = technologyContextManager;
 		setEditingContext(technologyContextManager.getServiceManager().getEditingContext());

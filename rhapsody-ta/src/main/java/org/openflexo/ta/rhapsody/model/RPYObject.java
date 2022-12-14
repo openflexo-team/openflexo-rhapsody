@@ -55,7 +55,7 @@ import org.openflexo.pamela.annotations.Imports;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.metamodel.RPYConcept;
 import org.openflexo.ta.rhapsody.metamodel.RPYProperty;
@@ -255,7 +255,7 @@ public interface RPYObject extends FlexoObject, TechnologyObject<RPYTechnologyAd
 		@Override
 		public Class<?> getImplementedInterface() {
 			if (getRootObject() != null) {
-				ModelFactory f = ((PamelaResource<?, ?>) getRootObject().getResource()).getFactory();
+				PamelaModelFactory f = ((PamelaResource<?, ?>) getRootObject().getResource()).getFactory();
 				if (f != null) {
 					return f.getModelEntityForInstance(this).getImplementedInterface();
 				}

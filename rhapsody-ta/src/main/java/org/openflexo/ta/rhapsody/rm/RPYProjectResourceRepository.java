@@ -42,7 +42,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResourceRepository;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.ta.rhapsody.RPYTechnologyAdapter;
 import org.openflexo.ta.rhapsody.model.RPYProject;
 
@@ -60,9 +60,9 @@ public interface RPYProjectResourceRepository<I>
 
 	public static <I> RPYProjectResourceRepository<I> instanciateNewRepository(RPYTechnologyAdapter technologyAdapter,
 			FlexoResourceCenter<I> resourceCenter) {
-		ModelFactory factory;
+		PamelaModelFactory factory;
 		try {
-			factory = new ModelFactory(RPYProjectResourceRepository.class);
+			factory = new PamelaModelFactory(RPYProjectResourceRepository.class);
 			RPYProjectResourceRepository<I> newRepository = factory.newInstance(RPYProjectResourceRepository.class);
 			newRepository.setTechnologyAdapter(technologyAdapter);
 			newRepository.setResourceCenter(resourceCenter);
