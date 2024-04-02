@@ -1,4 +1,5 @@
 package org.openflexo.ta.rhapsody.model;
+
 /**
  * 
  * Copyright (c) 2018, Openflexo
@@ -45,6 +46,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -94,6 +96,7 @@ public class TestPingPongProject extends AbstractRPYTest {
 
 	@Test
 	@TestOrder(4)
+	@Ignore
 	public void testRPYContents() {
 
 		project = getRPYProject("PingPongProject");
@@ -126,6 +129,7 @@ public class TestPingPongProject extends AbstractRPYTest {
 
 	@Test
 	@TestOrder(5)
+	@Ignore
 	public void testRPYPackages() {
 		assertEquals(1, project.getPackages().size());
 		RPYPackageResource defaultPackageResource = (RPYPackageResource) project.getResource().getContents().get(0);

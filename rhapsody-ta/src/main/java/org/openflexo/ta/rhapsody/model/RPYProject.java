@@ -284,7 +284,7 @@ public interface RPYProject extends RPYProjectObject, RPYRootObject<RPYProject> 
 		 */
 		private void loadPackagesWhenUnloaded() {
 			packages = new ArrayList<>();
-			System.out.println("contents: " + getResource().getContents());
+			// System.out.println("contents: " + getResource().getContents());
 			if (getResource() != null) {
 				for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
 					if (r instanceof RPYPackageResource) {
