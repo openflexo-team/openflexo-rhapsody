@@ -5,8 +5,7 @@ dependencies {
   implementation flexoUi()
   implementation diana()
   implementation dianaSwing()
-  implementation pdfConnector()
-  // external dep
+   // external dep
 
   // testing dep
   testImplementation flexoUiTest()
