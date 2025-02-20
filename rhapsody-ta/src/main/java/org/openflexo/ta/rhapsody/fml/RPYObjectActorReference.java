@@ -103,7 +103,7 @@ public interface RPYObjectActorReference extends ActorReference<RPYObject> {
 		}
 
 		public RPYProjectResource getRPYProjectResource() {
-			FreeModelSlotInstance<?, ?> msInstance = (FreeModelSlotInstance<?, ?>) getModelSlotInstance();
+			FreeModelSlotInstance<?, ?, ?> msInstance = (FreeModelSlotInstance<?, ?, ?>) getModelSlotInstance();
 			if (msInstance != null && msInstance.getResource() instanceof RPYProjectResource) {
 				return (RPYProjectResource) msInstance.getResource();
 			}

@@ -51,6 +51,7 @@ import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.rhapsody.fml.RPYObjectActorReference;
 import org.openflexo.ta.rhapsody.model.RPYProject;
+import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 
 /**
  * Implementation of the {@link ModelSlot} class for the Rhapsody technology adapter
@@ -67,9 +68,9 @@ import org.openflexo.ta.rhapsody.model.RPYProject;
 @ImplementationClass(RPYModelSlot.DSLModelSlotImpl.class)
 @XMLElement
 @FML("RPYModelSlot")
-public interface RPYModelSlot extends FreeModelSlot<RPYProject> {
+public interface RPYModelSlot extends FreeModelSlot<RPYProject, RPYProjectResource> {
 
-	public static abstract class DSLModelSlotImpl extends FreeModelSlotImpl<RPYProject> implements RPYModelSlot {
+	public static abstract class DSLModelSlotImpl extends FreeModelSlotImpl<RPYProject, RPYProjectResource> implements RPYModelSlot {
 
 		private static final Logger logger = Logger.getLogger(RPYModelSlot.class.getPackage().getName());
 
