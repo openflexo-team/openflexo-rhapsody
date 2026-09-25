@@ -111,7 +111,8 @@ public class RPYTechnologyAdapter extends TechnologyAdapter<RPYTechnologyAdapter
 		RPYProjectResourceRepository<I> returned = resourceCenter.retrieveRepository(RPYProjectResourceRepository.class, this);
 		if (returned == null) {
 			returned = RPYProjectResourceRepository.instanciateNewRepository(this, resourceCenter);
-			resourceCenter.registerRepository(returned, RPYProjectResourceRepository.class, this);
+			// Another thread may have registered one meanwhile: use the registered one (CORE-D-25)
+			returned = resourceCenter.registerRepository(returned, RPYProjectResourceRepository.class, this);
 		}
 		return returned;
 	}
