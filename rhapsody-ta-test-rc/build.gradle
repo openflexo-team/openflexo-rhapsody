@@ -1,0 +1,13 @@
+apply plugin: 'eclipse'
+
+// The .java files under src/main/resources are test data, not code: keep them out of
+// Eclipse's Java build (Gradle never compiles resources, only the Eclipse import does).
+eclipse {
+    classpath {
+        file {
+            whenMerged {
+                entries.findAll { it.path == 'src/main/resources' }.each { it.excludes = ['**/*.java'] }
+            }
+        }
+    }
+}
