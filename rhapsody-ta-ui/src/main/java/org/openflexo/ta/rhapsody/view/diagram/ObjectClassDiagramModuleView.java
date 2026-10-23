@@ -75,11 +75,6 @@ public class ObjectClassDiagramModuleView extends JPanel implements ModuleView<R
 	}
 
 	@Override
-	public void finalize() {
-		logger.warning("ObjectClassDiagramModuleView has been garbage collected");
-	}
-
-	@Override
 	public RPYObjectClassDiagram getRepresentedObject() {
 		return diagram;
 	}
