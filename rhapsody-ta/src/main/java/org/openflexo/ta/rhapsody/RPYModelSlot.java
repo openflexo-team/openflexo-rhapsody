@@ -48,7 +48,6 @@ import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.rhapsody.fml.RPYObjectActorReference;
 import org.openflexo.ta.rhapsody.model.RPYProject;
 import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
@@ -66,7 +65,6 @@ import org.openflexo.ta.rhapsody.rm.RPYProjectResource;
 @DeclareActorReferences({ RPYObjectActorReference.class })
 @ModelEntity
 @ImplementationClass(RPYModelSlot.DSLModelSlotImpl.class)
-@XMLElement
 @FML("RPYModelSlot")
 public interface RPYModelSlot extends FreeModelSlot<RPYProject, RPYProjectResource> {
 
