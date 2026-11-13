@@ -74,7 +74,7 @@ public abstract class RPYObjectNode<N extends Node, T> extends P2PPNode<N, T> {
 		this.analyser = analyser;
 	
 		modelObject.setPrettyPrintDelegate(this);
-		preparePrettyPrint(false);
+		definePrettyPrint(false);
 	}
 	
 	public BModelFactory getModelFactory() {
@@ -109,8 +109,8 @@ public abstract class RPYObjectNode<N extends Node, T> extends P2PPNode<N, T> {
 	
 	// Make this method visible
 	@Override
-	public void preparePrettyPrint(boolean hasParsedVersion) {
-		super.preparePrettyPrint(hasParsedVersion);
+	public void definePrettyPrint(boolean hasParsedVersion) {
+		super.definePrettyPrint(hasParsedVersion);
 	}
 	
 	@Override
