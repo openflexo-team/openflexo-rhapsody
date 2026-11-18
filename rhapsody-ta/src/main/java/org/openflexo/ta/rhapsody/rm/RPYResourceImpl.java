@@ -46,7 +46,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.IOFlexoException;
@@ -234,7 +234,7 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 		} catch (ResourceLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -263,7 +263,7 @@ public abstract class RPYResourceImpl<RD extends RPYRootObject<RD>, F extends RP
 		} catch (ResourceLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

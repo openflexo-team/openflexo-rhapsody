@@ -43,7 +43,7 @@ import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.InconsistentDataException;
 import org.openflexo.foundation.InvalidModelDefinitionException;
@@ -89,7 +89,7 @@ public abstract class RPYProjectResourceImpl extends RPYResourceImpl<RPYProject,
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
 			e.printStackTrace();
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			e.printStackTrace();
 		}
 		return null;
